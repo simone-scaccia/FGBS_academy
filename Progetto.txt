@@ -1,0 +1,42 @@
+Definire un dominio/argomento di lavoro
+
+- Potete scegliere liberamente il tema (es. assistente per il supporto clienti, tutor educativo, consulente legale/finanziario, agente per analisi dati, ecc.).
++ Generazione di una verifica su un argomento (nome della certificazione) (o database sensibile con RAG).
+- L’importante è che il problema richieda più competenze e quindi più agenti CrewAI che collaborano.
++ Search crew (valida nome certificazione, cerco il sito della documentazione del provider -> (llm che valida il sito ->) ricerca sulla documentazione)
++ Template Crew (l'utente sceglie la tipologia (aperte, multipla, v-f) delle domande (e/o sottoargomento) e il numero di domande, valida input, e generazione template in base al contesto precedente) (o, cercare la struttura dalla documentazione online e generare il template)
++ GenerazioneVerifica Crew (unisce search e template)
+(+ ValutazioneRisultatiCrew)
+
+Progettare la crew
+
+- Definite il ruolo di ciascun agente, le responsabilità e il flusso di interazione.
++ flusso sequenziale
+- Potete usare strumenti di memoria, strumenti esterni (API, RAG, browser, database) o limitarvi a capacità di reasoning puro: la scelta è vostra.
++ Tool: WebSearch, guardrail per url (testare i tool)
+
+Implementare il sistema con CrewAI
+
+- Utilizzate le librerie CrewAI per orchestrare gli agenti.
++ ?
+- Mostrate come gli agenti interagiscono per risolvere task complessi.
++ Plot flusso
+- Aggiungete un minimo di logica di validazione o controllo dei risultati (a vostra discrezione).
++ MLFlow (o DeepEval), ragas
+
+Documentare il progetto
+
+- Documentazione tecnica: come installare, configurare, eseguire.
++ README.md, installazione crewai, ddgs, mlflow, (qdrant se utilizziamo rag)
+- Spiegazione architetturale: perché avete scelto quegli agenti, come interagiscono, quali alternative avreste potuto considerare.
++ fine implementazione
+- Caso d’uso dimostrativo: esempio di input e output con spiegazione del flusso interno.
++ print del terminale e output generato (interfaccia streamlit)
+
+Valutazione critica
+
+- Indicate limiti, possibili miglioramenti, estensioni future.
++ Punti di forza: quiz a pagamento, creare quiz è time consuming, quiz aggiornati automaticamente con web search, scelta della tipologia e degli argomenti dei quiz.
++ Limiti: documentazione non pubblica, trovare il template dell'esame
+- Utilizzate framework esterni di valutazione per valutare il progetto.
++ ?
