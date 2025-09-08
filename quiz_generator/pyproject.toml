@@ -10,8 +10,14 @@ dependencies = [
     "markdown2>=2.5.4",
     "md2pdf>=1.0.1",
     "pdfkit>=1.0.0",
+    "jsonpatch>=1.33",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.29",
+    "langchain-core>=0.3.75",
+    "langchain-openai>=0.2.14",
+    "openai>=1.106.1",
+    "qdrant-client>=1.15.1",
 ]
-
 [project.scripts]
 kickoff = "quiz_generator.main:kickoff"
 run_crew = "quiz_generator.main:kickoff"
