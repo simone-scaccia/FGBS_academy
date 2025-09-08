@@ -7,13 +7,10 @@ import os
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
-
 from crewai.flow import Flow, listen, start
-
 from .crews.rag_crew.rag_crew import RagCrew
 from .crews.template_generator_crew.template_generator_crew import TemplateGeneratorCrew
 from .crews.quiz_maker_crew.quiz_maker_crew import QuizMakerCrew
-
 from .utils.user_utils import get_user_selections, get_user_choices, display_selection_summary
 from .utils.database_utils import initialize_database, save_quiz_results
 
