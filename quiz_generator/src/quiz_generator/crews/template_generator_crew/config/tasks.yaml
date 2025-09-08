@@ -1,11 +1,10 @@
 template_generator_task:
   description: |
     Inputs:
-    - topics: {topic}           # comma-separated list of topics
     - question_count: {number_of_questions}  # integer between 1 and 10
     - question_type: {question_type}   # one of: open, multiple, true_false, mixed
  
-    Produce a Markdown "Quiz Pack" that adapts to these inputs:
+    Produce a Markdown that adapts to these inputs:
     - Blueprint: distribution per type (derive from question_type)
       * open       -> all questions are open-ended
       * multiple   -> all are multiple choice (use 4 options by default)
@@ -27,17 +26,17 @@ template_generator_task:
     - Placeholders must be enclosed in square braces e.g. [TF_Question_1], [MC_Question_1], [MC_Option_A_1], [Open_Question_1]
   
     e.g. for 5 questions of type "mixed":
-    # Certification Quiz Pack
+    # **{provider} - {certification}**
 
     ## True/False Questions
 
     1. **[TF_Question_1]**
-      - True
-      - False
+      [] True
+      [] False
 
     2. **[TF_Question_2]**
-      - True
-      - False
+      [] True
+      [] False
 
     ## Multiple Choice Questions
 

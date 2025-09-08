@@ -2,9 +2,9 @@ template_generator:
   role: >
     Certification Quiz Template Writer
   goal: >
-    Given the following inputs — question_count ({question_count}) and
+    Given the following inputs — question_count ({number_of_questions}) and
     question_type ({question_type}: open | multiple | true_false | mixed) —
-    produce a complete Markdown "Quiz Pack" template for a certification quiz.
+    produce a complete Markdown template for the {provider} - {certification} certification quiz.
     The output MUST adapt sections, counts, and placeholders to the provided inputs.
   backstory: >
     A technical writer specialized in certifications who creates clean,

@@ -190,8 +190,8 @@ def get_user_number_of_questions():
             num_questions_input = input("\n❓ How many questions would you like to generate? (1-5): ").strip()
             number_of_questions = int(num_questions_input)
 
-            if number_of_questions < 1 or number_of_questions > 5:
-                print("❌ Invalid number of questions.Please enter a number between 1 and 5")
+            if number_of_questions < 1 or number_of_questions > 10:
+                print("❌ Invalid number of questions. Please enter a number between 1 and 10")
             else:
                 return number_of_questions
         except ValueError:
@@ -228,7 +228,7 @@ def get_user_question_type_selection():
             print("\n👋 Goodbye!")
             return None
 
-def get_user_choices(dataset_base_path):
+def get_user_choices():
     """
     Get complete user choices for number of questions and question type.
     

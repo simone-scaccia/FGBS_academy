@@ -1,0 +1,34 @@
+{
+  "questions": [
+    {
+      "type": "multiple_choice",
+      "question": "What core component of LUIS represents the purpose or goal of the user's input?",
+      "options": ["Utterances", "Entities", "Intents", "Phrase List Features"],
+      "answer": "Intents"
+    },
+    {
+      "type": "true_false",
+      "question": "LUIS requires in-depth machine learning expertise to set up conversational AI features.",
+      "options": ["True", "False"],
+      "answer": "False"
+    },
+    {
+      "type": "open_ended",
+      "question": "What are some practical use cases for integrating LUIS with e-commerce applications?",
+      "options": [],
+      "answer": ""
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which best practice involves leveraging endpoint logs to improve a LUIS model’s accuracy?",
+      "options": ["Versioning", "Iterative Testing", "Active Monitoring", "Data Segmentation"],
+      "answer": "Active Monitoring"
+    },
+    {
+      "type": "true_false",
+      "question": "LUIS will be retired by Microsoft on October 1, 2025.",
+      "options": ["True", "False"],
+      "answer": "True"
+    }
+  ]
+}

@@ -5,3 +5,4 @@ lib/
 dataset/
 .venv/
 qdrant_storage/
+.vscode/

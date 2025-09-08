@@ -1,11 +1,11 @@
 quiz_maker_task:
   description: |
-    Read the JSON file 'outputs/questions.json' that has the following structure:
+    Read the JSON file 'outputs/questions.json' using FileReadTool that has the following structure:
  
     {
       "questions": [
         {
-          "type": "multiple_choice|true_false|open_ended",
+          "type": "multiple_choice|true_false|open|mixed",
           "question": "<question text>",
           "options": ["<list of options>", "..."] OR ["True", "False"] OR [],
           "answer": "<correct answer or empty string>"
@@ -13,7 +13,7 @@ quiz_maker_task:
       ]
     }
 
-    Also read the quiz template from 'outputs/quiz_template.md' which contains placeholders like:
+    Also read the quiz template file 'outputs/quiz_template.md' using FileReadTool which contains placeholders like:
     [TF_Question_1], [MC_Question_1], [MC_Option_A_1], [Open_Question_1]
 
     Populate the base Markdown quiz template following these rules:
@@ -37,7 +37,7 @@ pdf_export_task:
     Requirements:
     - Paper size: A4
     - Margins: ~2 cm
-    - Preserve headings, lists, and formatting
+    - Preserve Markdown headings, lists, formatting and new lines
  
     Output a success message indicating the location of the saved PDF file.
   expected_output: >
