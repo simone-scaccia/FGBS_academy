@@ -11,7 +11,10 @@ from pydantic import BaseModel
 from crewai.flow import Flow, listen, start
 
 from .crews.rag_crew.rag_crew import RagCrew
-from .utils.user_utils import get_user_selections, display_selection_summary
+from .crews.template_generator_crew.template_generator_crew import TemplateGeneratorCrew
+from .crews.quiz_maker_crew.quiz_maker_crew import QuizMakerCrew
+
+from .utils.user_utils import get_user_selections, get_user_choices, display_selection_summary
 from .utils.database_utils import initialize_database, save_quiz_results
 
 class QuizGeneratorState(BaseModel):
@@ -19,6 +22,8 @@ class QuizGeneratorState(BaseModel):
     provider: Optional[str] = None
     certification: Optional[str] = None
     topic: Optional[str] = None
+    number_of_questions: int = None
+    question_type: int = None
     database_initialized: bool = False
     quiz_generated: bool = False
     output_filename: Optional[str] = None
@@ -40,6 +45,7 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
     def collect_user_input(self):
         """
         Step 1: Collect user input for provider, certification, and topic selection.
+        Step 2: Collect user choice about the number of questions and their type to generate for the practice quiz.
         """
         print("🚀 Starting Quiz Generator Flow...")
         
@@ -47,6 +53,8 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
         dataset_path = os.path.join(os.path.dirname(__file__), "dataset")
         
         try:
+
+            # Step 1: Collect info about certification
             # Get user selections
             provider, certification, topic = get_user_selections(dataset_path)
             
@@ -61,9 +69,11 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             
             # Display selection summary
             display_selection_summary(provider, certification, topic)
+            print("✅ User input selection collected successfully!")
             
-            print("✅ User input collected successfully!")
-            
+            # Step 2: Collect info about quiz template to generate
+            # Get user choices
+            number_of_questions, question_type = get_user_choices(dataset_path)
         except Exception as e:
             self.state.error_message = f"Error collecting user input: {str(e)}"
             print(f"❌ {self.state.error_message}")
@@ -71,7 +81,7 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
     @listen(collect_user_input)
     def initialize_vector_database(self):
         """
-        Step 2: Initialize the Qdrant vector database with documents from the selected certification.
+        Step 3: Initialize the Qdrant vector database with documents from the selected certification.
         """
         if self.state.error_message:
             print("⏭️ Skipping database initialization due to previous error")
