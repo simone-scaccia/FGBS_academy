@@ -1,0 +1,44 @@
+{
+  "questions": [
+    {
+      "type": "multiple_choice",
+      "question": "What is the primary purpose of the Azure AI Anomaly Detector service?",
+      "options": [
+        "To monitor and detect anomalies in time-series data",
+        "To perform large-scale data storage",
+        "To provide text translation services",
+        "To handle image recognition tasks"
+      ],
+      "answer": "To monitor and detect anomalies in time-series data"
+    },
+    {
+      "type": "true_false",
+      "question": "Azure AI Anomaly Detector requires extensive machine learning expertise to use.",
+      "options": ["True", "False"],
+      "answer": "False"
+    },
+    {
+      "type": "open_ended",
+      "question": "List two use cases for the Azure AI Anomaly Detector service.",
+      "options": [],
+      "answer": ""
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which algorithm is used by the Azure AI Anomaly Detector for multivariate anomaly detection?",
+      "options": [
+        "K-Means Clustering",
+        "Graph Attention Network",
+        "Support Vector Machine",
+        "Random Forest"
+      ],
+      "answer": "Graph Attention Network"
+    },
+    {
+      "type": "true_false",
+      "question": "Batch detection in Azure AI Anomaly Detector processes real-time data to detect anomalies.",
+      "options": ["True", "False"],
+      "answer": "False"
+    }
+  ]
+}

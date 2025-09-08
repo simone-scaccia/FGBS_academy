@@ -5,17 +5,12 @@ research_task:
     1. Key concepts and definitions
     2. Important features and functionalities  
     3. Best practices and common use cases
-    4. Common mistakes and troubleshooting scenarios
-    5. Integration patterns and configuration options
     
-    Use the RAG Search Tool multiple times with different queries to ensure comprehensive coverage.
-    Current year context: {current_year}
+    Use the RAG Search Tool at most 3 times with different queries to ensure comprehensive coverage.
   expected_output: >
     A comprehensive research document with:
-    - 15-20 key topics about {topic} with detailed explanations
-    - Each topic should include definition, importance, and practical applications
+    - Key topics about {topic} with detailed explanations
     - Sources and references from the knowledge base
-    - Categorization by complexity level (beginner, intermediate, advanced)
     Formatted as structured text without markdown code blocks.
   agent: researcher
 
@@ -49,7 +44,7 @@ reporting_task:
     {{
       "questions": [
         {{
-          "type": "multiple_choice|true_false|open_ended",
+          "type": "multiple_choice|true_false|open|mixed",
           "question": "question text",
           "options": ["option1", "option2", "option3", "option4"] OR ["True", "False"] OR [],
           "answer": "correct answer text" OR ""
@@ -64,4 +59,6 @@ reporting_task:
     - For true_false: provide ["True", "False"] as options, answer should be "True" or "False"
     - For open_ended: provide empty array [] for options and empty string "" for answer
     - Generate exactly {number_of_questions} questions total
+
+    Do NOT include JSON code blocks (```).
   agent: reporting_analyst

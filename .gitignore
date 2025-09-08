@@ -1,0 +1,8 @@
+.env
+__pycache__/
+lib/
+.DS_Store
+dataset/
+.venv/
+qdrant_storage/
+.vscode/

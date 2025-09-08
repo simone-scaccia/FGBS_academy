@@ -51,14 +51,20 @@ class Settings:
     qdrant_url: str = "http://localhost:6333"  # Qdrant URL
     collection: str = "rag_chunks"             # Collection name (can be dynamic)
     emb_model_name: str = "text-embedding-ada-002"  # Embedding model
-    chunk_size: int = 1000                      # Chunk size
-    chunk_overlap: int = 200                   # Overlap size
+    chunk_size: int = 10000                      # Chunk size
+    chunk_overlap: int = 300                   # Overlap size
     top_n_semantic: int = 30                   # Candidates for semantic search
     top_n_text: int = 100                      # Candidates for text search
     final_k: int = 6                           # Final results count
     alpha: float = 0.75                        # Semantic weight
     text_boost: float = 0.20                   # Text boost
-
+    use_mmr: bool = True                       # Use MMR diversification
+    mmr_lambda: float = 0.6                    # MMR balance
+    lm_base_env: str = "AZURE_OPENAI_ENDPOINT" # LLM base URL env
+    lm_key_env: str = "AZURE_OPENAI_API_KEY"   # LLM API key env
+    lm_model_env: str = "MODEL"                # LLM model env
+    use_cache: bool = True                     # Enable embedding cache
+    cache_file: str = "embedding_cache.pkl"   # Cache file path
 
 def get_collection_name(provider: str, certification: str) -> str:
     """
@@ -92,13 +98,6 @@ def get_settings_for_certification(provider: str, certification: str) -> Setting
     settings = Settings()
     settings.collection = get_collection_name(provider, certification)
     return settings
-    use_mmr: bool = True                       # Use MMR diversification
-    mmr_lambda: float = 0.6                    # MMR balance
-    lm_base_env: str = "AZURE_OPENAI_ENDPOINT"  # LLM base URL env
-    lm_key_env: str = "AZURE_OPENAI_API_KEY"    # LLM API key env
-    lm_model_env: str = "MODEL"                 # LLM model env
-    use_cache: bool = True                     # Enable embedding cache
-    cache_file: str = "embedding_cache.pkl"   # Cache file path
  
 SETTINGS = Settings()
  
