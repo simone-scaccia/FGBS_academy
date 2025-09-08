@@ -161,32 +161,6 @@ def get_llm(settings: Settings):
         return None
  
 # ========== Data prep ==========
- 
-def simulate_corpus() -> List[Document]:
-    """Return a small fake corpus"""
-    docs = [
-        Document(
-            page_content="LangChain is a framework for building LLM apps.",
-            metadata={"id": "doc1", "source": "intro-langchain.md", "title": "Intro LangChain", "lang": "en"}
-        ),
-        Document(
-            page_content="FAISS is a library for similarity search of dense vectors.",
-            metadata={"id": "doc2", "source": "faiss-overview.md", "title": "FAISS Overview", "lang": "en"}
-        ),
-        Document(
-            page_content="Sentence-transformers like MiniLM produce embeddings.",
-            metadata={"id": "doc3", "source": "embeddings-minilm.md", "title": "MiniLM Embeddings", "lang": "en"}
-        ),
-        Document(
-            page_content="A RAG pipeline includes indexing, retrieval and generation.",
-            metadata={"id": "doc4", "source": "rag-pipeline.md", "title": "RAG Pipeline", "lang": "en"}
-        ),
-        Document(
-            page_content="MMR balances relevance and diversity in retrieval.",
-            metadata={"id": "doc5", "source": "retrieval-mmr.md", "title": "MMR Retrieval", "lang": "en"}
-        ),
-    ]
-    return docs
 
 def load_pdf(file_path : str) -> List[Document]:
     """Load PDF with suppressed warnings for problematic PDF formatting."""

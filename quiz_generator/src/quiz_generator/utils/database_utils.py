@@ -5,7 +5,7 @@ This module contains functions for database initialization and management.
 
 import os
 from datetime import datetime
-from ..tools.rag_qdrant_hybrid import (
+from .rag_qdrant_hybrid import (
     get_embeddings, 
     get_qdrant_client, 
     recreate_collection_for_rag, 
