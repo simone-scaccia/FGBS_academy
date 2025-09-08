@@ -2,33 +2,43 @@
   "questions": [
     {
       "type": "multiple_choice",
-      "question": "What core component of LUIS represents the purpose or goal of the user's input?",
-      "options": ["Utterances", "Entities", "Intents", "Phrase List Features"],
-      "answer": "Intents"
+      "question": "What is the primary purpose of the Azure AI Anomaly Detector service?",
+      "options": [
+        "To monitor and detect anomalies in time-series data",
+        "To perform large-scale data storage",
+        "To provide text translation services",
+        "To handle image recognition tasks"
+      ],
+      "answer": "To monitor and detect anomalies in time-series data"
     },
     {
       "type": "true_false",
-      "question": "LUIS requires in-depth machine learning expertise to set up conversational AI features.",
+      "question": "Azure AI Anomaly Detector requires extensive machine learning expertise to use.",
       "options": ["True", "False"],
       "answer": "False"
     },
     {
       "type": "open_ended",
-      "question": "What are some practical use cases for integrating LUIS with e-commerce applications?",
+      "question": "List two use cases for the Azure AI Anomaly Detector service.",
       "options": [],
       "answer": ""
     },
     {
       "type": "multiple_choice",
-      "question": "Which best practice involves leveraging endpoint logs to improve a LUIS model’s accuracy?",
-      "options": ["Versioning", "Iterative Testing", "Active Monitoring", "Data Segmentation"],
-      "answer": "Active Monitoring"
+      "question": "Which algorithm is used by the Azure AI Anomaly Detector for multivariate anomaly detection?",
+      "options": [
+        "K-Means Clustering",
+        "Graph Attention Network",
+        "Support Vector Machine",
+        "Random Forest"
+      ],
+      "answer": "Graph Attention Network"
     },
     {
       "type": "true_false",
-      "question": "LUIS will be retired by Microsoft on October 1, 2025.",
+      "question": "Batch detection in Azure AI Anomaly Detector processes real-time data to detect anomalies.",
       "options": ["True", "False"],
-      "answer": "True"
+      "answer": "False"
     }
   ]
 }

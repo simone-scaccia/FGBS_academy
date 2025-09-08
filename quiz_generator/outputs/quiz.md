@@ -1,34 +1,34 @@
-# **azure - AI_900**
+# **Azure - AI_900**
 
 ## True/False Questions
 
-1. **LUIS requires in-depth machine learning expertise to set up conversational AI features.**  
+1. **Azure AI Anomaly Detector requires extensive machine learning expertise to use.**  
    [] True  
    [] False  
 
-2. **LUIS will be retired by Microsoft on October 1, 2025.**  
+2. **Batch detection in Azure AI Anomaly Detector processes real-time data to detect anomalies.**  
    [] True  
    [] False  
 
-## Multiple Choice Questions
+## Multiple Choice Questions  
 
-*Note: Select the most appropriate answer. Only one option is correct.*
+*Note: Select the most appropriate answer. Only one option is correct.*  
 
-3. **What core component of LUIS represents the purpose or goal of the user's input?**  
-   A) Utterances  
-   B) Entities  
-   C) Intents  
-   D) Phrase List Features  
+3. **What is the primary purpose of the Azure AI Anomaly Detector service?**  
+   A) To monitor and detect anomalies in time-series data  
+   B) To perform large-scale data storage  
+   C) To provide text translation services  
+   D) To handle image recognition tasks  
 
-4. **Which best practice involves leveraging endpoint logs to improve a LUIS model’s accuracy?**  
-   A) Versioning  
-   B) Iterative Testing  
-   C) Active Monitoring  
-   D) Data Segmentation  
+4. **Which algorithm is used by the Azure AI Anomaly Detector for multivariate anomaly detection?**  
+   A) K-Means Clustering  
+   B) Graph Attention Network  
+   C) Support Vector Machine  
+   D) Random Forest  
 
-## Short Open Questions
+## Short Open Questions  
 
-5. **What are some practical use cases for integrating LUIS with e-commerce applications?**
+5. **List two use cases for the Azure AI Anomaly Detector service.**  
 
    ________________________________________________________  
 
