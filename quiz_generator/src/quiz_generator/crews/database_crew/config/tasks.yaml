@@ -18,4 +18,3 @@ load_documents_to_qdrant_task:
   expected_output: >
     All provided Document objects are successfully chunked (if necessary) and loaded into the Qdrant database, with confirmation of successful ingestion.
   agent: DB_engineer
-

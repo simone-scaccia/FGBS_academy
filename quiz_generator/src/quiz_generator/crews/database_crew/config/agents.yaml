@@ -19,4 +19,3 @@ DB_engineer:
     The Qdrant database is created and managed by a separate task.
   backstory: >
     You are an expert in data engineering, chunking, and vector database management. You ensure that all information is optimally prepared and loaded into Qdrant for efficient retrieval and quiz generation, collaborating with other tasks for database setup and management.
-  

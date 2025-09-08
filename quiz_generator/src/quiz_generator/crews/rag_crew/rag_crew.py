@@ -2,15 +2,13 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
-from quiz_generator.src.quiz_generator.tools.db_tools import load_pdf
-
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 @CrewBase
-class DatabaseCrew():
-    """DatabaseCrew crew"""
+class RagCrew():
+    """RagCrew crew"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -22,17 +20,16 @@ class DatabaseCrew():
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
-    def PDF_formatter(self) -> Agent:
+    def researcher(self) -> Agent:
         return Agent(
-            config=self.agents_config['PDF_formatter'], # type: ignore[index]
-            verbose=True,
-            tools=[load_pdf()]
+            config=self.agents_config['researcher'], # type: ignore[index]
+            verbose=True
         )
 
     @agent
-    def DB_engineer(self) -> Agent:
+    def reporting_analyst(self) -> Agent:
         return Agent(
-            config=self.agents_config['DB_engineer'], # type: ignore[index]
+            config=self.agents_config['reporting_analyst'], # type: ignore[index]
             verbose=True
         )
 
@@ -40,26 +37,21 @@ class DatabaseCrew():
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def load_and_structure_pdfs_task(self) -> Task:
+    def research_task(self) -> Task:
         return Task(
-            config=self.tasks_config['load_and_structure_pdfs_task'], # type: ignore[index]
+            config=self.tasks_config['research_task'], # type: ignore[index]
         )
 
     @task
-    def create_qdrant_db_task(self) -> Task:
+    def reporting_task(self) -> Task:
         return Task(
-            config=self.tasks_config['create_qdrant_db_task'], # type: ignore[index]
-        )
-
-    @task
-    def load_documents_to_qdrant_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['load_documents_to_qdrant_task'], # type: ignore[index]
+            config=self.tasks_config['reporting_task'], # type: ignore[index]
+            output_file='report.md'
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the DatabaseCrew crew"""
+        """Creates the RagCrew crew"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
