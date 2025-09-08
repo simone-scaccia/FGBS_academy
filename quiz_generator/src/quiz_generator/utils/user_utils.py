@@ -15,7 +15,6 @@ def get_available_providers(dataset_base_path):
     
     return providers
 
-
 def get_available_certifications(provider, dataset_base_path):
     """Get list of available certifications for a given provider."""
     dataset_path = os.path.join(dataset_base_path, provider)
@@ -27,7 +26,6 @@ def get_available_certifications(provider, dataset_base_path):
     
     return certifications
 
-
 def get_available_topics(provider, certification, dataset_base_path):
     """Get list of available topics (PDF files) for a given provider and certification."""
     dataset_path = os.path.join(dataset_base_path, provider, certification)
@@ -38,6 +36,7 @@ def get_available_topics(provider, certification, dataset_base_path):
                  if f.endswith('.pdf')]
     
     return topics
+
 
 def get_user_provider_selection(providers):
     """
@@ -131,7 +130,6 @@ def get_user_topic_selection(topics, provider, certification):
             print("\n👋 Goodbye!")
             return None
 
-
 def get_user_selections(dataset_base_path):
     """
     Get complete user selections for provider, certification, and topic.
@@ -183,8 +181,79 @@ def get_user_selections(dataset_base_path):
     
     return selected_provider, selected_certification, selected_topic
 
+def get_user_number_of_questions():
+    """
+    Get number of questions selection from user.
+    
+    Returns:
+        int or None: Selected number of questions or None if cancelled
+    """
+    while True:
+        try:
+            num_questions_input = input("\n❓ How many questions would you like to generate? (1-5): ").strip()
+            number_of_questions = int(num_questions_input)
 
-def display_selection_summary(provider, certification, topic):
+            if number_of_questions < 1 or number_of_questions > 5:
+                print("❌ Invalid number of questions.Please enter a number between 1 and 5")
+            else:
+                return number_of_questions
+        except ValueError:
+            print("❌ Please enter a valid number")
+        except KeyboardInterrupt:
+            print("\n👋 Goodbye!")
+            return None
+
+def get_user_question_type_selection():
+    """
+    Get question type selection from user.
+    
+    Returns:
+        str or None: Selected question type or None if cancelled
+    """
+    question_types = ['Multiple Choice', 'True/False', 'Short Open Answer', 'Mixed']
+    
+    print("\n📝 Available question types:")
+    for i, qtype in enumerate(question_types, 1):
+        print(f"  {i}. {qtype}")
+    
+    while True:
+        try:
+            qtype_choice = input(f"\n📋 What type of questions do you want? Select a question type (1-{len(question_types)}): ").strip()
+            qtype_index = int(qtype_choice) - 1
+            
+            if 0 <= qtype_index < len(question_types):
+                return question_types[qtype_index]
+            else:
+                print(f"❌ Please enter a number between 1 and {len(question_types)}")
+        except ValueError:
+            print("❌ Please enter a valid number")
+        except KeyboardInterrupt:
+            print("\n👋 Goodbye!")
+            return None
+
+def get_user_choices(dataset_base_path):
+    """
+    Get complete user choices for number of questions and question type.
+    
+    Args:
+        dataset_base_path (str): Base path to the dataset folder
+        
+    Returns:
+        tuple: (number_of_questions, question_type) or (None, None) if cancelled
+    """
+    # Get number of questions
+    number_of_questions = get_user_number_of_questions()
+    if not number_of_questions:
+        return None, None
+    
+    # Get question type
+    question_type = get_user_question_type_selection()
+    if not question_type:
+        return None, None
+    
+    return number_of_questions, question_type
+
+def display_selection_summary(provider, certification, topic, number_of_questions, question_type):
     """
     Display a summary of user selections.
     
@@ -192,8 +261,12 @@ def display_selection_summary(provider, certification, topic):
         provider (str): Selected provider
         certification (str): Selected certification
         topic (str): Selected topic
+        number_of_questions (int): Number of questions to generate
+        question_type (str): Type of questions to generate
     """
     print(f"\n🔧 You selected:")
     print(f"   Provider: {provider}")
     print(f"   Certification: {certification}")
     print(f"   Topic: {topic}")
+    print(f"   Total Questions: {number_of_questions}")
+    print(f"   Question's Type: {question_type}")
