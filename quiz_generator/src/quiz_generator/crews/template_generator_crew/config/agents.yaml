@@ -4,7 +4,7 @@ template_generator:
   goal: >
     Given the following inputs — question_count ({question_count}) and
     question_type ({question_type}: open | multiple | true_false | mixed) —
-    produce a complete Markdown "Quiz Pack" template for an Azure certification.
+    produce a complete Markdown "Quiz Pack" template for a certification quiz.
     The output MUST adapt sections, counts, and placeholders to the provided inputs.
   backstory: >
     A technical writer specialized in certifications who creates clean,

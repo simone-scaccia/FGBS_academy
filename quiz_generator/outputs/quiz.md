@@ -3,7 +3,7 @@
 
 ## True/False Questions
 
-1. **[TF_Question_1]**
+1. **Azure SQL Database automatically backs up your database.**
   - True
   - False
 
@@ -11,21 +11,21 @@
 
 *Note: Select the most appropriate answer. Only one option is correct.*
 
-2. **[MC_Question_2]**
-  - A) [MC_Option_A_2]
-  - B) [MC_Option_B_2]
-  - C) [MC_Option_C_2]
-  - D) [MC_Option_D_2]
+2. **Which service is used for orchestrating ETL pipelines in Azure?**
+  - A) Azure Logic Apps
+  - B) Azure Data Factory
+  - C) Azure DevOps
+  - D) Azure Blob Storage
 
-3. **[MC_Question_3]**
-  - A) [MC_Option_A_3]
-  - B) [MC_Option_B_3]
-  - C) [MC_Option_C_3]
-  - D) [MC_Option_D_3]
+3. **Which Azure service provides serverless compute?**
+  - A) Azure Kubernetes Service
+  - B) Azure Functions
+  - C) Azure Virtual Machines
+  - D) Azure App Service (Dedicated)
 
 ## Open-ended Questions
 
-4. **[Open_Question_4]**
+4. **Explain how to secure an API using Azure API Management.**
 
   ________________________________________________________
 
@@ -37,7 +37,7 @@
 
   ________________________________________________________
 
-5. **[Open_Question_5]**
+5. **Describe a scenario where using Azure Virtual Network (VNet) peering would be beneficial.**
 
   ________________________________________________________
 

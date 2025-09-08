@@ -11,16 +11,63 @@ template_generator_task:
       * true_false -> all are true/false
       * mixed      -> split as 33.3% multiple, 33.3% true_false, 33.3% open (round and fix totals)
     - Sections (if applicable):
-      * True/False: list questions with a short statement placeholder
-      * Multiple Choice: list questions with A-D (and E if 5 options) placeholders
-      * Open-ended: list questions with a short scenario placeholder
+      * True/False: T/F question placeholder and true and false answers
+      * Multiple Choice: MC question placeholder and A-D placeholders answers
+      * Open-ended: open question placeholder and 5 empty lines for the answer
     Return ONLY the final Markdown content.
  
     Important formatting rules:
     - Use clear H2 sections per type (only include sections with count > 0)
-    - Number questions starting from 1 inside each section
-    - Include a short explanation placeholder for TF/MC
+    - Number questions starting from 1, continuous across sections
+    - Use bold for question text
+    - Include a text into the MC section to specify that only one answer is correct
     - Keep the template generic (no cert-specific content)
+    - Do NOT include any explanations or notes about the template
+    - Placeholders must be enclosed in square braces e.g. [TF_Question_1], [MC_Question_1], [MC_Option_A_1], [Open_Question_1]
+  
+    e.g. for 5 questions of type "mixed":
+    # Certification Quiz Pack
+
+    ## True/False Questions
+
+    1. **[TF_Question_1]**
+      - True
+      - False
+
+    2. **[TF_Question_2]**
+      - True
+      - False
+
+    ## Multiple Choice Questions
+
+    *Note: Select the most appropriate answer. Only one option is correct.*
+
+    3. **[MC_Question_3]**
+      - A) [MC_Option_A_3]
+      - B) [MC_Option_B_3]
+      - C) [MC_Option_C_3]
+      - D) [MC_Option_D_3]
+
+    4. **[MC_Question_4]**
+      - A) [MC_Option_A_4]
+      - B) [MC_Option_B_4]
+      - C) [MC_Option_C_4]
+      - D) [MC_Option_D_4]
+
+    ## Open-ended Questions
+
+    5. **[Open_Question_5]**
+
+      ________________________________________________________
+
+      ________________________________________________________
+
+      ________________________________________________________
+
+      ________________________________________________________
+
+      ________________________________________________________
+  
   expected_output: >
-    A single Markdown string (the complete Quiz Pack).
+    A single string (the complete Quiz Pack).
   agent: template_generator
