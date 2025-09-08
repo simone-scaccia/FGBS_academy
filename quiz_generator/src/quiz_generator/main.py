@@ -7,13 +7,10 @@ import os
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel
-
 from crewai.flow import Flow, listen, start
-
 from .crews.rag_crew.rag_crew import RagCrew
 from .crews.template_generator_crew.template_generator_crew import TemplateGeneratorCrew
 from .crews.quiz_maker_crew.quiz_maker_crew import QuizMakerCrew
-
 from .utils.user_utils import get_user_selections, get_user_choices, display_selection_summary
 from .utils.database_utils import initialize_database, save_quiz_results
 
@@ -67,15 +64,51 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             self.state.certification = certification
             self.state.topic = topic
             
-            # Display selection summary
-            display_selection_summary(provider, certification, topic)
-            print("✅ User input selection collected successfully!")
-            
             # Step 2: Collect info about quiz template to generate
             # Get user choices
             number_of_questions, question_type = get_user_choices(dataset_path)
+            
+            if not all([number_of_questions, question_type]):
+                self.state.error_message = "User cancelled or invalid quiz configuration"
+                return
+            
+            # Update state with quiz configuration
+            self.state.number_of_questions = number_of_questions
+            self.state.question_type = question_type
+            
+            # Display selection summary
+            display_selection_summary(provider, certification, topic, number_of_questions, question_type)
+            print("✅ User input selection collected successfully!")
+            print(f"This system will generate {number_of_questions} questions of type '{question_type}' for the certification {certification}, focusing on these topics: {topic}")
         except Exception as e:
             self.state.error_message = f"Error collecting user input: {str(e)}"
+            print(f"❌ {self.state.error_message}")
+
+    @listen(collect_user_input)
+    def generate_quiz_template(self):
+        """
+        Step 2.5: Generate quiz template using the Template Generator crew.
+        """
+        if self.state.error_message:
+            print("⏭️ Skipping quiz template generation due to previous error")
+            return
+        
+        print(f"\n� Generating quiz template for {self.state.provider}/{self.state.certification}... with choices done")
+        
+        try:
+            # Initialize and run Template Generator crew with provider/certification configuration
+            template_crew = TemplateGeneratorCrew(provider=self.state.provider, certification=self.state.certification)
+            template_result = template_crew.crew().kickoff(inputs={
+                "topic": self.state.topic,
+                "number_of_questions": self.state.number_of_questions,
+                "question_type": self.state.question_type
+            })
+            
+            print("✅ Quiz template generated successfully!")
+            print(f"📝 Generated Template:\n{template_result}")
+            
+        except Exception as e:
+            self.state.error_message = f"Error during quiz template generation: {str(e)}"
             print(f"❌ {self.state.error_message}")
 
     @listen(collect_user_input)
@@ -171,6 +204,8 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             print(f"📁 Provider: {self.state.provider}")
             print(f"🎓 Certification: {self.state.certification}")
             print(f"🎯 Topic: {self.state.topic}")
+            print(f"❓ Number of Questions: {self.state.number_of_questions}")
+            print(f"📝 Question Type: {self.state.question_type}")
             print(f"💾 Output file: {self.state.output_filename}")
             print("✅ Database initialized: Yes")
             print("✅ Quiz generated: Yes")
