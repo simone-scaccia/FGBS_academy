@@ -4,79 +4,61 @@ Accepts a question and a ``k`` value to retrieve top-k contexts from a local
 vector store. Useful as an agent tool step before generation.
 """
 
-from typing import Type, List
+from typing import Type, List, Optional
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
-from .rag_qdrant_hybrid import search_rag
+from .rag_qdrant_hybrid import search_rag, search_rag_with_collection
 
 
 class RagToolInput(BaseModel):
-    """Input schema for ``RagTool``.
-
-    Parameters
-    ----------
-    question : str
-        Question to answer using RAG search.
-    k : int
-        Number of documents to retrieve for context.
-    """
+    """Input schema for ``RagTool``."""
     question: str = Field(..., description="Question to answer using RAG search.")
     k: int = Field(3, description="Number of documents to retrieve for context.")
 
 
 class RagTool(BaseTool):
-    """CrewAI tool that performs a simple RAG retrieval.
-
-    Notes
-    -----
-    The tool returns contexts as a mapping of ``source`` to text and does not
-    perform generation.
-    """
+    """CrewAI tool that performs a simple RAG retrieval with support for specific collections."""
 
     name: str = "RAG Search Tool"
     description: str = (
         "A tool that performs a Retrieval-Augmented Generation (RAG) search "
         "given a question and a number of documents to retrieve. "
         "Uses a local vector store and LLM to retrieve and answer based on "
-        "context. Returns a dictionary in the form { 'source': str, "
-        "'document': str }"
+        "context. Returns a list of document strings with source and content information."
     )
     args_schema: Type[BaseModel] = RagToolInput
+    
+    # Class attributes for provider/certification configuration
+    provider: Optional[str] = None
+    certification: Optional[str] = None
+    
+    def __init__(self, provider: Optional[str] = None, certification: Optional[str] = None, **kwargs):
+        """
+        Initialize RagTool with optional provider/certification for collection selection.
+        
+        Args:
+            provider (str, optional): Provider name for collection selection
+            certification (str, optional): Certification name for collection selection
+        """
+        super().__init__(**kwargs)
+        self.provider = provider
+        self.certification = certification
 
     def _run(self, question: str, k: int) -> List[str]:
-        """Run retrieval with the provided inputs.
-
-        Executes RAG search to retrieve relevant document contexts for a given
-        question using the configured vector store and embeddings.
-
-        Args
-        ----
-        question : str
-            The query to retrieve contexts for.
-        k : int
-            Number of contexts to retrieve and return.
-
-        Returns
-        -------
-        dict
-            Dictionary mapping source names to page content strings.
-
-        Raises
-        ------
-        ValueError
-            If the question parameter is empty or None.
-
-        Examples
-        --------
-        >>> tool = RagTool()
-        >>> results = tool._run("What is LangChain?", 2)
-        >>> print(type(results))
-        <class 'dict'>
-        >>> print(len(results))
-        2
-        """
+        """Run retrieval with the provided inputs."""
         if not question:
             raise ValueError("Please provide a question for RAG search.")
-        results = search_rag(question, k=k)
+        
+        # Use collection-specific search if provider/certification are set
+        if self.provider and self.certification:
+            results = search_rag_with_collection(
+                question, 
+                k=k, 
+                provider=self.provider, 
+                certification=self.certification
+            )
+        else:
+            # Fallback to default search
+            results = search_rag(question, k=k)
 
         return results

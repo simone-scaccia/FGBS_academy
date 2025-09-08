@@ -1,17 +1,47 @@
 research_task:
   description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is {current_year}.
+    Conduct comprehensive research about {topic} using the RAG Search Tool to gather relevant 
+    information from the knowledge base. Focus on:
+    1. Key concepts and definitions
+    2. Important features and functionalities  
+    3. Best practices and common use cases
+    4. Common mistakes and troubleshooting scenarios
+    5. Integration patterns and configuration options
+    
+    Use the RAG Search Tool multiple times with different queries to ensure comprehensive coverage.
+    Current year context: {current_year}
   expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
+    A comprehensive research document with:
+    - 15-20 key topics about {topic} with detailed explanations
+    - Each topic should include definition, importance, and practical applications
+    - Sources and references from the knowledge base
+    - Categorization by complexity level (beginner, intermediate, advanced)
+    Formatted as structured text without markdown code blocks.
   agent: researcher
 
 reporting_task:
   description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    Based on the research findings, create a comprehensive quiz about {topic}. 
+    Use the RAG Search Tool to verify information and get additional context when needed.
+    Create questions that cover:
+    1. Fundamental concepts (30% of questions)
+    2. Practical applications (40% of questions) 
+    3. Advanced scenarios and troubleshooting (30% of questions)
+    
+    For each question include:
+    - Clear, unambiguous question text
+    - 4 multiple choice options (A, B, C, D)
+    - Correct answer indication
+    - Detailed explanation of why the answer is correct
+    - Source reference from the knowledge base
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
+    A complete quiz with 20 multiple-choice questions about {topic}, each containing:
+    1. Question number and text
+    2. Four answer options (A, B, C, D)
+    3. Correct answer (e.g., "Correct Answer: B")
+    4. Detailed explanation (2-3 sentences)
+    5. Difficulty level (Beginner/Intermediate/Advanced)
+    6. Knowledge base source reference
+    
+    Format as clean text without markdown code blocks, with clear separation between questions.
   agent: reporting_analyst

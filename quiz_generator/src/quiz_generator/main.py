@@ -1,151 +1,202 @@
-#!/usr/bin/env python
 """
 Main module for Quiz Generator application.
-This module handles user interaction and initializes the Qdrant database.
+This module implements the main Flow following CrewAI best practices.
 """
 
 import os
-import sys
-from quiz_generator.crews.database_crew.database_crew import DatabaseCrew
+from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel
+
+from crewai.flow import Flow, listen, start
+
+from .crews.rag_crew.rag_crew import RagCrew
+from .utils.user_utils import get_user_selections, display_selection_summary
+from .utils.database_utils import initialize_database, save_quiz_results
+
+class QuizGeneratorState(BaseModel):
+    """State model for the Quiz Generator Flow."""
+    provider: Optional[str] = None
+    certification: Optional[str] = None
+    topic: Optional[str] = None
+    database_initialized: bool = False
+    quiz_generated: bool = False
+    output_filename: Optional[str] = None
+    error_message: Optional[str] = None
 
 
-def get_available_providers():
-    """Get list of available providers from dataset folder."""
-    dataset_path = os.path.join(os.path.dirname(__file__), "dataset")
-    providers = []
-    
-    if os.path.exists(dataset_path):
-        providers = [d for d in os.listdir(dataset_path) 
-                    if os.path.isdir(os.path.join(dataset_path, d))]
-    
-    return providers
-
-
-def get_available_certifications(provider):
-    """Get list of available certifications for a given provider."""
-    dataset_path = os.path.join(os.path.dirname(__file__), "dataset", provider)
-    certifications = []
-    
-    if os.path.exists(dataset_path):
-        certifications = [d for d in os.listdir(dataset_path) 
-                         if os.path.isdir(os.path.join(dataset_path, d))]
-    
-    return certifications
-
-
-def initialize_database(provider, certification):
+class QuizGeneratorFlow(Flow[QuizGeneratorState]):
     """
-    Initialize Qdrant database using DatabaseCrew.
+    Main Flow for Quiz Generator following CrewAI best practices.
     
-    Args:
-        provider (str): The provider name
-        certification (str): The certification name
-        
-    Returns:
-        bool: True if initialization was successful, False otherwise
+    This flow orchestrates the complete quiz generation process:
+    1. User input collection
+    2. Database initialization
+    3. Quiz generation using RAG crew
+    4. Results saving
     """
-    print(f"🚀 Initializing Qdrant database...")
-    print(f"📋 Provider: {provider}")
-    print(f"🎓 Certification: {certification}")
-    
-    try:
-        # Initialize and run DatabaseCrew
-        database_crew = DatabaseCrew()
-        result = database_crew.crew().kickoff(inputs={
-            "provider": provider,
-            "certification": certification
-        })
+
+    @start()
+    def collect_user_input(self):
+        """
+        Step 1: Collect user input for provider, certification, and topic selection.
+        """
+        print("🚀 Starting Quiz Generator Flow...")
         
-        print("✅ Database initialization completed successfully!")
-        print(f"📊 Result: {result.raw}")
-        return True
+        # Get dataset path
+        dataset_path = os.path.join(os.path.dirname(__file__), "dataset")
         
-    except Exception as e:
-        print(f"❌ Error during database initialization: {str(e)}")
-        return False
+        try:
+            # Get user selections
+            provider, certification, topic = get_user_selections(dataset_path)
+            
+            if not all([provider, certification, topic]):
+                self.state.error_message = "User cancelled or invalid selection"
+                return
+            
+            # Update state
+            self.state.provider = provider
+            self.state.certification = certification
+            self.state.topic = topic
+            
+            # Display selection summary
+            display_selection_summary(provider, certification, topic)
+            
+            print("✅ User input collected successfully!")
+            
+        except Exception as e:
+            self.state.error_message = f"Error collecting user input: {str(e)}"
+            print(f"❌ {self.state.error_message}")
+
+    @listen(collect_user_input)
+    def initialize_vector_database(self):
+        """
+        Step 2: Initialize the Qdrant vector database with documents from the selected certification.
+        """
+        if self.state.error_message:
+            print("⏭️ Skipping database initialization due to previous error")
+            return
+        
+        print(f"\n� Initializing database for {self.state.provider}/{self.state.certification}...")
+        
+        try:
+            # Get dataset path
+            dataset_path = os.path.join(os.path.dirname(__file__), "dataset")
+            
+            # Initialize database
+            success = initialize_database(
+                self.state.provider, 
+                self.state.certification, 
+                dataset_path
+            )
+            
+            if success:
+                self.state.database_initialized = True
+                print("✅ Database initialization completed successfully!")
+            else:
+                self.state.error_message = "Database initialization failed"
+                print("❌ Database initialization failed!")
+                
+        except Exception as e:
+            self.state.error_message = f"Error during database initialization: {str(e)}"
+            print(f"❌ {self.state.error_message}")
+
+    @listen(initialize_vector_database)
+    def generate_quiz_with_rag_crew(self):
+        """
+        Step 3: Generate quiz using the RAG crew with the initialized database.
+        """
+        if self.state.error_message or not self.state.database_initialized:
+            print("⏭️ Skipping quiz generation due to previous error or failed database initialization")
+            return
+        
+        print(f"\n� Starting RAG crew for topic: {self.state.topic}")
+        
+        try:
+            current_year = datetime.now().year
+            
+            # Initialize and run RAG crew with provider/certification configuration
+            rag_crew = RagCrew(provider=self.state.provider, certification=self.state.certification)
+            crew_result = rag_crew.crew().kickoff(inputs={
+                "topic": self.state.topic,
+                "current_year": current_year
+            })
+            
+            # Save results
+            output_dir = os.path.join(os.path.dirname(__file__), "..", "..")
+            output_filename = save_quiz_results(
+                self.state.provider,
+                self.state.certification,
+                self.state.topic,
+                crew_result,
+                output_dir
+            )
+            
+            self.state.quiz_generated = True
+            self.state.output_filename = output_filename
+            
+            print("✅ RAG crew completed successfully!")
+            print(f"📊 Quiz generated successfully!")
+            print(f"💾 Results saved to: {output_filename}")
+            
+        except Exception as e:
+            self.state.error_message = f"Error during quiz generation: {str(e)}"
+            print(f"❌ {self.state.error_message}")
+
+    @listen(generate_quiz_with_rag_crew)
+    def finalize_flow(self):
+        """
+        Step 4: Finalize the flow and provide summary.
+        """
+        print("\n" + "=" * 60)
+        print("📋 QUIZ GENERATOR FLOW SUMMARY")
+        print("=" * 60)
+        
+        if self.state.error_message:
+            print(f"❌ Flow completed with errors: {self.state.error_message}")
+            return
+        
+        if self.state.quiz_generated:
+            print("🎉 Flow completed successfully!")
+            print(f"📁 Provider: {self.state.provider}")
+            print(f"🎓 Certification: {self.state.certification}")
+            print(f"🎯 Topic: {self.state.topic}")
+            print(f"💾 Output file: {self.state.output_filename}")
+            print("✅ Database initialized: Yes")
+            print("✅ Quiz generated: Yes")
+        else:
+            print("⚠️ Flow completed with issues")
+            print(f"✅ Database initialized: {self.state.database_initialized}")
+            print(f"❌ Quiz generated: {self.state.quiz_generated}")
 
 
 def main():
-    """Main function to handle user interaction and database initialization."""
-    print("🎯 Welcome to Quiz Generator!")
-    print("=" * 50)
+    """
+    Main function to start the Quiz Generator Flow.
     
-    # Get available providers
-    providers = get_available_providers()
-    
-    if not providers:
-        print("❌ No providers found in dataset folder!")
-        sys.exit(1)
-    
-    # Display available providers
-    print("📁 Available providers:")
-    for i, provider in enumerate(providers, 1):
-        print(f"  {i}. {provider}")
-    
-    # Get provider input from user
-    while True:
-        try:
-            provider_choice = input(f"\n🔗 Select a provider (1-{len(providers)}): ").strip()
-            provider_index = int(provider_choice) - 1
-            
-            if 0 <= provider_index < len(providers):
-                selected_provider = providers[provider_index]
-                break
-            else:
-                print(f"❌ Please enter a number between 1 and {len(providers)}")
-        except ValueError:
-            print("❌ Please enter a valid number")
-        except KeyboardInterrupt:
-            print("\n� Goodbye!")
-            sys.exit(0)
-    
-    # Get available certifications for selected provider
-    certifications = get_available_certifications(selected_provider)
-    
-    if not certifications:
-        print(f"❌ No certifications found for provider '{selected_provider}'!")
-        sys.exit(1)
-    
-    # Display available certifications
-    print(f"\n🎓 Available certifications for '{selected_provider}':")
-    for i, certification in enumerate(certifications, 1):
-        print(f"  {i}. {certification}")
-    
-    # Get certification input from user
-    while True:
-        try:
-            cert_choice = input(f"\n📚 Select a certification (1-{len(certifications)}): ").strip()
-            cert_index = int(cert_choice) - 1
-            
-            if 0 <= cert_index < len(certifications):
-                selected_certification = certifications[cert_index]
-                break
-            else:
-                print(f"❌ Please enter a number between 1 and {len(certifications)}")
-        except ValueError:
-            print("❌ Please enter a valid number")
-        except KeyboardInterrupt:
-            print("\n👋 Goodbye!")
-            sys.exit(0)
-    
-    # Initialize database with selected provider and certification
-    print(f"\n🔧 You selected:")
-    print(f"   Provider: {selected_provider}")
-    print(f"   Certification: {selected_certification}")
-    
-    confirm = input("\n❓ Do you want to initialize the database? (y/N): ").strip().lower()
-    
-    if confirm in ['y', 'yes']:
-        success = initialize_database(selected_provider, selected_certification)
+    This function follows CrewAI best practices by implementing the main logic
+    as a Flow with proper state management and step-by-step execution.
+    """
+    try:
+        # Initialize and run the Quiz Generator Flow
+        quiz_flow = QuizGeneratorFlow()
+        quiz_flow.kickoff()
         
-        if success:
-            print("\n🎉 Database initialization completed successfully!")
-            print("🚀 You can now use the quiz generator with this database.")
-        else:
-            print("\n⚠️ Database initialization failed!")
-            print("🔍 Please check the logs for more details.")
-    else:
-        print("👋 Database initialization cancelled.")
+    except KeyboardInterrupt:
+        print("\n👋 Quiz Generator Flow interrupted by user")
+    except Exception as e:
+        print(f"\n❌ Quiz Generator Flow failed: {str(e)}")
+
+
+def plot():
+    """Plot the Quiz Generator Flow for visualization."""
+    quiz_flow = QuizGeneratorFlow()
+    quiz_flow.plot()
+
+
+def kickoff():
+    """Alternative entry point for the flow (CrewAI convention)."""
+    main()
 
 
 if __name__ == "__main__":

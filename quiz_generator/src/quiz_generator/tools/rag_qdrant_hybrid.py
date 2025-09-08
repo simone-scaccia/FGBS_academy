@@ -14,7 +14,7 @@ from langchain.schema import Document
 from langchain_openai import AzureOpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from langchain.document_loaders import PyPDFLoader, PDFMinerLoader
+from langchain_community.document_loaders import PyPDFLoader, PDFMinerLoader
  
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -49,8 +49,8 @@ load_dotenv()
 class Settings:
     """Config settings for RAG pipeline"""
     qdrant_url: str = "http://localhost:6333"  # Qdrant URL
-    collection: str = "rag_chunks"             # Collection name
-    emb_model_name: str = "embedding_model"  # Embedding model
+    collection: str = "rag_chunks"             # Collection name (can be dynamic)
+    emb_model_name: str = "text-embedding-ada-002"  # Embedding model
     chunk_size: int = 1000                      # Chunk size
     chunk_overlap: int = 200                   # Overlap size
     top_n_semantic: int = 30                   # Candidates for semantic search
@@ -58,11 +58,45 @@ class Settings:
     final_k: int = 6                           # Final results count
     alpha: float = 0.75                        # Semantic weight
     text_boost: float = 0.20                   # Text boost
+
+
+def get_collection_name(provider: str, certification: str) -> str:
+    """
+    Generate a unique collection name for each provider/certification combination.
+    
+    Args:
+        provider (str): The provider name (e.g., 'azure')
+        certification (str): The certification name (e.g., 'AI_900')
+        
+    Returns:
+        str: Collection name in format: provider_certification_chunks
+    """
+    # Clean the names to ensure valid collection names (alphanumeric + underscore)
+    clean_provider = "".join(c if c.isalnum() else "_" for c in provider.lower())
+    clean_certification = "".join(c if c.isalnum() else "_" for c in certification.lower())
+    
+    return f"{clean_provider}_{clean_certification}_chunks"
+
+
+def get_settings_for_certification(provider: str, certification: str) -> Settings:
+    """
+    Get Settings instance with collection name specific to provider/certification.
+    
+    Args:
+        provider (str): The provider name
+        certification (str): The certification name
+        
+    Returns:
+        Settings: Settings instance with specific collection name
+    """
+    settings = Settings()
+    settings.collection = get_collection_name(provider, certification)
+    return settings
     use_mmr: bool = True                       # Use MMR diversification
     mmr_lambda: float = 0.6                    # MMR balance
-    lm_base_env: str = "OPENAI_BASE_URL"       # LLM base URL env
-    lm_key_env: str = "OPENAI_API_KEY"         # LLM API key env
-    lm_model_env: str = "LMSTUDIO_MODEL"       # LLM model env
+    lm_base_env: str = "AZURE_OPENAI_ENDPOINT"  # LLM base URL env
+    lm_key_env: str = "AZURE_OPENAI_API_KEY"    # LLM API key env
+    lm_model_env: str = "MODEL"                 # LLM model env
     use_cache: bool = True                     # Enable embedding cache
     cache_file: str = "embedding_cache.pkl"   # Cache file path
  
@@ -88,21 +122,37 @@ def retry_with_backoff(func, max_retries=3, base_delay=1.0):
 
 def get_embeddings(settings: Settings) -> AzureOpenAIEmbeddings:
     """Return Azure OpenAI embeddings"""
-    return AzureOpenAIEmbeddings(model=settings.emb_model_name)
+    return AzureOpenAIEmbeddings(
+        model=settings.emb_model_name,
+        azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+        api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+        api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01")
+    )
  
 def get_llm(settings: Settings):
     """Initialize LLM if configured"""
     try:
-        base = os.getenv(settings.lm_base_env)
+        endpoint = os.getenv(settings.lm_base_env)
         key = os.getenv(settings.lm_key_env)
         model_name = os.getenv(settings.lm_model_env)
-        if not (base and key and model_name):
-            print("LLM not configured")
+        api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01")
+        
+        if not (endpoint and key and model_name):
+            print("LLM not configured - missing environment variables")
             return None
-        llm = init_chat_model(model_name, model_provider="azure_openai")
+            
+        llm = init_chat_model(
+            model_name, 
+            model_provider="azure_openai",
+            azure_endpoint=endpoint,
+            api_key=key,
+            api_version=api_version
+        )
+        
+        # Test the LLM
         test_response = llm.invoke("test")
         if test_response:
-            print("LLM configured")
+            print("LLM configured successfully")
             return llm
         print("LLM test failed")
         return None
@@ -139,15 +189,31 @@ def simulate_corpus() -> List[Document]:
     return docs
 
 def load_pdf(file_path : str) -> List[Document]:
-
+    """Load PDF with suppressed warnings for problematic PDF formatting."""
+    import warnings
+    import logging
+    
+    # Suppress specific PDF parsing warnings
+    warnings.filterwarnings("ignore", message=".*Cannot set gray.*")
+    warnings.filterwarnings("ignore", message=".*Cannot get FontBBox.*")
+    
+    # Temporarily disable pdfminer logs
+    pdfminer_logger = logging.getLogger('pdfminer')
+    original_level = pdfminer_logger.level
+    pdfminer_logger.setLevel(logging.ERROR)
+    
     documents: List[Document] = []
     
-    loader = PDFMinerLoader(file_path)
-    docs = loader.load()
-    
-    for doc in docs:
-            doc.metadata["source"] = os.path.basename(file_path)
-            documents.append(doc)
+    try:
+        loader = PDFMinerLoader(file_path)
+        docs = loader.load()
+        
+        for doc in docs:
+                doc.metadata["source"] = os.path.basename(file_path)
+                documents.append(doc)
+    finally:
+        # Restore original logging level
+        pdfminer_logger.setLevel(original_level)
 
     return documents
 
@@ -353,8 +419,53 @@ def build_rag_chain(llm):
  
 # ========== Main ==========
  
+def search_rag_with_collection(q, k, provider=None, certification=None):
+    """
+    RAG search with support for specific provider/certification collections.
+    
+    Args:
+        q (str): Query string
+        k (int): Number of results to return
+        provider (str, optional): Provider name for collection selection
+        certification (str, optional): Certification name for collection selection
+        
+    Returns:
+        List of documents from hybrid search
+    """
+    print(f"--------- Starting RAG Search (Collection: {provider}_{certification}) -----------")
+    
+    # Get settings for specific certification if provided
+    if provider and certification:
+        s = get_settings_for_certification(provider, certification)
+        print(f"🗄️ Using collection: {s.collection}")
+    else:
+        s = Settings()
+        print(f"🗄️ Using default collection: {s.collection}")
+    
+    s.final_k = k
+    embeddings = get_embeddings(s)
+    client = get_qdrant_client(s)
+    
+    # Check if collection exists
+    if not client.collection_exists(s.collection):
+        print(f"❌ Collection '{s.collection}' not found. Please initialize the database first.")
+        return []
+    
+    # Perform hybrid search
+    hits = hybrid_search(client, s, q, embeddings)
+    
+    results = []
+    for hit in hits:
+        source = hit.payload.get("source", "Unknown")
+        content = hit.payload.get("text", "")
+        results.append(f"Source: {source}\nContent: {content}")
+    
+    return results
+
+
+# Legacy function for backward compatibility
 def search_rag(q, k):
-    """Demo full RAG pipeline"""
+    """Demo full RAG pipeline (legacy version)"""
     print("--------- Starting RAG Search -----------")
     s = SETTINGS
     s.final_k = k

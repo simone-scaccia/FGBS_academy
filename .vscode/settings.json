@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./quiz_generator/src/quiz_generator"
+    ]
+}

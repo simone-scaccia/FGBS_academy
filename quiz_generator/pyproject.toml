@@ -7,11 +7,13 @@ requires-python = ">=3.10,<3.14"
 dependencies = [
     "crewai[tools]>=0.177.0,<1.0.0",
     "jsonpatch>=1.33",
+    "jsonpointer>=3.0.0",
     "langchain>=0.3.27",
     "langchain-community>=0.3.29",
     "langchain-core>=0.3.75",
     "langchain-openai>=0.2.14",
     "openai>=1.106.1",
+    "pymupdf>=1.26.4",
     "qdrant-client>=1.15.1",
 ]
 
