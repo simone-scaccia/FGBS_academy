@@ -62,7 +62,7 @@ class Settings:
     mmr_lambda: float = 0.6                    # MMR balance
     lm_base_env: str = "OPENAI_BASE_URL"       # LLM base URL env
     lm_key_env: str = "OPENAI_API_KEY"         # LLM API key env
-    lm_model_env: str = "LMSTUDIO_MODEL"       # LLM model env
+    lm_model_env: str = "LM_STUDIO_MODEL"       # LLM model env
     use_cache: bool = True                     # Enable embedding cache
     cache_file: str = "embedding_cache.pkl"   # Cache file path
  
@@ -86,10 +86,21 @@ def retry_with_backoff(func, max_retries=3, base_delay=1.0):
                 raise e
     return None
 
+# def get_embeddings(settings: Settings) -> AzureOpenAIEmbeddings:
+#     """Return Azure OpenAI embeddings"""
+#     return AzureOpenAIEmbeddings(model=settings.emb_model_name)
+
 def get_embeddings(settings: Settings) -> AzureOpenAIEmbeddings:
     """Return Azure OpenAI embeddings"""
-    return AzureOpenAIEmbeddings(model=settings.emb_model_name)
- 
+    azure_endpoint = os.getenv(settings.lm_base_env)
+    api_key = os.getenv(settings.lm_key_env)
+    model = settings.emb_model_name
+    return AzureOpenAIEmbeddings(
+        model=model,
+        azure_endpoint=azure_endpoint,
+        api_key=api_key
+    )
+
 def get_llm(settings: Settings):
     """Initialize LLM if configured"""
     try:
@@ -138,18 +149,34 @@ def simulate_corpus() -> List[Document]:
     ]
     return docs
 
-def load_pdf(file_path : str) -> List[Document]:
+# def load_pdf(file_path : str) -> List[Document]:
 
+#     documents: List[Document] = []
+    
+#     loader = PDFMinerLoader(file_path)
+#     docs = loader.load()
+    
+#     for doc in docs:
+#             doc.metadata["source"] = os.path.basename(file_path)
+#             documents.append(doc)
+
+#     return documents
+
+def load_pdf(certification : str) -> List[Document]:
+    path = os.path.abspath(f"../dataset/azure/{certification}")
     documents: List[Document] = []
-    
-    loader = PDFMinerLoader(file_path)
-    docs = loader.load()
-    
-    for doc in docs:
-            doc.metadata["source"] = os.path.basename(file_path)
-            documents.append(doc)
+
+    for file in os.listdir(path):
+        if file.endswith(".pdf"):
+            file_path = os.path.join(path, file)
+            loader = PDFMinerLoader(file_path, mode="page")
+            docs = loader.load()
+            for doc in docs:
+                doc.metadata["topic"] = file
+            documents.extend(docs)
 
     return documents
+
 
 def split_documents(docs: List[Document], settings: Settings) -> List[Document]:
     """Split docs into chunks"""
@@ -361,33 +388,30 @@ def search_rag(q, k):
     embeddings = get_embeddings(s)
     llm = get_llm(s)
     client = get_qdrant_client(s)
-    # docs = simulate_corpus()
-    docs = load_pdf(f"{CURRENT_DIRECTORY_PATH}/knowledge_base/EU AI Act.pdf")
-    chunks = split_documents(docs, s)
-    print(f"Docs: {len(docs)}, Chunks: {len(chunks)}")
-    
-    # Use retry logic for initial embedding call
-    def get_vector_size():
-        return len(embeddings.embed_query("hello world"))
-    
-    vector_size = retry_with_backoff(get_vector_size, max_retries=5, base_delay=2.0)
-    recreate_collection_for_rag(client, s, vector_size)
-    
-    # You only need to run upsert_chunks if your collection is empty or you want to update it.
-    # If the chunks are already embedded and present in Qdrant, you can skip this step.
-    if not client.count(collection_name=s.collection).count:
-        upsert_chunks(client, s, chunks, embeddings)
+
+    # Check if collection is already populated
+    collection_count = client.count(collection_name=s.collection).count
+    if collection_count:
+        print("Collection already populated, skipping document loading and upsert.")
     else:
-        print("Collection already populated, skipping upsert.")
-    
-    
+        # Only load and upsert if collection is empty
+        docs = load_pdf(f"AI_102")
+        chunks = split_documents(docs, s)
+        print(f"Docs: {len(docs)}, Chunks: {len(chunks)}")
+
+        # Use retry logic for initial embedding call
+        def get_vector_size():
+            return len(embeddings.embed_query("hello world"))
+        vector_size = retry_with_backoff(get_vector_size, max_retries=5, base_delay=2.0)
+        recreate_collection_for_rag(client, s, vector_size)
+        upsert_chunks(client, s, chunks, embeddings)
+
     hits = hybrid_search(client, s, q, embeddings)
     if not hits:
         print("No result.")
-        
     return format_docs_for_prompt(hits)
 
 if __name__ == "__main__":
-    print(search_rag("Quali sono i principi dell'AI etica?", 30))
+    print(search_rag("Cosa fa l'OCR? quali sono i limiti dell'OCR?", 30))
     
 

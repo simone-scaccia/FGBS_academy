@@ -8,7 +8,69 @@ import os
 import sys
 from quiz_generator.crews.database_crew.database_crew import DatabaseCrew
 
+from random import randint
+ 
+from pydantic import BaseModel
+ 
+from crewai.flow import Flow, listen, start
+ 
+from quiz_generator.crews.database_crew.database_crew import DatabaseCrew
+ 
+ 
+class QuizGeneratorState(BaseModel):
+    provider: str = ""
+    certification: str = ""
+ 
+ 
+class QuizGeneratorFlow(Flow[QuizGeneratorState]):
+ 
+    @start()
+    def initialize(self):
+        print("Starting Quiz Generator Flow")
+        self.state.topic = input("Quale certificazione vuoi approfondire? ").lower().strip()
+        print(f"Argomento inserito è {self.state.topic}")
+        return self.state.topic
 
+
+    def generate_sentence_count(self):
+        print("Generating sentence count")
+        self.state.sentence_count = randint(1, 5)
+ 
+    @listen(generate_sentence_count)
+    def generate_poem(self):
+        print("Generating poem")
+        result = (
+            PoemCrew()
+            .crew()
+            .kickoff(inputs={"sentence_count": self.state.sentence_count})
+        )
+ 
+        print("Poem generated", result.raw)
+        self.state.poem = result.raw
+ 
+    @listen(generate_poem)
+    def save_poem(self):
+        print("Saving poem")
+        with open("poem.txt", "w") as f:
+            f.write(self.state.poem)
+ 
+ 
+def kickoff():
+    poem_flow = QuizGeneratorFlow()
+    poem_flow.kickoff()
+ 
+ 
+def plot():
+    poem_flow = QuizGeneratorFlow()
+    poem_flow.plot()
+ 
+ 
+if __name__ == "__main__":
+    kickoff()
+
+
+
+    
 def get_available_providers():
     """Get list of available providers from dataset folder."""
     dataset_path = os.path.join(os.path.dirname(__file__), "dataset")

@@ -1,6 +1,6 @@
 load_and_structure_pdfs_task:
   description: >
-    Load all PDF files from the dataset/{certification} folder and extract their content, ensuring that no information is lost, even if it seems less relevant. Structure the extracted data so it is ready for direct insertion into a Qdrant database, following the conventions required by the load_pdf tool. All details must be preserved to enable the generation of highly specific quiz questions for the certification.
+    Load all PDF files from the {certification} folder and extract their content, ensuring that no information is lost, even if it seems less relevant. Structure the extracted data so it is ready for direct insertion into a Qdrant database, following the conventions required by the load_pdf tool. All details must be preserved to enable the generation of highly specific quiz questions for the certification.
   expected_output: >
     A list of langchain.schema.Document objects, each containing the extracted content from a PDF file. Each Document must include metadata with at least the 'source' field set to the PDF filename, as required by the load_pdf tool in db_tools.py. No information should be omitted, regardless of its perceived relevance.
   agent: PDF_formatter

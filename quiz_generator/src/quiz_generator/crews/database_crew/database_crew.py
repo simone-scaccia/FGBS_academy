@@ -20,7 +20,7 @@ class DatabaseCrew():
         return Agent(
             config=self.agents_config['PDF_formatter'], # type: ignore[index]
             verbose=True,
-            tools=[load_pdf()]
+            tools=[load_pdf]
         )
 
     @agent
