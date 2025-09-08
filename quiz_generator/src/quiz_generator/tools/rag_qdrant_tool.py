@@ -7,7 +7,7 @@ vector store. Useful as an agent tool step before generation.
 from typing import Type, List, Optional
 from crewai.tools import BaseTool
 from pydantic import BaseModel, Field
-from .rag_qdrant_hybrid import search_rag, search_rag_with_collection
+from ..utils.rag_qdrant_hybrid import search_rag, search_rag_with_collection
 
 
 class RagToolInput(BaseModel):

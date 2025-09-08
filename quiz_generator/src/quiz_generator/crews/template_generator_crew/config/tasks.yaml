@@ -1,17 +1,75 @@
-research_task:
-  description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is {current_year}.
-  expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
-  agent: researcher
+template_generator_task:
+  description: |
+    Inputs:
+    - topics: {topic}           # comma-separated list of topics
+    - question_count: {number_of_questions}  # integer between 1 and 10
+    - question_type: {question_type}   # one of: open, multiple, true_false, mixed
+ 
+    Produce a Markdown "Quiz Pack" that adapts to these inputs:
+    - Blueprint: distribution per type (derive from question_type)
+      * open       -> all questions are open-ended
+      * multiple   -> all are multiple choice (use 4 options by default)
+      * true_false -> all are true/false
+      * mixed      -> split as 33.3% multiple, 33.3% true_false, 33.3% open (round and fix totals)
+    - Sections (if applicable):
+      * True/False: T/F question placeholder and true and false answers
+      * Multiple Choice: MC question placeholder and A-D placeholders answers
+      * Short Open Question: open question placeholder and 4 empty lines for the answer
+    Return ONLY the final Markdown content.
+ 
+    Important formatting rules:
+    - Use clear H2 sections per type (only include sections with count > 0)
+    - Number questions starting from 1, continuous across sections
+    - Use bold for question text
+    - Include a text into the MC section to specify that only one answer is correct
+    - Keep the template generic (no cert-specific content)
+    - Do NOT include any explanations or notes about the template
+    - Placeholders must be enclosed in square braces e.g. [TF_Question_1], [MC_Question_1], [MC_Option_A_1], [Open_Question_1]
+  
+    e.g. for 5 questions of type "mixed":
+    # Certification Quiz Pack
 
-reporting_task:
-  description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    ## True/False Questions
+
+    1. **[TF_Question_1]**
+      - True
+      - False
+
+    2. **[TF_Question_2]**
+      - True
+      - False
+
+    ## Multiple Choice Questions
+
+    *Note: Select the most appropriate answer. Only one option is correct.*
+
+    3. **[MC_Question_3]**
+      A) [MC_Option_A_3]
+      B) [MC_Option_B_3]
+      C) [MC_Option_C_3]
+      D) [MC_Option_D_3]
+
+    4. **[MC_Question_4]**
+      A) [MC_Option_A_4]
+      B) [MC_Option_B_4]
+      C) [MC_Option_C_4]
+      D) [MC_Option_D_4]
+
+    ## Short Open Questions
+
+    5. **[Open_Question_5]**
+
+      ________________________________________________________
+
+      ________________________________________________________
+
+      ________________________________________________________
+
+      ________________________________________________________
+
+      ________________________________________________________
+  
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
-  agent: reporting_analyst
+    A single string (the complete Quiz Pack).
+    Do not include Markdown code blocks (```).
+  agent: template_generator

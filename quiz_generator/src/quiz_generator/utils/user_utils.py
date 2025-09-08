@@ -37,7 +37,6 @@ def get_available_topics(provider, certification, dataset_base_path):
     
     return topics
 
-
 def get_user_provider_selection(providers):
     """
     Get provider selection from user.
@@ -66,7 +65,6 @@ def get_user_provider_selection(providers):
         except KeyboardInterrupt:
             print("\n👋 Goodbye!")
             return None
-
 
 def get_user_certification_selection(certifications, provider):
     """
@@ -97,7 +95,6 @@ def get_user_certification_selection(certifications, provider):
         except KeyboardInterrupt:
             print("\n👋 Goodbye!")
             return None
-
 
 def get_user_topic_selection(topics, provider, certification):
     """
@@ -210,7 +207,7 @@ def get_user_question_type_selection():
     Returns:
         str or None: Selected question type or None if cancelled
     """
-    question_types = ['Multiple Choice', 'True/False', 'Short Open Answer', 'Mixed']
+    question_types = ['Multiple Choice', 'True/False', 'Short Open Question', 'Mixed']
     
     print("\n📝 Available question types:")
     for i, qtype in enumerate(question_types, 1):
