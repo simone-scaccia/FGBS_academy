@@ -14,13 +14,7 @@ class DatabaseCrew():
 
     agents: List[BaseAgent]
     tasks: List[Task]
-
-    # Learn more about YAML configuration files here:
-    # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
-    # Tasks: https://docs.crewai.com/concepts/tasks#yaml-configuration-recommended
     
-    # If you would like to add tools to your agents, you can learn more about it here:
-    # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def PDF_formatter(self) -> Agent:
         return Agent(
@@ -36,9 +30,6 @@ class DatabaseCrew():
             verbose=True
         )
 
-    # To learn more about structured task outputs,
-    # task dependencies, and task callbacks, check out the documentation:
-    # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
     def load_and_structure_pdfs_task(self) -> Task:
         return Task(
@@ -60,8 +51,6 @@ class DatabaseCrew():
     @crew
     def crew(self) -> Crew:
         """Creates the DatabaseCrew crew"""
-        # To learn how to add knowledge sources to your crew, check out the documentation:
-        # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
         return Crew(
             agents=self.agents, # Automatically created by the @agent decorator
