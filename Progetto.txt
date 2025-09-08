@@ -13,7 +13,7 @@ Progettare la crew
 - Definite il ruolo di ciascun agente, le responsabilità e il flusso di interazione.
 + flusso sequenziale
 - Potete usare strumenti di memoria, strumenti esterni (API, RAG, browser, database) o limitarvi a capacità di reasoning puro: la scelta è vostra.
-+ Tool: WebSearch, guardrail per url (testare i tool)
++ Tool: WebSearch, guardrail per url (testare i tool), lettura documenti (template), creazione pdf
 
 Implementare il sistema con CrewAI
 
