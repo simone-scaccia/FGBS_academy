@@ -1,19 +1,17 @@
-
-
 from crewai.tools import tool
 from typing import List
-from langchain.document_loaders import PDFMinerLoader
+from langchain_community.document_loaders import PDFMinerLoader
 from langchain.schema import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
-
-from quiz_generator.src.quiz_generator.tools.rag_qdrant_hybrid import Settings, retry_with_backoff
 from qdrant_client import QdrantClient
-from quiz_generator.src.quiz_generator.utils.qdrant_utils import get_embeddings, get_embeddings, get_vector_size, recreate_collection_for_rag
+from quiz_generator.tools.rag_qdrant_hybrid import Settings, retry_with_backoff
+from quiz_generator.utils.qdrant_utils import get_embeddings, get_vector_size, recreate_collection_for_rag
 
 @tool
 def load_pdf(certification : str) -> List[Document]:
-    path = os.path.abspath(f"dataset/azure/{certification}")
+    # Correct path based on your project structure
+    path = os.path.abspath(f"src/quiz_generator/dataset/azure/{certification}")
     documents: List[Document] = []
 
     for file in os.listdir(path):
@@ -25,10 +23,7 @@ def load_pdf(certification : str) -> List[Document]:
                 doc.metadata["topic"] = file
             documents.extend(docs)
 
-
     return documents
-
-
 
 @tool
 def create_qdrant_DB(settings: Settings) -> QdrantClient:
