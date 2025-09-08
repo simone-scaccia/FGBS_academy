@@ -147,13 +147,13 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
     @listen(initialize_vector_database)
     def generate_quiz_with_rag_crew(self):
         """
-        Step 3: Generate quiz using the RAG crew with the initialized database.
+        Step 4: Generate quiz questions using the RAG crew with the initialized database.
         """
         if self.state.error_message or not self.state.database_initialized:
             print("⏭️ Skipping quiz generation due to previous error or failed database initialization")
             return
         
-        print(f"\n� Starting RAG crew for topic: {self.state.topic}")
+        print(f"\n📝 Starting RAG crew for topic: {self.state.topic}")
         
         try:
             current_year = datetime.now().year
@@ -162,8 +162,33 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             rag_crew = RagCrew(provider=self.state.provider, certification=self.state.certification)
             crew_result = rag_crew.crew().kickoff(inputs={
                 "topic": self.state.topic,
-                "current_year": current_year
+                "current_year": current_year,
+                "number_of_questions": self.state.number_of_questions,
+                "question_type": self.state.question_type
             })
+            
+            print("✅ RAG crew completed successfully!")
+            print("📊 Quiz questions generated in JSON format!")
+            
+        except Exception as e:
+            self.state.error_message = f"Error during quiz generation: {str(e)}"
+            print(f"❌ {self.state.error_message}")
+
+    @listen(generate_quiz_with_rag_crew)
+    def create_final_quiz(self):
+        """
+        Step 5: Create final quiz using Quiz Maker crew to combine template and questions.
+        """
+        if self.state.error_message:
+            print("⏭️ Skipping final quiz creation due to previous error")
+            return
+        
+        print(f"\n📋 Creating final quiz with Quiz Maker crew...")
+        
+        try:
+            # Initialize and run Quiz Maker crew
+            quiz_maker_crew = QuizMakerCrew()
+            quiz_result = quiz_maker_crew.crew().kickoff()
             
             # Save results
             output_dir = os.path.join(os.path.dirname(__file__), "..", "..")
@@ -171,22 +196,22 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
                 self.state.provider,
                 self.state.certification,
                 self.state.topic,
-                crew_result,
+                quiz_result,
                 output_dir
             )
             
             self.state.quiz_generated = True
             self.state.output_filename = output_filename
             
-            print("✅ RAG crew completed successfully!")
-            print(f"📊 Quiz generated successfully!")
+            print("✅ Quiz Maker crew completed successfully!")
+            print(f"📊 Final quiz generated successfully!")
             print(f"💾 Results saved to: {output_filename}")
             
         except Exception as e:
-            self.state.error_message = f"Error during quiz generation: {str(e)}"
+            self.state.error_message = f"Error during final quiz creation: {str(e)}"
             print(f"❌ {self.state.error_message}")
 
-    @listen(generate_quiz_with_rag_crew)
+    @listen(create_final_quiz)
     def finalize_flow(self):
         """
         Step 4: Finalize the flow and provide summary.
