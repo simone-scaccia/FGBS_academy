@@ -10,7 +10,7 @@ from langchain.schema import Document
 from langchain_openai import AzureOpenAIEmbeddings
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-from langchain.document_loaders import PyPDFLoader, PDFMinerLoader
+from langchain_community.document_loaders import PyPDFLoader, PDFMinerLoader
  
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
@@ -46,7 +46,7 @@ class Settings:
     """Config settings for RAG pipeline"""
     qdrant_url: str = "http://localhost:6333"  # Qdrant URL
     collection: str = "rag_chunks"             # Collection name
-    emb_model_name: str = "embedding_model"  # Embedding model
+    emb_model_name: str = os.getenv("EMB_MODEL_NAME")  # Embedding model
     chunk_size: int = 1000                      # Chunk size
     chunk_overlap: int = 200                   # Overlap size
     top_n_semantic: int = 30                   # Candidates for semantic search
@@ -77,9 +77,10 @@ def recreate_collection_for_rag(client: QdrantClient, settings: Settings, vector
             ),
         )
         client.create_payload_index(settings.collection, "text", PayloadSchemaType.TEXT)
-        for key in ["doc_id", "source", "title", "lang"]:
+        for key in ["doc_id", "topic"]:
             client.create_payload_index(settings.collection, key, PayloadSchemaType.KEYWORD)
     # If collection exists, do nothing (reuse existing collection and indexes)
+
 def get_embeddings(settings: Settings) -> AzureOpenAIEmbeddings:
     """Return Azure OpenAI embeddings"""
     return AzureOpenAIEmbeddings(model=settings.emb_model_name)
