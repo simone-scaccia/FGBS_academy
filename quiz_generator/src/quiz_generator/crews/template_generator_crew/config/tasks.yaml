@@ -1,0 +1,26 @@
+template_generator_task:
+  description: |
+    Inputs:
+    - question_count: {question_count}
+    - question_type: {question_type}   # one of: open, multiple, true_false, mixed
+ 
+    Produce a Markdown "Quiz Pack" that adapts to these inputs:
+    - Blueprint: distribution per type (derive from question_type)
+      * open       -> all questions are open-ended
+      * multiple   -> all are multiple choice (use 4 options by default)
+      * true_false -> all are true/false
+      * mixed      -> split as 33.3% multiple, 33.3% true_false, 33.3% open (round and fix totals)
+    - Sections (if applicable):
+      * True/False: list questions with a short statement placeholder
+      * Multiple Choice: list questions with A-D (and E if 5 options) placeholders
+      * Open-ended: list questions with a short scenario placeholder
+    Return ONLY the final Markdown content.
+ 
+    Important formatting rules:
+    - Use clear H2 sections per type (only include sections with count > 0)
+    - Number questions starting from 1 inside each section
+    - Include a short explanation placeholder for TF/MC
+    - Keep the template generic (no cert-specific content)
+  expected_output: >
+    A single Markdown string (the complete Quiz Pack).
+  agent: template_generator
