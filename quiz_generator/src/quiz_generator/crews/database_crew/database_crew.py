@@ -2,6 +2,8 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
+from quiz_generator.src.quiz_generator.tools.db_tools import load_pdf
+
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
@@ -20,16 +22,17 @@ class DatabaseCrew():
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
-    def researcher(self) -> Agent:
+    def PDF_formatter(self) -> Agent:
         return Agent(
-            config=self.agents_config['researcher'], # type: ignore[index]
-            verbose=True
+            config=self.agents_config['PDF_formatter'], # type: ignore[index]
+            verbose=True,
+            tools=[load_pdf()]
         )
 
     @agent
-    def reporting_analyst(self) -> Agent:
+    def DB_engineer(self) -> Agent:
         return Agent(
-            config=self.agents_config['reporting_analyst'], # type: ignore[index]
+            config=self.agents_config['DB_engineer'], # type: ignore[index]
             verbose=True
         )
 
@@ -37,16 +40,21 @@ class DatabaseCrew():
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def research_task(self) -> Task:
+    def load_and_structure_pdfs_task(self) -> Task:
         return Task(
-            config=self.tasks_config['research_task'], # type: ignore[index]
+            config=self.tasks_config['load_and_structure_pdfs_task'], # type: ignore[index]
         )
 
     @task
-    def reporting_task(self) -> Task:
+    def create_qdrant_db_task(self) -> Task:
         return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='report.md'
+            config=self.tasks_config['create_qdrant_db_task'], # type: ignore[index]
+        )
+
+    @task
+    def load_documents_to_qdrant_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['load_documents_to_qdrant_task'], # type: ignore[index]
         )
 
     @crew
