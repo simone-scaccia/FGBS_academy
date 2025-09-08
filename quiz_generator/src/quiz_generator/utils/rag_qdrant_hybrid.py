@@ -1,10 +1,11 @@
 """
 RAG pipeline with Qdrant and AzureOpenAI embeddings
 """
- 
+
 from __future__ import annotations
 import os
 import time
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Dict, Any, Iterable, Tuple
@@ -38,6 +39,7 @@ from qdrant_client.models import (
     SearchParams,
     PointStruct,
 )
+logging.getLogger("pdfminer").setLevel(logging.ERROR)
 
 CURRENT_FILE_PATH = os.path.abspath(__file__)
 CURRENT_DIRECTORY_PATH = os.path.dirname(CURRENT_FILE_PATH)
@@ -49,7 +51,7 @@ load_dotenv()
 class Settings:
     """Config settings for RAG pipeline"""
     qdrant_url: str = "http://localhost:6333"  # Qdrant URL
-    collection: str = "rag_chunks"             # Collection name
+    #collection: str = "rag_chunks"             # Collection name
     emb_model_name: str = "embedding_model"  # Embedding model
     chunk_size: int = 1000                      # Chunk size
     chunk_overlap: int = 200                   # Overlap size
@@ -65,7 +67,7 @@ class Settings:
     lm_model_env: str = "LM_STUDIO_MODEL"       # LLM model env
     use_cache: bool = True                     # Enable embedding cache
     cache_file: str = "embedding_cache.pkl"   # Cache file path
- 
+    
 SETTINGS = Settings()
  
 # ========== Embeddings & LLM ==========
@@ -195,11 +197,11 @@ def get_qdrant_client(settings: Settings) -> QdrantClient:
 
 
 
-def recreate_collection_for_rag(client: QdrantClient, settings: Settings, vector_size: int):
+def recreate_collection_for_rag(client: QdrantClient, settings: Settings, vector_size: int, collection_name:str):
     """Create Qdrant collection and indexes only if they don't exist"""
-    if not client.collection_exists(settings.collection):
+    if not client.collection_exists(collection_name):
         client.create_collection(
-            collection_name=settings.collection,
+            collection_name=collection_name,
             vectors_config=VectorParams(size=vector_size, distance=Distance.COSINE),
             hnsw_config=HnswConfigDiff(m=32, ef_construct=256),
             optimizers_config=OptimizersConfigDiff(default_segment_number=2),
@@ -207,9 +209,9 @@ def recreate_collection_for_rag(client: QdrantClient, settings: Settings, vector
                 scalar=ScalarQuantizationConfig(type=ScalarType.INT8, always_ram=False)
             ),
         )
-        client.create_payload_index(settings.collection, "text", PayloadSchemaType.TEXT)
+        client.create_payload_index(collection_name, "text", PayloadSchemaType.TEXT)
         for key in ["doc_id", "source", "title", "lang"]:
-            client.create_payload_index(settings.collection, key, PayloadSchemaType.KEYWORD)
+            client.create_payload_index(collection_name, key, PayloadSchemaType.KEYWORD)
     # If collection exists, do nothing (reuse existing collection and indexes)
 
 # ========== Ingest ==========
@@ -229,7 +231,7 @@ def build_points(chunks: List[Document], embeds: List[List[float]]) -> List[Poin
         pts.append(PointStruct(id=i, vector=vec, payload=payload))
     return pts
  
-def upsert_chunks(client: QdrantClient, settings: Settings, chunks: List[Document], embeddings: AzureOpenAIEmbeddings):
+def upsert_chunks(client: QdrantClient, settings: Settings, chunks: List[Document], embeddings: AzureOpenAIEmbeddings,collection_name:str):
     """Embed and upsert chunks with rate limiting"""
     print(f"Embedding {len(chunks)} chunks...")
     
@@ -253,18 +255,18 @@ def upsert_chunks(client: QdrantClient, settings: Settings, chunks: List[Documen
             time.sleep(1.0)
     
     points = build_points(chunks, all_vecs)
-    client.upsert(collection_name=settings.collection, points=points, wait=True)
+    client.upsert(collection_name=collection_name, points=points, wait=True)
  
 # ========== Search ==========
  
-def qdrant_semantic_search(client: QdrantClient, settings: Settings, query: str, embeddings: AzureOpenAIEmbeddings, limit: int, with_vectors: bool = False):
+def qdrant_semantic_search(client: QdrantClient, settings: Settings, query: str, embeddings: AzureOpenAIEmbeddings, limit: int, collection_name: str, with_vectors: bool = False):
     """Semantic search in Qdrant with retry logic"""
     def embed_query():
         return embeddings.embed_query(query)
     
     qv = retry_with_backoff(embed_query, max_retries=5, base_delay=2.0)
     res = client.query_points(
-        collection_name=settings.collection,
+        collection_name=collection_name,
         query=qv,
         limit=limit,
         with_payload=True,
@@ -273,13 +275,13 @@ def qdrant_semantic_search(client: QdrantClient, settings: Settings, query: str,
     )
     return res.points
  
-def qdrant_text_prefilter_ids(client: QdrantClient, settings: Settings, query: str, max_hits: int) -> List[int]:
+def qdrant_text_prefilter_ids(client: QdrantClient, settings: Settings, query: str, max_hits: int, collection_name:str) -> List[int]:
     """Return ids matching text filter"""
     matched_ids: List[int] = []
     next_page = None
     while True:
         points, next_page = client.scroll(
-            collection_name=settings.collection,
+            collection_name=collection_name,
             scroll_filter=Filter(must=[FieldCondition(key="text", match=MatchText(text=query))]),
             limit=min(256, max_hits - len(matched_ids)),
             offset=next_page,
@@ -321,11 +323,11 @@ def mmr_select(query_vec: List[float], candidates_vecs: List[List[float]], k: in
         remaining.remove(best_idx)
     return selected
  
-def hybrid_search(client: QdrantClient, settings: Settings, query: str, embeddings: AzureOpenAIEmbeddings):
+def hybrid_search(client: QdrantClient, settings: Settings, query: str, embeddings: AzureOpenAIEmbeddings, collection_name: str):
     """Hybrid search with semantic + text + MMR"""
-    sem = qdrant_semantic_search(client, settings, query, embeddings, limit=settings.top_n_semantic, with_vectors=True)
+    sem = qdrant_semantic_search(client, settings, query, embeddings, limit=settings.top_n_semantic, collection_name=collection_name, with_vectors=True)
     if not sem: return []
-    text_ids = set(qdrant_text_prefilter_ids(client, settings, query, settings.top_n_text))
+    text_ids = set(qdrant_text_prefilter_ids(client, settings, query, settings.top_n_text, collection_name))
     scores = [p.score for p in sem]
     smin, smax = min(scores), max(scores)
     def norm(x): return 1.0 if smax == smin else (x - smin) / (smax - smin)
@@ -380,7 +382,10 @@ def build_rag_chain(llm):
  
 # ========== Main ==========
  
-def search_rag(q, k):
+def search_rag(q, k, collection_name):
+    if collection_name=='AI_900':       #to do for testing (just once)
+        collection_name="rag_chunks"
+    
     """Demo full RAG pipeline"""
     print("--------- Starting RAG Search -----------")
     s = SETTINGS
@@ -390,7 +395,7 @@ def search_rag(q, k):
     client = get_qdrant_client(s)
 
     # Check if collection is already populated
-    collection_count = client.count(collection_name=s.collection).count
+    collection_count = client.count(collection_name=collection_name).count
     if collection_count:
         print("Collection already populated, skipping document loading and upsert.")
     else:
@@ -403,15 +408,15 @@ def search_rag(q, k):
         def get_vector_size():
             return len(embeddings.embed_query("hello world"))
         vector_size = retry_with_backoff(get_vector_size, max_retries=5, base_delay=2.0)
-        recreate_collection_for_rag(client, s, vector_size)
-        upsert_chunks(client, s, chunks, embeddings)
+        recreate_collection_for_rag(client, s, vector_size,collection_name)
+        upsert_chunks(client, s, chunks, embeddings,collection_name)
 
-    hits = hybrid_search(client, s, q, embeddings)
+    hits = hybrid_search(client, s, q, embeddings,collection_name)
     if not hits:
         print("No result.")
     return format_docs_for_prompt(hits)
 
 if __name__ == "__main__":
-    print(search_rag("Cosa fa l'OCR? quali sono i limiti dell'OCR?", 30))
+    print(search_rag("Cosa fa l'OCR? quali sono i limiti dell'OCR?", 30, "AI_900"))
     
 

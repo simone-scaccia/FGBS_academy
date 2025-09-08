@@ -27,9 +27,15 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
     @start()
     def initialize(self):
         print("Starting Quiz Generator Flow")
-        self.state.topic = input("Quale certificazione vuoi approfondire? ").lower().strip()
-        print(f"Argomento inserito è {self.state.topic}")
-        return self.state.topic
+        self.state.certification = input("Quale certificazione vuoi approfondire? ").lower().strip()
+        print(f"Argomento inserito è {self.state.certification}")
+        return self.state.certification
+    
+    @listen(initialize)
+    def create_DB(self):
+        
+
+        return
 
 
     def generate_sentence_count(self):
