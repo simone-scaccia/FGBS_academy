@@ -50,7 +50,7 @@ class Settings:
     """Config settings for RAG pipeline"""
     qdrant_url: str = "http://localhost:6333"  # Qdrant URL
     collection: str = "rag_chunks"             # Collection name (can be dynamic)
-    emb_model_name: str = "text-embedding-ada-002"  # Embedding model
+    emb_model_name: str = "embedding_model"  # Embedding model
     chunk_size: int = 10000                      # Chunk size
     chunk_overlap: int = 300                   # Overlap size
     top_n_semantic: int = 30                   # Candidates for semantic search
@@ -120,12 +120,14 @@ def retry_with_backoff(func, max_retries=3, base_delay=1.0):
     return None
 
 def get_embeddings(settings: Settings) -> AzureOpenAIEmbeddings:
+    # os.environ["OPENAI_API_TYPE"] = "azure"             
+    # os.environ["openai_api_type"] = "azure"
     """Return Azure OpenAI embeddings"""
     return AzureOpenAIEmbeddings(
         model=settings.emb_model_name,
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
         api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01")
+        api_version=os.getenv("AZURE_OPENAI_API_VERSION")
     )
  
 def get_llm(settings: Settings):
