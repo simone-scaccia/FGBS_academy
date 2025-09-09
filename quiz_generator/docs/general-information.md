@@ -25,26 +25,35 @@
 
 ## Operational Environment
 
-- **Expected operational environment:**  
-  - Python 3.11+ on developer machines or a VM/container  
-  - **Project setup (CLI-based with CrewAI):**
-    ```bash
-    # Create and activate a virtual environment
-    python -m venv .venv
-    # Windows
-    .\.venv\Scripts\activate
-    # macOS/Linux
-    # source .venv/bin/activate
+- **Expected operational environment:** Python 3.11+ on developer machines or a VM/container
+- **Vector DB:** Qdrant (Docker) on `localhost:6333` / `6334`
+- **LLM & Embeddings:** Azure OpenAI (configured via `.env`)
+- **Datasets:** official certification PDFs stored in `src/quiz_generator/dataset/`
 
-    # Install CrewAI
-    pip install crewai
+**Project setup (CLI-based with CrewAI):**
 
-    # Create the Flow project
-    crewai create flow quiz_generator
-    ```
-  - Qdrant (via Docker) running on `localhost:6333`  
-  - LLM and embeddings served by Azure OpenAI (configured via `.env`)  
-  - Official certification datasets downloaded and stored in `src/quiz_generator/dataset/`
+```bash
+# 1) Create the virtual environment OUTSIDE the project folder
+cd <your_workspace_root>
+python -m venv .venv
+
+# 2) Activate the venv
+# Windows
+.\.venv\Scripts\activate
+# macOS/Linux
+source .venv/bin/activate
+
+# 3) Install CrewAI in the venv
+pip install crewai
+
+# 4) Obtain the project and move into the folder
+# (if not already downloaded)
+git clone https://github.com/simone-scaccia/FGBS_academy
+cd FGBS_academy/quiz_generator
+
+# 5) Start the Flow (CrewAI will resolve/install the Flow dependencies)
+crewai flow kickoff
+
 
 - **User Interface:**  
   - Command-line interface (interactive wizard via terminal)  
