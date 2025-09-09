@@ -1,0 +1,56 @@
+{
+  "questions": [
+    {
+      "type": "true_false",
+      "question": "LUIS is a cloud-based conversational AI service designed exclusively for bot development and cannot be integrated with other Azure services.",
+      "options": ["True", "False"],
+      "answer": "False"
+    },
+    {
+      "type": "true_false",
+      "question": "Intents in LUIS represent what the user wants to accomplish, such as requesting to turn on a device.",
+      "options": ["True", "False"],
+      "answer": "True"
+    },
+    {
+      "type": "true_false",
+      "question": "Data privacy and legal compliance are not essential considerations when designing LUIS applications.",
+      "options": ["True", "False"],
+      "answer": "False"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is an entity in LUIS?",
+      "options": [
+        "A piece of information describing user goals.",
+        "A textual example used to train the model.",
+        "A parameter that provides detailed context for intents.",
+        "A list of phrases to refine predictions."
+      ],
+      "answer": "A parameter that provides detailed context for intents."
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which of the following is NOT a common use case for LUIS?",
+      "options": [
+        "E-commerce assistants for shopping queries.",
+        "Voice-controlled IoT systems.",
+        "Developing autonomous vehicles.",
+        "Enterprise-grade chatbots for HR inquiries."
+      ],
+      "answer": "Developing autonomous vehicles."
+    },
+    {
+      "type": "open_ended",
+      "question": "Explain the development lifecycle stages in LUIS and how they help refine the application.",
+      "options": [],
+      "answer": "The development lifecycle involves planning user scenarios, building intents and entities, testing model accuracy, publishing resources, and refining the application using user insights—each stage ensures iterative improvement."
+    },
+    {
+      "type": "open_ended",
+      "question": "What are some best practices for training data that can enhance prediction accuracy in LUIS applications?",
+      "options": [],
+      "answer": "Varied and realistic utterance examples improve prediction accuracy; avoiding irrelevant or sensitive data ensures the model's reliability and ethical compliance."
+    }
+  ]
+}

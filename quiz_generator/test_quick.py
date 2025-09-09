@@ -11,6 +11,7 @@ import sys
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 from src.quiz_generator.main import QuizGeneratorFlow, QuizGeneratorState
+from src.quiz_generator.utils.user_utils import generate_output_filenames
 
 
 def test_with_direct_state():
@@ -28,15 +29,23 @@ def test_with_direct_state():
         quiz_flow.state.provider = "azure"
         quiz_flow.state.certification = "AI_900"
         quiz_flow.state.topic = "azure-ai-services-luis"  # One of the available topics
+        quiz_flow.state.formatted_topic = "LUIS"  # Formatted topic name
         quiz_flow.state.number_of_questions = 7
         quiz_flow.state.question_type = "mixed"
+        
+        # Generate output filenames
+        quiz_flow.state.output_filenames = generate_output_filenames(
+            quiz_flow.state.certification, 
+            quiz_flow.state.formatted_topic
+        )
         
         print("📋 Test Configuration:")
         print(f"   - Provider: {quiz_flow.state.provider}")
         print(f"   - Certification: {quiz_flow.state.certification}")
-        print(f"   - Topic: {quiz_flow.state.topic}")
+        print(f"   - Topic: {quiz_flow.state.formatted_topic} (file: {quiz_flow.state.topic})")
         print(f"   - Questions: {quiz_flow.state.number_of_questions}")
         print(f"   - Type: {quiz_flow.state.question_type}")
+        print(f"   - Output files will use prefix: {quiz_flow.state.certification}_{quiz_flow.state.formatted_topic.lower().replace(' ', '_')}")
         print("=" * 60)
         
         # Skip user input and start from database initialization
@@ -66,7 +75,7 @@ def test_with_direct_state():
             print(f"❌ Quiz maker failed: {quiz_flow.state.error_message}")
             return False
         
-        # Step 5: Take quiz (student simulation)
+        '''# Step 5: Take quiz (student simulation)
         quiz_flow.take_quiz()
         if quiz_flow.state.error_message:
             print(f"❌ Quiz taker failed: {quiz_flow.state.error_message}")
@@ -76,7 +85,7 @@ def test_with_direct_state():
         quiz_flow.evaluate_quiz()
         if quiz_flow.state.error_message:
             print(f"❌ Quiz evaluation failed: {quiz_flow.state.error_message}")
-            return False
+            return False'''
         
         # Step 7: Finalize
         quiz_flow.finalize_flow()

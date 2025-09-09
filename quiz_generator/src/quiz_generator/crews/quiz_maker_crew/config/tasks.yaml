@@ -1,32 +1,46 @@
 quiz_maker_task:
   description: |
-    Read the JSON file 'outputs/questions.json' using FileReadTool that has the following structure:
- 
-    {
-      "questions": [
-        {
-          "type": "multiple_choice|true_false|open|mixed",
-          "question": "<question text>",
-          "options": ["<list of options>", "..."] OR ["True", "False"] OR [],
-          "answer": "<correct answer or empty string>"
-        }
-      ]
-    }
-
-    Also read the quiz template file 'outputs/quiz_template.md' using FileReadTool which contains placeholders like:
-    [TF_Question_1], [MC_Question_1], [MC_Option_A_1], [Open_Question_1]
-
-    Populate the base Markdown quiz template following these rules:
-    - For each true_false question, replace the T/F question placeholder with the actual question text.
-    - For each multiple_choice question, replace the MC question placeholder with the actual question text and the A-D placeholders with the actual options.
-    - For each short open question, replace the open question placeholder with the actual question text.
-    - Maintain the original template structure and formatting
-    - Replace placeholders in sequential order (question 1, 2, 3, etc.)
-
-    Output only the final Markdown content of the populated quiz pack.
-  expected_output: >
-    A Markdown quiz pack populated with all questions from the JSON file.
-    Do not include Markdown code blocks (```).
+    You must perform these steps in exact order:
+    
+    1. First, read the JSON file using FileReadTool to get the questions data
+    2. Then, read the quiz template file using FileReadTool to get the template structure
+    3. Populate the template by replacing ALL placeholders with actual content from the JSON in the EXACT same order
+    
+    IMPORTANT RULES:
+    - Use ONLY the questions from the JSON file - do NOT create new questions
+    - Match the question types and order exactly as they appear in the JSON
+    - Replace placeholders systematically based on the JSON content:
+      * For true_false questions: use [TF_Question_X] placeholders
+      * For multiple_choice questions: use [MC_Question_X] and [MC_Option_A_X], [MC_Option_B_X], [MC_Option_C_X], [MC_Option_D_X] placeholders
+      * For open_ended questions: use [Open_Question_X] placeholders
+    - The number X should match the position in the template (1, 2, 3, etc.)
+    - PRESERVE THE ORIGINAL QUESTION NUMBERING from the template exactly as it appears
+    - Do NOT renumber questions - keep the numbers from the template (e.g., if template shows "5. **[Open_Question_5]**", your output must be "5. **[actual question text]**")
+    - If the JSON has fewer questions than template placeholders, only populate existing questions
+    - If the JSON has more questions than template placeholders, only use the first N questions that fit the template
+    
+    CRITICAL: You must output the COMPLETE populated Markdown content, not just a description.
+    Replace ALL placeholders with real content from the JSON. Do not leave any [placeholder] unfilled.
+    Do NOT generate additional questions beyond what's in the JSON file.
+    MAINTAIN EXACT NUMBERING from the template - do not restart numbering in any section.
+  expected_output: |
+    The complete Markdown quiz content with all placeholders replaced by actual questions and options from the JSON file.
+    Must preserve the original template structure and replace only the placeholders with content from the JSON.
+    
+    Requirements:
+    - Start with the exact template header (e.g., "# **Azure - AI_102**")
+    - Include ALL quiz sections from the template
+    - Replace each placeholder with the corresponding question/option from the JSON file
+    - Maintain the template's formatting and structure
+    - PRESERVE EXACT NUMBERING from template - do NOT renumber questions
+    - If template shows "5. **[Open_Question_5]**", output must be "5. **[actual question text]**"
+    - Use ONLY the questions provided in the JSON file
+    - Do NOT add extra questions beyond what's in the JSON
+    - Do NOT wrap in Markdown code blocks (```)
+    - CRITICAL: Keep consecutive numbering across sections as defined in the template
+    
+    NO placeholders like [TF_Question_1] should remain in the final output.
+    NO renumbering of questions - maintain template numbering exactly.
   agent: quiz_maker
 
 pdf_export_task:

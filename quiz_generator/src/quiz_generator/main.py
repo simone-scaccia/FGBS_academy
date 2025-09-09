@@ -13,14 +13,15 @@ from .crews.template_generator_crew.template_generator_crew import TemplateGener
 from .crews.quiz_maker_crew.quiz_maker_crew import QuizMakerCrew
 #from .crews.quiz_taker_crew.quiz_taker_crew import QuizTakerCrew
 #from .crews.quiz_evaluator_crew.quiz_evaluator_crew import QuizEvaluatorCrew
-from .utils.user_utils import get_user_selections, get_user_choices, display_selection_summary
+from .utils.user_utils import get_user_selections, get_user_choices, display_selection_summary, generate_output_filenames
 from .utils.database_utils import initialize_database
 
 class QuizGeneratorState(BaseModel):
     """State model for the Quiz Generator Flow."""
     provider: Optional[str] = None
     certification: Optional[str] = None
-    topic: Optional[str] = None
+    topic: Optional[str] = None  # filename without extension
+    formatted_topic: Optional[str] = None  # human-readable topic name
     number_of_questions: int = None
     question_type: str = None
     database_initialized: bool = False
@@ -28,6 +29,7 @@ class QuizGeneratorState(BaseModel):
     quiz_completed: bool = False
     quiz_evaluated: bool = False
     output_filename: Optional[str] = None
+    output_filenames: Optional[dict] = None  # dict with all output file paths
     error_message: Optional[str] = None
 
 
@@ -57,16 +59,17 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
 
             # Step 1: Collect info about certification
             # Get user selections
-            provider, certification, topic = get_user_selections(dataset_path)
+            provider, certification, filename, formatted_topic = get_user_selections(dataset_path)
             
-            if not all([provider, certification, topic]):
+            if not all([provider, certification, filename, formatted_topic]):
                 self.state.error_message = "User cancelled or invalid selection"
                 return
             
             # Update state
             self.state.provider = provider
             self.state.certification = certification
-            self.state.topic = topic
+            self.state.topic = filename  # Keep filename for file operations
+            self.state.formatted_topic = formatted_topic  # Human-readable topic name
             
             # Step 2: Collect info about quiz template to generate
             # Get user choices
@@ -80,10 +83,13 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             self.state.number_of_questions = number_of_questions
             self.state.question_type = question_type
             
+            # Generate output filenames based on certification and topic
+            self.state.output_filenames = generate_output_filenames(certification, formatted_topic)
+            
             # Display selection summary
-            display_selection_summary(provider, certification, topic, number_of_questions, question_type)
+            display_selection_summary(provider, certification, formatted_topic, number_of_questions, question_type)
             print("✅ User input selection collected successfully!")
-            print(f"This system will generate {number_of_questions} questions of type '{question_type}' for the certification {certification}, focusing on these topics: {topic}")
+            print(f"This system will generate {number_of_questions} questions of type '{question_type}' for the certification {certification}, focusing on these topics: {formatted_topic}")
         except Exception as e:
             self.state.error_message = f"Error collecting user input: {str(e)}"
             print(f"❌ {self.state.error_message}")
@@ -135,6 +141,11 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
         try:
             # Initialize and run Template Generator crew with provider/certification configuration
             template_crew = TemplateGeneratorCrew()
+            
+            # Update the task's output_file dynamically
+            template_task = template_crew.template_generator_task()
+            template_task.output_file = self.state.output_filenames['quiz_template']
+            
             template_result = template_crew.crew().kickoff(inputs={
                 "provider": self.state.provider.capitalize(),
                 "certification": self.state.certification,
@@ -158,15 +169,24 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             print("⏭️ Skipping quiz generation due to previous error or failed database initialization")
             return
         
-        print(f"\n📝 Starting RAG crew for topic: {self.state.topic}")
+        print(f"\n📝 Starting RAG crew for topic: {self.state.formatted_topic}")
         
         try:
             current_year = datetime.now().year
             
             # Initialize and run RAG crew with provider/certification configuration
-            rag_crew = RagCrew(provider=self.state.provider, certification=self.state.certification)
+            rag_crew = RagCrew(
+                provider=self.state.provider, 
+                certification=self.state.certification,
+                template_file=self.state.output_filenames['quiz_template']
+            )
+            
+            # Update the task's output_file dynamically
+            reporting_task = rag_crew.reporting_task()
+            reporting_task.output_file = self.state.output_filenames['questions_json']
+            
             rag_crew.crew().kickoff(inputs={
-                "topic": self.state.topic,
+                "topic": self.state.formatted_topic,
                 "current_year": current_year,
                 "number_of_questions": self.state.number_of_questions,
                 "question_type": self.state.question_type
@@ -192,7 +212,15 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
         
         try:
             # Initialize and run Quiz Maker crew
-            quiz_maker_crew = QuizMakerCrew()
+            quiz_maker_crew = QuizMakerCrew(
+                template_file=self.state.output_filenames['quiz_template'],
+                questions_file=self.state.output_filenames['questions_json']
+            )
+            
+            # Update the task's output_file dynamically
+            quiz_task = quiz_maker_crew.quiz_maker_task()
+            quiz_task.output_file = self.state.output_filenames['quiz_md']
+            
             quiz_result = quiz_maker_crew.crew().kickoff(inputs={
                 "number_of_questions": self.state.number_of_questions
             })
@@ -200,6 +228,7 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             
             print("✅ Quiz Maker crew completed successfully!")
             print(f"📊 Final quiz generated successfully!")
+            print(f"📄 Quiz saved to: {self.state.output_filenames['quiz_md']}")
 
         except Exception as e:
             self.state.error_message = f"Error during final quiz creation: {str(e)}"
@@ -277,21 +306,21 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             print("🎉 Flow completed successfully!")
             print(f"📁 Provider: {self.state.provider}")
             print(f"🎓 Certification: {self.state.certification}")
-            print(f"🎯 Topic: {self.state.topic}")
+            print(f"🎯 Topic: {self.state.formatted_topic}")
             print(f"❓ Number of Questions: {self.state.number_of_questions}")
             print(f"📝 Question Type: {self.state.question_type}")
             print("✅ Database initialized: Yes")
             print("✅ Quiz generated: Yes")
             #print(f"✅ Quiz completed by student: {self.state.quiz_completed}")
             #print(f"✅ Quiz evaluated: {self.state.quiz_evaluated}")
-            if self.state.quiz_evaluated:
+            if self.state.quiz_generated and self.state.output_filenames:
                 print("📄 Files generated:")
-                print("   - outputs/quiz_template.md (template)")
-                print("   - outputs/questions.json (questions data)")
-                print("   - outputs/quiz.md (blank quiz)")
-                print("   - outputs/quiz.pdf (blank quiz PDF)")
-                #print("   - outputs/completed_quiz.md (completed quiz)")
-                #print("   - outputs/quiz_evaluation.md (evaluation report)")
+                print(f"   - {self.state.output_filenames['quiz_template']} (template)")
+                print(f"   - {self.state.output_filenames['questions_json']} (questions data)")
+                print(f"   - {self.state.output_filenames['quiz_md']} (blank quiz)")
+                print(f"   - {self.state.output_filenames['quiz_pdf']} (blank quiz PDF)")
+                #print(f"   - {self.state.output_filenames['completed_quiz']} (completed quiz)")
+                #print(f"   - {self.state.output_filenames['quiz_evaluation']} (evaluation report)")
         else:
             print("⚠️ Flow completed with issues")
             print(f"✅ Database initialized: {self.state.database_initialized}")

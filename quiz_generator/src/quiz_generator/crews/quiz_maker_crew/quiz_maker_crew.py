@@ -15,6 +15,18 @@ class QuizMakerCrew():
 
     agents: List[BaseAgent]
     tasks: List[Task]
+    
+    def __init__(self, template_file: str = None, questions_file: str = None, **kwargs):
+        """
+        Initialize QuizMakerCrew with dynamic file paths.
+        
+        Args:
+            template_file (str, optional): Path to the quiz template file
+            questions_file (str, optional): Path to the questions JSON file
+        """
+        super().__init__(**kwargs)
+        self.template_file = template_file or 'outputs/quiz_template.md'
+        self.questions_file = questions_file or 'outputs/questions.json'
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
@@ -26,8 +38,8 @@ class QuizMakerCrew():
     def quiz_maker(self) -> Agent:
         return Agent(
             config=self.agents_config['quiz_maker'], # type: ignore[index]
-            tools=[FileReadTool(file_path='outputs/quiz_template.md'), # Tool to read the quiz template
-                   FileReadTool(file_path='outputs/questions.json'), # Tool to read the questions JSON
+            tools=[FileReadTool(file_path=self.template_file), # Tool to read the quiz template
+                   FileReadTool(file_path=self.questions_file), # Tool to read the questions JSON
                    MarkdownToPdfExporter() # Tool to convert markdown to PDF
                   ],
             verbose=True
@@ -39,8 +51,8 @@ class QuizMakerCrew():
     @task
     def quiz_maker_task(self) -> Task:
         return Task(
-            config=self.tasks_config['quiz_maker_task'], # type: ignore[index]
-            output_file='outputs/quiz.md'
+            config=self.tasks_config['quiz_maker_task'] # type: ignore[index]
+            # Note: output_file will be set dynamically based on inputs
         )
     
     @task

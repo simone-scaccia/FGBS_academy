@@ -1,6 +1,6 @@
-# **Azure - AI_102**
+# **Azure - AI_900**  
 
-## True/False Questions
+## True/False Questions  
 
 1. **[TF_Question_1]**  
   [] True  
@@ -14,9 +14,9 @@
   [] True  
   [] False  
 
-## Multiple Choice Questions
+## Multiple Choice Questions  
 
-*Note: Select the most appropriate answer. Only one option is correct.*
+*Note: Select the most appropriate answer. Only one option is correct.*  
 
 4. **[MC_Question_4]**  
   A) [MC_Option_A_4]  
@@ -30,7 +30,7 @@
   C) [MC_Option_C_5]  
   D) [MC_Option_D_5]  
 
-## Short Open Questions
+## Short Open Questions  
 
 6. **[Open_Question_6]**  
 

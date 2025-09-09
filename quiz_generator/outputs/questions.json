@@ -2,60 +2,45 @@
   "questions": [
     {
       "type": "true_false",
-      "question": "Azure AI Anomaly Detector supports both univariate and multivariate anomaly detection strategies.",
+      "question": "Azure AI Document Intelligence can analyze both structured and unstructured data from documents.",
       "options": ["True", "False"],
       "answer": "True"
     },
     {
       "type": "true_false",
-      "question": "Multivariate anomaly detection in Azure AI can analyze up to 500 signals simultaneously.",
+      "question": "Custom models in Azure AI Document Intelligence require extensive coding skills to train and deploy.",
+      "options": ["True", "False"],
+      "answer": "False"
+    },
+    {
+      "type": "true_false",
+      "question": "Microsoft AI principles are optional when using Azure AI Document Intelligence for sensitive data.",
       "options": ["True", "False"],
       "answer": "False"
     },
     {
       "type": "multiple_choice",
-      "question": "What is the main benefit of using univariate detection mode in Azure AI Anomaly Detector?",
-      "options": [
-        "Analyzes multiple correlated metrics together.",
-        "Focuses on detecting anomalies in a single time-series variable.",
-        "Relies on Graph Attention Networks.",
-        "Requires manual configuration of models."
-      ],
-      "answer": "Focuses on detecting anomalies in a single time-series variable."
+      "question": "Which feature is NOT supported by Azure AI Document Intelligence?",
+      "options": ["Text extraction", "Gender prediction", "Barcode recognition", "Document layout analysis"],
+      "answer": "Gender prediction"
     },
     {
       "type": "multiple_choice",
-      "question": "Which feature allows Azure Anomaly Detector to handle real-time data streams efficiently?",
-      "options": [
-        "Batch Processing",
-        "Streaming Detection",
-        "Change Point Detection",
-        "On-premise Deployment"
-      ],
-      "answer": "Streaming Detection"
-    },
-    {
-      "type": "multiple_choice",
-      "question": "When training models in multivariate detection, what is the recommended minimum number of data points per variable?",
-      "options": [
-        "1,000",
-        "3,000",
-        "5,000",
-        "10,000"
-      ],
-      "answer": "5,000"
+      "question": "What is a common use case for Azure AI Document Intelligence?",
+      "options": ["Automating accounts payable", "Predicting stock market trends", "Measuring website traffic", "Creating social media ads"],
+      "answer": "Automating accounts payable"
     },
     {
       "type": "open_ended",
-      "question": "Explain how sensitivity settings in Azure AI Anomaly Detector can impact the detection results.",
+      "question": "Describe the advantages of integrating Azure Logic Apps with Azure AI Document Intelligence for enterprise workflows.",
       "options": [],
-      "answer": "Higher sensitivity increases anomaly detection but may misinterpret minor deviations, while lower sensitivity reduces false positives but may miss smaller anomalies."
+      "answer": "Integration with Azure Logic Apps enhances automation by enabling workflows such as invoice processing and email notifications, streamlining business operations."
     },
     {
       "type": "open_ended",
-      "question": "Describe a real-world application of Azure AI's multivariate detection mode.",
+      "question": "What are the best practices to ensure ethical and secure usage of Azure AI Document Intelligence?",
       "options": [],
-      "answer": "A real-world application includes predictive maintenance where data from multiple sensors (e.g., pressure, temperature) on machinery is analyzed to predict equipment failures."
+      "answer": "Best practices include incorporating human-in-the-loop oversight, respecting data privacy laws, maintaining security protocols to prevent unauthorized access, and aligning with Microsoft's Responsible AI principles."
     }
   ]
 }

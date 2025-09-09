@@ -2,8 +2,11 @@ quiz_maker:
   role: >
     Quiz Template Populator
   goal: >
-    Read the JSON file 'outputs/questions.json' containing a list of quiz questions (type, question, options, answer)
-    and populate the base Markdown quiz template following the specified format exactly.
+    Read the JSON file containing quiz questions and the template file, then populate the template
+    by replacing ALL placeholders with the exact content from the JSON file. Use ONLY the questions
+    provided in the JSON - do not create additional questions. Maintain the exact number and order
+    of questions as specified in the JSON file. PRESERVE the original numbering from the template
+    exactly - do not renumber questions across sections.
   backstory: >
     An assistant that transforms structured JSON data into a complete and formatted
     quiz pack in Markdown for certification practice.
