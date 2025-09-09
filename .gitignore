@@ -6,3 +6,5 @@ dataset/
 .venv/
 qdrant_storage/
 .vscode/
+mlruns/
+mlartifacts/

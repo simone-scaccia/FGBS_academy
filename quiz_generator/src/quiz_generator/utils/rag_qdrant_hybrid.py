@@ -50,7 +50,7 @@ class Settings:
     """Config settings for RAG pipeline"""
     qdrant_url: str = "http://localhost:6333"  # Qdrant URL
     collection: str = "rag_chunks"             # Collection name (can be dynamic)
-    emb_model_name: str = "text-embedding-ada-002"  # Embedding model
+    emb_model_name: str = "embedding_model"  # Embedding model
     chunk_size: int = 10000                      # Chunk size
     chunk_overlap: int = 300                   # Overlap size
     top_n_semantic: int = 30                   # Candidates for semantic search
