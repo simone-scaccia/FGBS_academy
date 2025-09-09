@@ -19,6 +19,12 @@ quiz_maker_task:
     - If the JSON has fewer questions than template placeholders, only populate existing questions
     - If the JSON has more questions than template placeholders, only use the first N questions that fit the template
     
+    CRITICAL FOR OPEN QUESTIONS: 
+    - For open-ended questions, include ONLY the question text from the JSON
+    - DO NOT include any answer or solution from the JSON file
+    - Leave the answer lines empty with just underscores: ________________________________________________________
+    - This is a BLANK quiz for students to fill out - no answers should be pre-filled
+    
     CRITICAL: You must output the COMPLETE populated Markdown content, not just a description.
     Replace ALL placeholders with real content from the JSON. Do not leave any [placeholder] unfilled.
     Do NOT generate additional questions beyond what's in the JSON file.
@@ -38,6 +44,8 @@ quiz_maker_task:
     - Do NOT add extra questions beyond what's in the JSON
     - Do NOT wrap in Markdown code blocks (```)
     - CRITICAL: Keep consecutive numbering across sections as defined in the template
+    - FOR OPEN QUESTIONS: Include ONLY the question text, NOT the answers from JSON
+    - Leave answer spaces blank with underscores for students to fill out
     
     NO placeholders like [TF_Question_1] should remain in the final output.
     NO renumbering of questions - maintain template numbering exactly.

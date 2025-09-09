@@ -1,0 +1,51 @@
+{
+  "questions": [
+    {
+      "type": "true_false",
+      "question": "Document Intelligence is exclusively designed for processing legal documents.",
+      "options": ["True", "False"],
+      "answer": "False"
+    },
+    {
+      "type": "true_false",
+      "question": "Custom Models in Document Intelligence can be trained using labeled datasets.",
+      "options": ["True", "False"],
+      "answer": "True"
+    },
+    {
+      "type": "true_false",
+      "question": "Model Composition allows users to classify and group models for better routing of documents.",
+      "options": ["True", "False"],
+      "answer": "True"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which of the following is NOT a prebuilt model in Document Intelligence?",
+      "options": ["Banking", "Tax", "Document Verification", "Legal"],
+      "answer": "Document Verification"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is the primary purpose of Azure Logic Apps in Document Intelligence workflows?",
+      "options": [
+        "To create machine learning models",
+        "To facilitate human-in-the-loop oversight",
+        "To integrate document workflows like invoice handling",
+        "To enhance multilingual document processing"
+      ],
+      "answer": "To integrate document workflows like invoice handling"
+    },
+    {
+      "type": "open",
+      "question": "Explain the importance of Responsible AI principles in the use of Document Intelligence for sensitive data processing.",
+      "options": [],
+      "answer": "Responsible AI principles ensure adherence to global privacy and compliance standards, mitigating risks related to sensitive data handling and preventing unauthorized access or retention of personal information."
+    },
+    {
+      "type": "open",
+      "question": "Describe two common use cases of Document Intelligence in financial automation.",
+      "options": [],
+      "answer": "1. Automating invoice data extraction for accounts payable. 2. Processing receipts for expense management."
+    }
+  ]
+}

@@ -4,8 +4,12 @@ This module implements the main Flow following CrewAI best practices.
 """
 
 import os
+import json
+import pandas as pd
+import mlflow
 from datetime import datetime
 from typing import Optional
+from pure_eval import Evaluator
 from pydantic import BaseModel
 from crewai.flow import Flow, listen, start
 from .crews.rag_crew.rag_crew import RagCrew
@@ -15,6 +19,11 @@ from .crews.quiz_taker_crew.quiz_taker_crew import QuizTakerCrew
 #from .crews.quiz_evaluator_crew.quiz_evaluator_crew import QuizEvaluatorCrew
 from .utils.user_utils import get_user_selections, get_user_choices, display_selection_summary, generate_output_filenames
 from .utils.database_utils import initialize_database
+
+# ---------- MLflow base config ----------
+mlflow.set_tracking_uri("http://127.0.0.1:5001")
+mlflow.autolog()  
+mlflow.set_experiment("FlowGruppo2")
 
 class QuizGeneratorState(BaseModel):
     """State model for the Quiz Generator Flow."""
@@ -273,33 +282,6 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             self.state.error_message = f"Error during quiz taking: {str(e)}"
             print(f"❌ {self.state.error_message}")
 
-    '''@listen(take_quiz)
-    def evaluate_quiz(self):
-        """
-        Step 7: Evaluate the completed quiz using Quiz Evaluator crew.
-        """
-        if self.state.error_message or not self.state.quiz_completed:
-            print("⏭️ Skipping quiz evaluation due to previous error or quiz not completed")
-            return
-        
-        print(f"\n📊 Evaluating the completed quiz...")
-        
-        try:
-            # Initialize and run Quiz Evaluator crew
-            quiz_evaluator_crew = QuizEvaluatorCrew()
-            quiz_evaluation_result = quiz_evaluator_crew.crew().kickoff(inputs={
-                "topic": self.state.topic
-            })
-            self.state.quiz_evaluated = True
-            
-            print("✅ Quiz Evaluator crew completed successfully!")
-            print(f"📈 Quiz evaluation completed!")
-            print(f"💾 Evaluation report saved to: outputs/quiz_evaluation.md")
-
-        except Exception as e:
-            self.state.error_message = f"Error during quiz evaluation: {str(e)}"
-            print(f"❌ {self.state.error_message}")'''
-
     @listen(take_quiz)
     def finalize_flow(self):
         """
@@ -341,6 +323,97 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             print(f"❌ Quiz completed: {self.state.quiz_completed}")
             #print(f"❌ Quiz evaluated: {self.state.quiz_evaluated}")
 
+def evaluation_flow():
+    # self.state.mode = "evaluate"
+    # if self.state.mode == "flow":
+    #     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+    # else:
+    #     azure_endpoint = os.getenv("OPENAI_API_BASE")
+
+
+    with open("C:\\Users\\WE572VG\\OneDrive - EY\\Documents\\GitHub\\FGBS_academy\\quiz_generator\\outputs\\questions.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+        for q in data["questions"]:
+            question_texts = q["question"]
+            predictions = q["answer"]
+            #predictions = f"{self.state.provider} {self.state.certification} {self.state.topic}"
+            #contexts=self.state.contexts or None,              # opzionale
+            #ground_truths=self.state.ground_truths or None,    # opzionale
+ 
+            try:
+                eval_metrics = _run_llm_judge_mlflow(
+                    user_query=question_texts,
+                    prediction=predictions,
+                    #context=contexts,
+                    #ground_truth=ground_truths,
+                )
+                if eval_metrics:
+                    mlflow.log_dict(eval_metrics, "eval_metrics_snapshot.json")
+                    mlflow.set_tag("llm_judge_status", "success")
+            except Exception as e:
+                mlflow.set_tag("llm_judge_status", f"failed:{type(e).__name__}")
+                mlflow.log_text(str(e), "llm_judge_error.txt")
+ 
+ 
+ 
+# ---------- Nuovo: judge con mlflow.evaluate ----------
+def _run_llm_judge_mlflow(
+    user_query: str,
+    prediction: str,
+    context: str | None = None,
+    ground_truth: str | None = None,
+):
+    """
+    Usa i judge integrati MLflow:
+        - answer_relevance (richiede inputs+predictions)
+        - faithfulness (se fornisci context)
+        - answer_similarity/answer_correctness (se fornisci ground_truth)
+        - toxicity (metric non-LLM)
+    Le metriche e la tabella vengono loggate automaticamente nel run attivo.
+    """
+ 
+    # Tabella di valutazione a 1 riga (scalabile a molte righe)
+    data = {
+        "inputs": [user_query],
+        "predictions": [prediction],
+    }
+    if context is not None:
+        data["context"] = [context]
+    if ground_truth is not None:
+        data["ground_truth"] = [ground_truth]
+ 
+    df = pd.DataFrame(data)
+ 
+    # Costruisci lista metriche in base alle colonne disponibili
+    extra_metrics = [
+        mlflow.metrics.genai.answer_relevance(),  # sempre se hai inputs+predictions
+        mlflow.metrics.toxicity(),                # metrica non-LLM (HF pipeline)
+    ]
+    if "context" in df.columns:
+        extra_metrics.append(mlflow.metrics.genai.faithfulness(context_column="context"))
+    if "ground_truth" in df.columns:
+        extra_metrics.extend([
+            mlflow.metrics.genai.answer_similarity(),
+            mlflow.metrics.genai.answer_correctness(),
+        ])
+ 
+    # model_type:
+    # - "text" va bene per generico testo
+    # - "question-answering" se passi ground_truth in stile QA
+    model_type = "question-answering" if "ground_truth" in df.columns else "text"
+ 
+    results = mlflow.evaluate(
+        data=df,
+        predictions="predictions",
+        targets="ground_truth" if "ground_truth" in df.columns else None,
+        model_type=model_type,
+        extra_metrics=extra_metrics,
+        evaluators="default",
+    )
+   
+    # MLflow ha già loggato metriche e tabella 'eval_results_table'
+    return results.metrics
+ 
 
 def main():
     """
@@ -369,6 +442,7 @@ def plot():
 def kickoff():
     """Alternative entry point for the flow (CrewAI convention)."""
     plot()
+    #evaluation_flow()
     main()
 
 

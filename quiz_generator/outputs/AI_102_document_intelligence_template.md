@@ -10,15 +10,13 @@
   [] True  
   [] False  
 
+3. **[TF_Question_3]**  
+  [] True  
+  [] False  
+
 ## Multiple Choice Questions
 
 *Note: Select the most appropriate answer. Only one option is correct.*
-
-3. **[MC_Question_3]**  
-  A) [MC_Option_A_3]  
-  B) [MC_Option_B_3]  
-  C) [MC_Option_C_3]  
-  D) [MC_Option_D_3]  
 
 4. **[MC_Question_4]**  
   A) [MC_Option_A_4]  
