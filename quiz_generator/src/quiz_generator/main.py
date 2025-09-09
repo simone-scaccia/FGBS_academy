@@ -5,15 +5,16 @@ This module implements the main Flow following CrewAI best practices.
 
 import os
 from datetime import datetime
-from ssl import cert_time_to_seconds
 from typing import Optional
 from pydantic import BaseModel
 from crewai.flow import Flow, listen, start
 from .crews.rag_crew.rag_crew import RagCrew
 from .crews.template_generator_crew.template_generator_crew import TemplateGeneratorCrew
 from .crews.quiz_maker_crew.quiz_maker_crew import QuizMakerCrew
+from .crews.quiz_taker_crew.quiz_taker_crew import QuizTakerCrew
+from .crews.quiz_evaluator_crew.quiz_evaluator_crew import QuizEvaluatorCrew
 from .utils.user_utils import get_user_selections, get_user_choices, display_selection_summary
-from .utils.database_utils import initialize_database, save_quiz_results
+from .utils.database_utils import initialize_database
 
 class QuizGeneratorState(BaseModel):
     """State model for the Quiz Generator Flow."""
@@ -24,6 +25,8 @@ class QuizGeneratorState(BaseModel):
     question_type: str = None
     database_initialized: bool = False
     quiz_generated: bool = False
+    quiz_completed: bool = False
+    quiz_evaluated: bool = False
     output_filename: Optional[str] = None
     error_message: Optional[str] = None
 
@@ -190,7 +193,9 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
         try:
             # Initialize and run Quiz Maker crew
             quiz_maker_crew = QuizMakerCrew()
-            quiz_result = quiz_maker_crew.crew().kickoff()
+            quiz_result = quiz_maker_crew.crew().kickoff(inputs={
+                "number_of_questions": self.state.number_of_questions
+            })
             self.state.quiz_generated = True
             
             print("✅ Quiz Maker crew completed successfully!")
@@ -199,6 +204,61 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
         except Exception as e:
             self.state.error_message = f"Error during final quiz creation: {str(e)}"
             print(f"❌ {self.state.error_message}")
+
+    '''@listen(create_final_quiz)
+    def take_quiz(self):
+        """
+        Step 6: Simulate a student taking the quiz using Quiz Taker crew.
+        """
+        if self.state.error_message or not self.state.quiz_generated:
+            print("⏭️ Skipping quiz taking due to previous error or quiz not generated")
+            return
+        
+        print(f"\n🎓 Simulating student taking the quiz...")
+        
+        try:
+            # Initialize and run Quiz Taker crew
+            quiz_taker_crew = QuizTakerCrew(provider=self.state.provider, certification=self.state.certification)
+            quiz_taker_result = quiz_taker_crew.crew().kickoff(inputs={
+                "topic": self.state.topic,
+                "certification": self.state.certification
+            })
+            self.state.quiz_completed = True
+            
+            print("✅ Quiz Taker crew completed successfully!")
+            print(f"📝 Student has completed the quiz!")
+            print(f"💾 Completed quiz saved to: outputs/completed_quiz.md")
+
+        except Exception as e:
+            self.state.error_message = f"Error during quiz taking: {str(e)}"
+            print(f"❌ {self.state.error_message}")
+
+    @listen(take_quiz)
+    def evaluate_quiz(self):
+        """
+        Step 7: Evaluate the completed quiz using Quiz Evaluator crew.
+        """
+        if self.state.error_message or not self.state.quiz_completed:
+            print("⏭️ Skipping quiz evaluation due to previous error or quiz not completed")
+            return
+        
+        print(f"\n📊 Evaluating the completed quiz...")
+        
+        try:
+            # Initialize and run Quiz Evaluator crew
+            quiz_evaluator_crew = QuizEvaluatorCrew()
+            quiz_evaluation_result = quiz_evaluator_crew.crew().kickoff(inputs={
+                "topic": self.state.topic
+            })
+            self.state.quiz_evaluated = True
+            
+            print("✅ Quiz Evaluator crew completed successfully!")
+            print(f"📈 Quiz evaluation completed!")
+            print(f"💾 Evaluation report saved to: outputs/quiz_evaluation.md")
+
+        except Exception as e:
+            self.state.error_message = f"Error during quiz evaluation: {str(e)}"
+            print(f"❌ {self.state.error_message}")'''
 
     @listen(create_final_quiz)
     def finalize_flow(self):
@@ -222,10 +282,22 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             print(f"📝 Question Type: {self.state.question_type}")
             print("✅ Database initialized: Yes")
             print("✅ Quiz generated: Yes")
+            #print(f"✅ Quiz completed by student: {self.state.quiz_completed}")
+            #print(f"✅ Quiz evaluated: {self.state.quiz_evaluated}")
+            if self.state.quiz_evaluated:
+                print("📄 Files generated:")
+                print("   - outputs/quiz_template.md (template)")
+                print("   - outputs/questions.json (questions data)")
+                print("   - outputs/quiz.md (blank quiz)")
+                print("   - outputs/quiz.pdf (blank quiz PDF)")
+                #print("   - outputs/completed_quiz.md (completed quiz)")
+                #print("   - outputs/quiz_evaluation.md (evaluation report)")
         else:
             print("⚠️ Flow completed with issues")
             print(f"✅ Database initialized: {self.state.database_initialized}")
             print(f"❌ Quiz generated: {self.state.quiz_generated}")
+            #print(f"❌ Quiz completed: {self.state.quiz_completed}")
+            #print(f"❌ Quiz evaluated: {self.state.quiz_evaluated}")
 
 
 def main():
@@ -254,6 +326,7 @@ def plot():
 
 def kickoff():
     """Alternative entry point for the flow (CrewAI convention)."""
+    plot()
     main()
 
 

@@ -1,44 +1,61 @@
 {
   "questions": [
     {
-      "type": "multiple_choice",
-      "question": "What is the primary purpose of the Azure AI Anomaly Detector service?",
-      "options": [
-        "To monitor and detect anomalies in time-series data",
-        "To perform large-scale data storage",
-        "To provide text translation services",
-        "To handle image recognition tasks"
-      ],
-      "answer": "To monitor and detect anomalies in time-series data"
+      "type": "true_false",
+      "question": "Azure AI Anomaly Detector supports both univariate and multivariate anomaly detection strategies.",
+      "options": ["True", "False"],
+      "answer": "True"
     },
     {
       "type": "true_false",
-      "question": "Azure AI Anomaly Detector requires extensive machine learning expertise to use.",
+      "question": "Multivariate anomaly detection in Azure AI can analyze up to 500 signals simultaneously.",
       "options": ["True", "False"],
       "answer": "False"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is the main benefit of using univariate detection mode in Azure AI Anomaly Detector?",
+      "options": [
+        "Analyzes multiple correlated metrics together.",
+        "Focuses on detecting anomalies in a single time-series variable.",
+        "Relies on Graph Attention Networks.",
+        "Requires manual configuration of models."
+      ],
+      "answer": "Focuses on detecting anomalies in a single time-series variable."
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which feature allows Azure Anomaly Detector to handle real-time data streams efficiently?",
+      "options": [
+        "Batch Processing",
+        "Streaming Detection",
+        "Change Point Detection",
+        "On-premise Deployment"
+      ],
+      "answer": "Streaming Detection"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "When training models in multivariate detection, what is the recommended minimum number of data points per variable?",
+      "options": [
+        "1,000",
+        "3,000",
+        "5,000",
+        "10,000"
+      ],
+      "answer": "5,000"
     },
     {
       "type": "open_ended",
-      "question": "List two use cases for the Azure AI Anomaly Detector service.",
+      "question": "Explain how sensitivity settings in Azure AI Anomaly Detector can impact the detection results.",
       "options": [],
-      "answer": ""
+      "answer": "Higher sensitivity increases anomaly detection but may misinterpret minor deviations, while lower sensitivity reduces false positives but may miss smaller anomalies."
     },
     {
-      "type": "multiple_choice",
-      "question": "Which algorithm is used by the Azure AI Anomaly Detector for multivariate anomaly detection?",
-      "options": [
-        "K-Means Clustering",
-        "Graph Attention Network",
-        "Support Vector Machine",
-        "Random Forest"
-      ],
-      "answer": "Graph Attention Network"
-    },
-    {
-      "type": "true_false",
-      "question": "Batch detection in Azure AI Anomaly Detector processes real-time data to detect anomalies.",
-      "options": ["True", "False"],
-      "answer": "False"
+      "type": "open_ended",
+      "question": "Describe a real-world application of Azure AI's multivariate detection mode.",
+      "options": [],
+      "answer": "A real-world application includes predictive maintenance where data from multiple sensors (e.g., pressure, temperature) on machinery is analyzed to predict equipment failures."
     }
   ]
 }

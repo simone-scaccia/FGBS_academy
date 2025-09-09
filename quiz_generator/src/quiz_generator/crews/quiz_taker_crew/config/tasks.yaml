@@ -1,0 +1,47 @@
+quiz_taking_task:
+  description: >
+    Read the quiz from 'outputs/quiz.md' and complete it by answering all questions.
+    You are simulating a real student taking the {certification} certification exam on {topic}.
+    
+    For each question type, follow these specific formatting rules:
+    
+    1. **True/False Questions:**
+       - Read the question carefully
+       - Research the topic using the RAG Search Tool if needed for verification
+       - Mark your answer with ☑ next to True or False
+       - Leave the other option unmarked with ☐
+       Example:
+       ☑ True
+       ☐ False
+    
+    2. **Multiple Choice Questions:**
+       - Read the question and all options carefully
+       - Use the RAG Search Tool to research and verify your understanding
+       - Put an X over the letter of your chosen answer
+       Example:
+       X A) Your chosen option
+       B) Other option
+       C) Other option  
+       D) Other option
+    
+    3. **Short Open Questions:**
+       - Read the question carefully
+       - Use the RAG Search Tool to research relevant information
+       - Provide a comprehensive answer of 3-4 lines
+       - Write your answer in the blank lines provided
+    
+    Important guidelines:
+    - Answer based on your research and understanding, not on any answer keys
+    - Use the RAG Search Tool to look up information when you need clarification
+    - Maintain the original quiz structure and formatting
+    - Be thorough but concise in your answers
+    - Show your work by marking answers clearly as specified
+    
+  expected_output: >
+    A complete quiz with all questions answered following the specified formatting:
+    - True/False questions marked with ☑/☐ symbols
+    - Multiple choice questions marked with X over the chosen letter
+    - Open questions answered with 3-4 line responses
+    - Original quiz structure and formatting preserved
+    - No markdown code blocks (```)
+  agent: quiz_taker_student

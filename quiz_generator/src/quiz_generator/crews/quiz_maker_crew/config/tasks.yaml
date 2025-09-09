@@ -19,7 +19,7 @@ quiz_maker_task:
     Populate the base Markdown quiz template following these rules:
     - For each true_false question, replace the T/F question placeholder with the actual question text.
     - For each multiple_choice question, replace the MC question placeholder with the actual question text and the A-D placeholders with the actual options.
-    - For each open_ended question, replace the open question placeholder with the actual question text.
+    - For each short open question, replace the open question placeholder with the actual question text.
     - Maintain the original template structure and formatting
     - Replace placeholders in sequential order (question 1, 2, 3, etc.)
 
@@ -37,8 +37,9 @@ pdf_export_task:
     Requirements:
     - Paper size: A4
     - Margins: ~2 cm
-    - Preserve Markdown headings, lists, formatting and new lines
- 
+    - Preserve Markdown headings, lists, formatting, new lines
+    - Number questions starting from 1 and finish at {number_of_questions}, continuously across sections
+
     Output a success message indicating the location of the saved PDF file.
   expected_output: >
     A success message indicating the location of the saved PDF file.

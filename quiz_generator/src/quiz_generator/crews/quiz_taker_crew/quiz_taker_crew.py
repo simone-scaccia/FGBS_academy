@@ -1,16 +1,17 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from typing import List
-from quiz_generator.tools.rag_qdrant_tool import RagTool
 from crewai_tools import FileReadTool
+from typing import List
+
+from quiz_generator.tools.rag_qdrant_tool import RagTool
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 @CrewBase
-class RagCrew():
-    """RagCrew crew"""
+class QuizTakerCrew():
+    """QuizTakerCrew crew - Simulates a student taking the quiz"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -21,7 +22,7 @@ class RagCrew():
 
     def __init__(self, provider: str = None, certification: str = None, **kwargs):
         """
-        Initialize RagCrew with provider/certification for collection-specific search.
+        Initialize QuizTakerCrew with provider/certification for knowledge search.
         
         Args:
             provider (str, optional): Provider name for RAG collection
@@ -38,19 +39,13 @@ class RagCrew():
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
-    def researcher(self) -> Agent:
+    def quiz_taker_student(self) -> Agent:
         return Agent(
-            config=self.agents_config['researcher'], # type: ignore[index]
-            tools=[RagTool(provider=self.provider, certification=self.certification)],
-            verbose=True
-        )
-
-    @agent
-    def reporting_analyst(self) -> Agent:
-        return Agent(
-            config=self.agents_config['reporting_analyst'], # type: ignore[index]
-            tools=[RagTool(provider=self.provider, certification=self.certification),
-                   FileReadTool(file_path='outputs/quiz_template.md')],
+            config=self.agents_config['quiz_taker_student'], # type: ignore[index]
+            tools=[
+                FileReadTool(file_path='outputs/quiz.md'), # Tool to read the generated quiz
+                RagTool(provider=self.provider, certification=self.certification) # Tool to search knowledge base
+            ],
             verbose=True
         )
 
@@ -58,21 +53,15 @@ class RagCrew():
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def research_task(self) -> Task:
+    def quiz_taking_task(self) -> Task:
         return Task(
-            config=self.tasks_config['research_task'], # type: ignore[index]
-        )
-
-    @task
-    def reporting_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='outputs/questions.json'
+            config=self.tasks_config['quiz_taking_task'], # type: ignore[index]
+            output_file='outputs/completed_quiz.md'
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the RagCrew crew"""
+        """Creates the QuizTakerCrew crew"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
