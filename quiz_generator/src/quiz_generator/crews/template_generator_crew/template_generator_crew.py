@@ -1,3 +1,21 @@
+"""
+Template generation crew for drafting the quiz scaffold.
+
+This module defines a crew that creates a Markdown template used to structure
+the quiz. Agents and tasks are configured via YAML.
+
+Classes
+-------
+TemplateGeneratorCrew
+    Crew that outputs `outputs/quiz_template.md`.
+
+Examples
+--------
+>>> from quiz_generator.crews.template_generator_crew.template_generator_crew import TemplateGeneratorCrew
+>>> crew = TemplateGeneratorCrew()
+>>> result = crew.crew().kickoff()
+"""
+
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
@@ -8,7 +26,12 @@ from typing import List
 
 @CrewBase
 class TemplateGeneratorCrew():
-    """TemplateGeneratorCrew crew"""
+    """Crew that generates the initial quiz template in Markdown.
+
+    Attributes:
+        agents (List[BaseAgent]): Agents created from YAML configuration.
+        tasks (List[Task]): Tasks created from YAML configuration.
+    """
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -21,6 +44,11 @@ class TemplateGeneratorCrew():
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def template_generator(self) -> Agent:
+        """Build the template generator agent.
+
+        Returns:
+            Agent: Configured agent that drafts the quiz template.
+        """
         return Agent(
             config=self.agents_config['template_generator'],
             verbose=True,
@@ -31,6 +59,11 @@ class TemplateGeneratorCrew():
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task  
     @task
     def template_generator_task(self) -> Task:
+        """Create the task that outputs the quiz template Markdown file.
+
+        Returns:
+            Task: Task definition producing `outputs/quiz_template.md`.
+        """
         return Task(
             config=self.tasks_config['template_generator_task'],
             output_file='outputs/quiz_template.md'
@@ -38,7 +71,11 @@ class TemplateGeneratorCrew():
 
     @crew
     def crew(self) -> Crew:
-        """Creates the TemplateGeneratorCrew crew"""
+        """Create the `Crew` instance for template generation.
+
+        Returns:
+            Crew: Sequential process wiring the template agent to its task.
+        """
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

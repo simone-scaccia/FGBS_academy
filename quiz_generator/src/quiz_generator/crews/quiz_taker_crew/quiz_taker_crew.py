@@ -1,3 +1,22 @@
+"""
+Quiz taking crew that simulates a student answering the quiz.
+
+This module defines a crew that reads the generated quiz and, when needed,
+consults a RAG tool to look up knowledge scoped by provider/certification.
+It outputs a completed quiz file ready for evaluation.
+
+Classes
+-------
+QuizTakerCrew
+    Crew that answers questions and writes `outputs/completed_quiz.md`.
+
+Examples
+--------
+>>> from quiz_generator.crews.quiz_taker_crew.quiz_taker_crew import QuizTakerCrew
+>>> crew = QuizTakerCrew(provider="azure", certification="ai900")
+>>> result = crew.crew().kickoff()
+"""
+
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
@@ -11,7 +30,14 @@ from quiz_generator.tools.rag_qdrant_tool import RagTool
 
 @CrewBase
 class QuizTakerCrew():
-    """QuizTakerCrew crew - Simulates a student taking the quiz"""
+    """Crew that simulates a student taking the generated quiz.
+
+    Attributes:
+        agents (List[BaseAgent]): Agents created from YAML configuration.
+        tasks (List[Task]): Tasks created from YAML configuration.
+        provider (str | None): Provider name used to scope RAG searches.
+        certification (str | None): Certification name used to scope RAG searches.
+    """
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -21,12 +47,12 @@ class QuizTakerCrew():
     certification: str = None
 
     def __init__(self, provider: str = None, certification: str = None, **kwargs):
-        """
-        Initialize QuizTakerCrew with provider/certification for knowledge search.
-        
+        """Initialize crew with scoped Retrieval-Augmented Generation (RAG) options.
+
         Args:
-            provider (str, optional): Provider name for RAG collection
-            certification (str, optional): Certification name for RAG collection
+            provider (str | None): Provider name for the RAG collection.
+            certification (str | None): Certification name for the RAG collection.
+            **kwargs: Additional keyword arguments forwarded to the base class.
         """
         super().__init__(**kwargs)
         self.provider = provider
@@ -40,6 +66,14 @@ class QuizTakerCrew():
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def quiz_taker_student(self) -> Agent:
+        """Build the quiz-taking agent configured for knowledge retrieval.
+
+        The agent reads the produced quiz and can consult a RAG tool to search
+        relevant knowledge based on the configured provider/certification.
+
+        Returns:
+            Agent: Configured agent that answers quiz questions.
+        """
         return Agent(
             config=self.agents_config['quiz_taker_student'], # type: ignore[index]
             tools=[
@@ -54,6 +88,11 @@ class QuizTakerCrew():
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
     def quiz_taking_task(self) -> Task:
+        """Create the task that records the student's answers.
+
+        Returns:
+            Task: Task definition producing `outputs/completed_quiz.md`.
+        """
         return Task(
             config=self.tasks_config['quiz_taking_task'], # type: ignore[index]
             output_file='outputs/completed_quiz.md'
@@ -61,7 +100,11 @@ class QuizTakerCrew():
 
     @crew
     def crew(self) -> Crew:
-        """Creates the QuizTakerCrew crew"""
+        """Create the `Crew` instance for quiz taking.
+
+        Returns:
+            Crew: Sequential process wiring the student agent to its task.
+        """
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

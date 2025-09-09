@@ -1,36 +1,34 @@
 # **Azure - AI_102**
 
-## True/False Questions
+## True/False Questions  
 
-1. **[TF_Question_1]**
-  [] True  
-  [] False  
+1. **[TF_Question_1]**  
+   - True  
+   - False  
 
-## Multiple Choice Questions
+2. **[TF_Question_2]**  
+   - True  
+   - False  
 
-*Note: Select the most appropriate answer. Only one option is correct.*
+## Multiple Choice Questions  
 
-2. **[MC_Question_2]**  
-  A) [MC_Option_A_2]  
-  B) [MC_Option_B_2]  
-  C) [MC_Option_C_2]  
-  D) [MC_Option_D_2]  
+*Note: Select the most appropriate answer. Only one option is correct.*  
 
-## Short Open Questions
+3. **[MC_Question_3]**  
+  A) [MC_Option_A_3]  
+  B) [MC_Option_B_3]  
+  C) [MC_Option_C_3]  
+  D) [MC_Option_D_3]  
 
-3. **[Open_Question_3]**
+4. **[MC_Question_4]**  
+   A) [MC_Option_A_4]  
+   B) [MC_Option_B_4]  
+   C) [MC_Option_C_4]  
+   D) [MC_Option_D_4]  
 
-  ________________________________________________________
+## Open-ended Questions
 
-  ________________________________________________________
-
-  ________________________________________________________
-
-  ________________________________________________________
-
-  ________________________________________________________
-
-4. **[Open_Question_4]**
+5. **[Open_Question_5]**
 
   ________________________________________________________
 

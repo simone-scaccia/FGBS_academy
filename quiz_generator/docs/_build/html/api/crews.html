@@ -1,0 +1,240 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crews Modules &mdash; Quiz Generator  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tools" href="tools.html" />
+    <link rel="prev" title="Main Module" href="main.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Quiz Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">index</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="main.html">Main Module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Crews Modules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-quiz_generator.crews.rag_crew.rag_crew">RAG Crew</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-quiz_generator.crews.template_generator_crew.template_generator_crew">Template Generator Crew</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id1">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-quiz_generator.crews.quiz_maker_crew.quiz_maker_crew">Quiz Maker Crew</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id2">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-quiz_generator.crews.quiz_taker_crew.quiz_taker_crew">Quiz Taker Crew</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id3">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-quiz_generator.crews.quiz_evaluator_crew.quiz_evaluator_crew">Quiz Evaluator Crew</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#id4">Classes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Quiz Generator Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Quiz Generator Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Quiz Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">index</a></li>
+      <li class="breadcrumb-item active">Crews Modules</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/crews.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="crews-modules">
+<h1>Crews Modules<a class="headerlink" href="#crews-modules" title="Link to this heading"></a></h1>
+<section id="module-quiz_generator.crews.rag_crew.rag_crew">
+<span id="rag-crew"></span><h2>RAG Crew<a class="headerlink" href="#module-quiz_generator.crews.rag_crew.rag_crew" title="Link to this heading"></a></h2>
+<p>RAG (Retrieval-Augmented Generation) crew for certification quiz research.</p>
+<p>This module implements a specialized crew that performs retrieval-augmented
+research over a curated knowledge base and compiles structured outputs for
+quiz generation workflows. It wires a research agent with a reporting agent
+and tasks configured via YAML.</p>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>RagCrew</dt><dd><p>Crew that orchestrates RAG queries and reporting for quiz content.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quiz_generator.crews.rag_crew.rag_crew</span><span class="w"> </span><span class="kn">import</span> <span class="n">RagCrew</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crew</span> <span class="o">=</span> <span class="n">RagCrew</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">&quot;azure&quot;</span><span class="p">,</span> <span class="n">certification</span><span class="o">=</span><span class="s2">&quot;ai900&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">crew</span><span class="o">.</span><span class="n">crew</span><span class="p">()</span><span class="o">.</span><span class="n">kickoff</span><span class="p">(</span><span class="n">inputs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;topic&quot;</span><span class="p">:</span> <span class="s2">&quot;Fundamentals of AI&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="module-quiz_generator.crews.template_generator_crew.template_generator_crew">
+<span id="template-generator-crew"></span><h2>Template Generator Crew<a class="headerlink" href="#module-quiz_generator.crews.template_generator_crew.template_generator_crew" title="Link to this heading"></a></h2>
+<p>Template generation crew for drafting the quiz scaffold.</p>
+<p>This module defines a crew that creates a Markdown template used to structure
+the quiz. Agents and tasks are configured via YAML.</p>
+<section id="id1">
+<h3>Classes<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>TemplateGeneratorCrew</dt><dd><p>Crew that outputs <cite>outputs/quiz_template.md</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quiz_generator.crews.template_generator_crew.template_generator_crew</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemplateGeneratorCrew</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crew</span> <span class="o">=</span> <span class="n">TemplateGeneratorCrew</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">crew</span><span class="o">.</span><span class="n">crew</span><span class="p">()</span><span class="o">.</span><span class="n">kickoff</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="module-quiz_generator.crews.quiz_maker_crew.quiz_maker_crew">
+<span id="quiz-maker-crew"></span><h2>Quiz Maker Crew<a class="headerlink" href="#module-quiz_generator.crews.quiz_maker_crew.quiz_maker_crew" title="Link to this heading"></a></h2>
+<p>Quiz generation crew for composing and exporting quizzes.</p>
+<p>This module defines a crew that assembles a quiz from a Markdown template and
+pre-computed questions, and can export the final result to PDF via a tool.
+Agents and tasks are configured through YAML files.</p>
+<section id="id2">
+<h3>Classes<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>QuizMakerCrew</dt><dd><p>Crew that produces <cite>outputs/quiz.md</cite> and optionally a PDF export.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quiz_generator.crews.quiz_maker_crew.quiz_maker_crew</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuizMakerCrew</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crew</span> <span class="o">=</span> <span class="n">QuizMakerCrew</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">crew</span><span class="o">.</span><span class="n">crew</span><span class="p">()</span><span class="o">.</span><span class="n">kickoff</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="module-quiz_generator.crews.quiz_taker_crew.quiz_taker_crew">
+<span id="quiz-taker-crew"></span><h2>Quiz Taker Crew<a class="headerlink" href="#module-quiz_generator.crews.quiz_taker_crew.quiz_taker_crew" title="Link to this heading"></a></h2>
+<p>Quiz taking crew that simulates a student answering the quiz.</p>
+<p>This module defines a crew that reads the generated quiz and, when needed,
+consults a RAG tool to look up knowledge scoped by provider/certification.
+It outputs a completed quiz file ready for evaluation.</p>
+<section id="id3">
+<h3>Classes<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>QuizTakerCrew</dt><dd><p>Crew that answers questions and writes <cite>outputs/completed_quiz.md</cite>.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quiz_generator.crews.quiz_taker_crew.quiz_taker_crew</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuizTakerCrew</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crew</span> <span class="o">=</span> <span class="n">QuizTakerCrew</span><span class="p">(</span><span class="n">provider</span><span class="o">=</span><span class="s2">&quot;azure&quot;</span><span class="p">,</span> <span class="n">certification</span><span class="o">=</span><span class="s2">&quot;ai900&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">crew</span><span class="o">.</span><span class="n">crew</span><span class="p">()</span><span class="o">.</span><span class="n">kickoff</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="module-quiz_generator.crews.quiz_evaluator_crew.quiz_evaluator_crew">
+<span id="quiz-evaluator-crew"></span><h2>Quiz Evaluator Crew<a class="headerlink" href="#module-quiz_generator.crews.quiz_evaluator_crew.quiz_evaluator_crew" title="Link to this heading"></a></h2>
+<p>Quiz evaluation crew for grading completed quizzes.</p>
+<p>This module implements a crew that reads the completed quiz and the canonical
+answers, then produces an evaluation report. Configuration is provided via
+YAML for both agents and tasks.</p>
+<section id="id4">
+<h3>Classes<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>QuizEvaluatorCrew</dt><dd><p>Crew that generates <cite>outputs/quiz_evaluation.md</cite> from inputs.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span><span class="w"> </span><span class="nn">quiz_generator.crews.quiz_evaluator_crew.quiz_evaluator_crew</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuizEvaluatorCrew</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">crew</span> <span class="o">=</span> <span class="n">QuizEvaluatorCrew</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">crew</span><span class="o">.</span><span class="n">crew</span><span class="p">()</span><span class="o">.</span><span class="n">kickoff</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="main.html" class="btn btn-neutral float-left" title="Main Module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tools.html" class="btn btn-neutral float-right" title="Tools" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, FGBS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,14 +1,14 @@
 # **Azure - AI_102**
 
-## True/False Questions
+## True/False Questions  
 
 1. **Azure Language Understanding (LUIS) requires advanced AI expertise to set up and use effectively.**  
   [] True  
   [] False  
 
-## Multiple Choice Questions
+## Multiple Choice Questions  
 
-*Note: Select the most appropriate answer. Only one option is correct.*
+*Note: Select the most appropriate answer. Only one option is correct.*  
 
 2. **Which component of LUIS represents the actions a user intends to perform?**  
   A) Intents  
@@ -30,6 +30,7 @@
 
   ________________________________________________________
 
+
 4. **Describe a common use case of LUIS in enterprise environments.**
 
   ________________________________________________________
@@ -40,4 +41,6 @@
 
   ________________________________________________________
 
+  ________________________________________________________
+  
   ________________________________________________________
