@@ -1,0 +1,52 @@
+site_name: Quiz Generator (CrewAI) - Application Documentation
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - navigation.expand
+    - content.code.copy
+repo_url: https://github.com/simone-scaccia/FGBS_academy
+nav:
+  - Application Documentation Template:
+    - index.md
+    - Key Links: key-links.md
+    - General Information: general-information.md
+    - Risk classification: risk-classification.md
+    - Application Functionality: application-functionality.md
+    - Models and Datasets:
+      - Models: models.md
+      - Datasets: datasets.md
+    - Deployment:
+      - Infrastructure and Environment Details: infra-and-env.md
+    - Integration with External Systems: integrations.md
+    - Deployment Plan: deployment-plan.md
+    - Lifecycle Management: lifecycle-management.md
+    - Risk Management System:
+      - Risk Mitigation Measures: risk-mitigation-measures.md
+    - Testing and Validation (Accuracy, Robustness, Cybersecurity):
+      - Accuracy throughout the lifecycle: accuracy-lifecycle.md
+      - Robustness: robustness.md
+      - Cybersecurity: cybersecurity.md
+    - Human Oversight: human-oversight.md
+    - Incident Management:
+      - Troubleshooting AI Application Deployment: troubleshooting/deployment.md
+      - Infrastructure-Level Issues: troubleshooting/infra-level-issues.md
+      - Network Failures: troubleshooting/network-failures.md
+      - Deployment Pipeline Failures: troubleshooting/pipeline-failures.md
+      - Integration Problems: troubleshooting/integration-problems.md
+      - API Failures: troubleshooting/api-failures.md
+      - Data Format Mismatches: troubleshooting/data-format-mismatches.md
+      - Data Quality Problems: troubleshooting/data-quality-problems.md
+      - Model-Level Issues: troubleshooting/model-level-issues.md
+      - Safety and Security Issues: troubleshooting/safety-security-issues.md
+      - Unauthorised Access: troubleshooting/unauthorised-access.md
+      - Data Breaches: troubleshooting/data-breaches.md
+      - Monitoring and Logging Failures: troubleshooting/monitoring-logging-failures.md
+      - Recovery and Rollback: troubleshooting/recovery-rollback.md
+      - Rollback Mechanisms: troubleshooting/rollback-mechanisms.md
+      - Disaster Recovery: troubleshooting/disaster-recovery.md
+    - EU Declaration of conformity: eu-declaration-of-conformity.md
+    - Standards applied: standards-applied.md
+    - Documentation Metadata:
+      - Template Version: metadata/template-version.md
+      - Documentation Authors: metadata/documentation-authors.md
