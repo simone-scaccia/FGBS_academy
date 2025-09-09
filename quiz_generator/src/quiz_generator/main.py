@@ -11,7 +11,7 @@ from crewai.flow import Flow, listen, start
 from .crews.rag_crew.rag_crew import RagCrew
 from .crews.template_generator_crew.template_generator_crew import TemplateGeneratorCrew
 from .crews.quiz_maker_crew.quiz_maker_crew import QuizMakerCrew
-#from .crews.quiz_taker_crew.quiz_taker_crew import QuizTakerCrew
+from .crews.quiz_taker_crew.quiz_taker_crew import QuizTakerCrew
 #from .crews.quiz_evaluator_crew.quiz_evaluator_crew import QuizEvaluatorCrew
 from .utils.user_utils import get_user_selections, get_user_choices, display_selection_summary, generate_output_filenames
 from .utils.database_utils import initialize_database
@@ -222,7 +222,8 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             quiz_task.output_file = self.state.output_filenames['quiz_md']
             
             quiz_result = quiz_maker_crew.crew().kickoff(inputs={
-                "number_of_questions": self.state.number_of_questions
+                "number_of_questions": self.state.number_of_questions,
+                "quiz_pdf_filename": self.state.output_filenames['quiz_pdf']
             })
             self.state.quiz_generated = True
             
@@ -234,7 +235,7 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             self.state.error_message = f"Error during final quiz creation: {str(e)}"
             print(f"❌ {self.state.error_message}")
 
-    '''@listen(create_final_quiz)
+    @listen(create_final_quiz)
     def take_quiz(self):
         """
         Step 6: Simulate a student taking the quiz using Quiz Taker crew.
@@ -246,23 +247,33 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
         print(f"\n🎓 Simulating student taking the quiz...")
         
         try:
-            # Initialize and run Quiz Taker crew
-            quiz_taker_crew = QuizTakerCrew(provider=self.state.provider, certification=self.state.certification)
+            # Initialize and run Quiz Taker crew with the correct quiz file
+            quiz_taker_crew = QuizTakerCrew(
+                provider=self.state.provider, 
+                certification=self.state.certification,
+                quiz_file=self.state.output_filenames['quiz_md']
+            )
+            
+            # Update the task's output_file dynamically
+            quiz_taking_task = quiz_taker_crew.quiz_taking_task()
+            quiz_taking_task.output_file = self.state.output_filenames['completed_quiz']
+            
             quiz_taker_result = quiz_taker_crew.crew().kickoff(inputs={
-                "topic": self.state.topic,
-                "certification": self.state.certification
+                "topic": self.state.formatted_topic,
+                "certification": self.state.certification,
+                "completed_quiz_pdf_filename": self.state.output_filenames['completed_quiz_pdf']
             })
             self.state.quiz_completed = True
             
             print("✅ Quiz Taker crew completed successfully!")
             print(f"📝 Student has completed the quiz!")
-            print(f"💾 Completed quiz saved to: outputs/completed_quiz.md")
+            print(f"💾 Completed quiz saved to: {self.state.output_filenames['completed_quiz']}")
 
         except Exception as e:
             self.state.error_message = f"Error during quiz taking: {str(e)}"
             print(f"❌ {self.state.error_message}")
 
-    @listen(take_quiz)
+    '''@listen(take_quiz)
     def evaluate_quiz(self):
         """
         Step 7: Evaluate the completed quiz using Quiz Evaluator crew.
@@ -289,7 +300,7 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             self.state.error_message = f"Error during quiz evaluation: {str(e)}"
             print(f"❌ {self.state.error_message}")'''
 
-    @listen(create_final_quiz)
+    @listen(take_quiz)
     def finalize_flow(self):
         """
         Step 4: Finalize the flow and provide summary.
@@ -311,7 +322,7 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             print(f"📝 Question Type: {self.state.question_type}")
             print("✅ Database initialized: Yes")
             print("✅ Quiz generated: Yes")
-            #print(f"✅ Quiz completed by student: {self.state.quiz_completed}")
+            print(f"✅ Quiz completed by student: {self.state.quiz_completed}")
             #print(f"✅ Quiz evaluated: {self.state.quiz_evaluated}")
             if self.state.quiz_generated and self.state.output_filenames:
                 print("📄 Files generated:")
@@ -319,13 +330,15 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
                 print(f"   - {self.state.output_filenames['questions_json']} (questions data)")
                 print(f"   - {self.state.output_filenames['quiz_md']} (blank quiz)")
                 print(f"   - {self.state.output_filenames['quiz_pdf']} (blank quiz PDF)")
-                #print(f"   - {self.state.output_filenames['completed_quiz']} (completed quiz)")
+                if self.state.quiz_completed:
+                    print(f"   - {self.state.output_filenames['completed_quiz']} (completed quiz)")
+                    print(f"   - {self.state.output_filenames['completed_quiz_pdf']} (completed quiz PDF)")
                 #print(f"   - {self.state.output_filenames['quiz_evaluation']} (evaluation report)")
         else:
             print("⚠️ Flow completed with issues")
             print(f"✅ Database initialized: {self.state.database_initialized}")
             print(f"❌ Quiz generated: {self.state.quiz_generated}")
-            #print(f"❌ Quiz completed: {self.state.quiz_completed}")
+            print(f"❌ Quiz completed: {self.state.quiz_completed}")
             #print(f"❌ Quiz evaluated: {self.state.quiz_evaluated}")
 
 

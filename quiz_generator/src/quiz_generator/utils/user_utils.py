@@ -110,6 +110,7 @@ def generate_output_filenames(certification, formatted_topic):
         'quiz_md': f"outputs/{base_name}_quiz.md",
         'quiz_pdf': f"outputs/{base_name}_quiz.pdf",
         'completed_quiz': f"outputs/{base_name}_completed_quiz.md",
+        'completed_quiz_pdf': f"outputs/{base_name}_completed_quiz.pdf",
         'quiz_evaluation': f"outputs/{base_name}_evaluation.md"
     }
 

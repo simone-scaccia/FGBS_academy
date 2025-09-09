@@ -2,55 +2,45 @@
   "questions": [
     {
       "type": "true_false",
-      "question": "LUIS is a cloud-based conversational AI service designed exclusively for bot development and cannot be integrated with other Azure services.",
+      "question": "LUIS is only capable of handling English language applications.",
       "options": ["True", "False"],
       "answer": "False"
     },
     {
       "type": "true_false",
-      "question": "Intents in LUIS represent what the user wants to accomplish, such as requesting to turn on a device.",
+      "question": "LUIS supports integration with Microsoft Bot Framework and Azure Speech services.",
       "options": ["True", "False"],
       "answer": "True"
     },
     {
-      "type": "true_false",
-      "question": "Data privacy and legal compliance are not essential considerations when designing LUIS applications.",
-      "options": ["True", "False"],
-      "answer": "False"
+      "type": "multiple_choice",
+      "question": "What is the primary purpose of 'Intents' in LUIS?",
+      "options": ["To represent user’s purpose or goal", "To identify specific details from inputs", "To improve security measures", "To enable source control of apps"],
+      "answer": "To represent user’s purpose or goal"
     },
     {
       "type": "multiple_choice",
-      "question": "What is an entity in LUIS?",
-      "options": [
-        "A piece of information describing user goals.",
-        "A textual example used to train the model.",
-        "A parameter that provides detailed context for intents.",
-        "A list of phrases to refine predictions."
-      ],
-      "answer": "A parameter that provides detailed context for intents."
+      "question": "Which feature in LUIS helps recognize variations in input quality?",
+      "options": ["Custom Entities", "Phrase List Features", "Batch Testing", "Prebuilt Apps"],
+      "answer": "Phrase List Features"
     },
     {
       "type": "multiple_choice",
-      "question": "Which of the following is NOT a common use case for LUIS?",
-      "options": [
-        "E-commerce assistants for shopping queries.",
-        "Voice-controlled IoT systems.",
-        "Developing autonomous vehicles.",
-        "Enterprise-grade chatbots for HR inquiries."
-      ],
-      "answer": "Developing autonomous vehicles."
+      "question": "What should be avoided in LUIS training data to ensure compliance with privacy laws?",
+      "options": ["Sensitive data", "Intent training examples", "Entity classification samples", "Source control files"],
+      "answer": "Sensitive data"
     },
     {
       "type": "open_ended",
-      "question": "Explain the development lifecycle stages in LUIS and how they help refine the application.",
+      "question": "Explain the importance of version control in large-scale LUIS applications.",
       "options": [],
-      "answer": "The development lifecycle involves planning user scenarios, building intents and entities, testing model accuracy, publishing resources, and refining the application using user insights—each stage ensures iterative improvement."
+      "answer": "Version control helps manage app schema definitions, enables independent versioning for different components, and ensures consistent updates."
     },
     {
       "type": "open_ended",
-      "question": "What are some best practices for training data that can enhance prediction accuracy in LUIS applications?",
+      "question": "Describe an example use case where LUIS could be applied in IoT device management.",
       "options": [],
-      "answer": "Varied and realistic utterance examples improve prediction accuracy; avoiding irrelevant or sensitive data ensures the model's reliability and ethical compliance."
+      "answer": "LUIS can be used in IoT device management to process voice commands for controlling smart devices, such as adjusting thermostat settings or turning lights on/off."
     }
   ]
 }

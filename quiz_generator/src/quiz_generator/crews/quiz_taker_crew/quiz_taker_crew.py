@@ -3,8 +3,7 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai_tools import FileReadTool
 from typing import List
-
-from quiz_generator.tools.rag_qdrant_tool import RagTool
+from quiz_generator.tools.md_to_pdf_tool import MarkdownToPdfExporter
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
@@ -19,18 +18,21 @@ class QuizTakerCrew():
     # Provider and certification for RAG tool configuration
     provider: str = None
     certification: str = None
+    quiz_file: str = None
 
-    def __init__(self, provider: str = None, certification: str = None, **kwargs):
+    def __init__(self, provider: str = None, certification: str = None, quiz_file: str = None, **kwargs):
         """
         Initialize QuizTakerCrew with provider/certification for knowledge search.
         
         Args:
             provider (str, optional): Provider name for RAG collection
             certification (str, optional): Certification name for RAG collection
+            quiz_file (str, optional): Path to the quiz file to complete
         """
         super().__init__(**kwargs)
         self.provider = provider
         self.certification = certification
+        self.quiz_file = quiz_file or 'outputs/quiz.md'
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
@@ -43,8 +45,8 @@ class QuizTakerCrew():
         return Agent(
             config=self.agents_config['quiz_taker_student'], # type: ignore[index]
             tools=[
-                FileReadTool(file_path='outputs/quiz.md'), # Tool to read the generated quiz
-                RagTool(provider=self.provider, certification=self.certification) # Tool to search knowledge base
+                FileReadTool(file_path=self.quiz_file), # Tool to read the generated quiz
+                MarkdownToPdfExporter() # Tool to convert markdown to PDF 
             ],
             verbose=True
         )
@@ -55,8 +57,14 @@ class QuizTakerCrew():
     @task
     def quiz_taking_task(self) -> Task:
         return Task(
-            config=self.tasks_config['quiz_taking_task'], # type: ignore[index]
-            output_file='outputs/completed_quiz.md'
+            config=self.tasks_config['quiz_taking_task'] # type: ignore[index]
+            # Note: output_file will be set dynamically
+        )
+    
+    @task
+    def completed_quiz_pdf_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['completed_quiz_pdf_task'], # type: ignore[index]
         )
 
     @crew
