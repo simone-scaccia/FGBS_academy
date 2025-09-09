@@ -2,27 +2,27 @@
   "questions": [
     {
       "type": "true_false",
-      "question": "LUIS enables rapid development of conversational AI applications without requiring deep knowledge of AI or machine learning.",
+      "question": "Azure Language Understanding (LUIS) requires advanced AI expertise to set up and use effectively.",
       "options": ["True", "False"],
-      "answer": "True"
+      "answer": "False"
     },
     {
       "type": "multiple_choice",
-      "question": "Which of the following is NOT a best practice when developing a LUIS application?",
-      "options": ["Plan iteratively by mapping user scenarios early on", "Automatically extract sensitive data irrespective of relevance", "Use versioning to release newer iterations", "Improve the model with real data"],
-      "answer": "Automatically extract sensitive data irrespective of relevance"
+      "question": "Which component of LUIS represents the actions a user intends to perform?",
+      "options": ["Intents", "Entities", "Utterances", "Phrase List Features"],
+      "answer": "Intents"
     },
     {
       "type": "open_ended",
-      "question": "What are the key components of a LUIS application and their roles in interpreting user input?",
+      "question": "Outline the key steps involved in the development lifecycle of LUIS applications.",
       "options": [],
-      "answer": "Utterances are user inputs, Intents represent tasks or actions, and Entities are specific pieces of information that refine the Intent."
+      "answer": "The key steps include planning by identifying scenarios and defining intents and entities, building iteratively by adding utterances and configuring capabilities, testing and improving applications for accuracy, publishing the application for real-world inputs, and continuously refining using real-life examples."
     },
     {
       "type": "open_ended",
-      "question": "Describe how LUIS can be integrated with other Azure tools and provide one practical example.",
+      "question": "Describe a common use case of LUIS in enterprise environments.",
       "options": [],
-      "answer": "LUIS integrates with tools like Azure Bot Framework, QnA Maker, and Speech Service. For example, it can be used with Azure Bot Framework to build a chatbot that interprets customer queries and recommends solutions."
+      "answer": "A common use case is the development of enterprise chatbots in industries like retail, healthcare, and finance, which handle customer queries and assist with interactions effectively."
     }
   ]
 }

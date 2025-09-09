@@ -120,12 +120,14 @@ def retry_with_backoff(func, max_retries=3, base_delay=1.0):
     return None
 
 def get_embeddings(settings: Settings) -> AzureOpenAIEmbeddings:
+    # os.environ["OPENAI_API_TYPE"] = "azure"             
+    # os.environ["openai_api_type"] = "azure"
     """Return Azure OpenAI embeddings"""
     return AzureOpenAIEmbeddings(
         model=settings.emb_model_name,
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
         api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-        api_version=os.getenv("AZURE_OPENAI_API_VERSION", "2024-02-01")
+        api_version=os.getenv("AZURE_OPENAI_API_VERSION")
     )
  
 def get_llm(settings: Settings):

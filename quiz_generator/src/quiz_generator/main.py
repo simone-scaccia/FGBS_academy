@@ -317,98 +317,98 @@ class QuizGeneratorFlow(Flow[QuizGeneratorState]):
             #print(f"❌ Quiz completed: {self.state.quiz_completed}")
             #print(f"❌ Quiz evaluated: {self.state.quiz_evaluated}")
 
-    @listen(finalize_flow)
-    def evaluation_flow(self):
-        # self.state.mode = "evaluate"
-        # if self.state.mode == "flow":
-        #     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-        # else:
-        #     azure_endpoint = os.getenv("OPENAI_API_BASE")
 
-            
-        with open("c:/Users/SV273YL/OneDrive - EY/Documents/GitHub/FGBS_academy/quiz_generator/outputs/questions.json", "r", encoding="utf-8") as f:
-            data = json.load(f)
-            for q in data["questions"]:
-                question_texts = q["question"]
-                predictions = q["answer"]
-                #predictions = f"{self.state.provider} {self.state.certification} {self.state.topic}"
-                #contexts=self.state.contexts or None,              # opzionale
-                #ground_truths=self.state.ground_truths or None,    # opzionale
 
-                try:
-                    eval_metrics = self._run_llm_judge_mlflow(
-                        user_query=question_texts,
-                        prediction=predictions,
-                        #context=contexts,
-                        #ground_truth=ground_truths,
-                    )
-                    if eval_metrics:
-                        mlflow.log_dict(eval_metrics, "eval_metrics_snapshot.json")
-                        mlflow.set_tag("llm_judge_status", "success")
-                except Exception as e:
-                    mlflow.set_tag("llm_judge_status", f"failed:{type(e).__name__}")
-                    mlflow.log_text(str(e), "llm_judge_error.txt")
-    
-    
+def evaluation_flow():
+    # self.state.mode = "evaluate"
+    # if self.state.mode == "flow":
+    #     azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+    # else:
+    #     azure_endpoint = os.getenv("OPENAI_API_BASE")
 
-    # ---------- Nuovo: judge con mlflow.evaluate ----------
-    def _run_llm_judge_mlflow(
-        self,
-        user_query: str,
-        prediction: str,
-        context: str | None = None,
-        ground_truth: str | None = None,
-    ):
-        """
-        Usa i judge integrati MLflow:
-            - answer_relevance (richiede inputs+predictions)
-            - faithfulness (se fornisci context)
-            - answer_similarity/answer_correctness (se fornisci ground_truth)
-            - toxicity (metric non-LLM)
-        Le metriche e la tabella vengono loggate automaticamente nel run attivo.
-        """
-
-        # Tabella di valutazione a 1 riga (scalabile a molte righe)
-        data = {
-            "inputs": [user_query],
-            "predictions": [prediction],
-        }
-        if context is not None:
-            data["context"] = [context]
-        if ground_truth is not None:
-            data["ground_truth"] = [ground_truth]
-
-        df = pd.DataFrame(data)
-
-        # Costruisci lista metriche in base alle colonne disponibili
-        extra_metrics = [
-            mlflow.metrics.genai.answer_relevance(),  # sempre se hai inputs+predictions
-            mlflow.metrics.toxicity(),                # metrica non-LLM (HF pipeline)
-        ]
-        if "context" in df.columns:
-            extra_metrics.append(mlflow.metrics.genai.faithfulness(context_column="context"))
-        if "ground_truth" in df.columns:
-            extra_metrics.extend([
-                mlflow.metrics.genai.answer_similarity(),
-                mlflow.metrics.genai.answer_correctness(),
-            ])
-
-        # model_type:
-        # - "text" va bene per generico testo
-        # - "question-answering" se passi ground_truth in stile QA
-        model_type = "question-answering" if "ground_truth" in df.columns else "text"
-
-        results = mlflow.evaluate(
-            data=df,
-            predictions="predictions",
-            targets="ground_truth" if "ground_truth" in df.columns else None,
-            model_type=model_type,
-            extra_metrics=extra_metrics,
-            evaluators="default",
-        )
         
-        # MLflow ha già loggato metriche e tabella 'eval_results_table'
-        return results.metrics
+    with open("c:/Users/SV273YL/OneDrive - EY/Documents/GitHub/FGBS_academy/quiz_generator/outputs/questions.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+        for q in data["questions"]:
+            question_texts = q["question"]
+            predictions = q["answer"]
+            #predictions = f"{self.state.provider} {self.state.certification} {self.state.topic}"
+            #contexts=self.state.contexts or None,              # opzionale
+            #ground_truths=self.state.ground_truths or None,    # opzionale
+
+            try:
+                eval_metrics = _run_llm_judge_mlflow(
+                    user_query=question_texts,
+                    prediction=predictions,
+                    #context=contexts,
+                    #ground_truth=ground_truths,
+                )
+                if eval_metrics:
+                    mlflow.log_dict(eval_metrics, "eval_metrics_snapshot.json")
+                    mlflow.set_tag("llm_judge_status", "success")
+            except Exception as e:
+                mlflow.set_tag("llm_judge_status", f"failed:{type(e).__name__}")
+                mlflow.log_text(str(e), "llm_judge_error.txt")
+
+
+
+# ---------- Nuovo: judge con mlflow.evaluate ----------
+def _run_llm_judge_mlflow(
+    user_query: str,
+    prediction: str,
+    context: str | None = None,
+    ground_truth: str | None = None,
+):
+    """
+    Usa i judge integrati MLflow:
+        - answer_relevance (richiede inputs+predictions)
+        - faithfulness (se fornisci context)
+        - answer_similarity/answer_correctness (se fornisci ground_truth)
+        - toxicity (metric non-LLM)
+    Le metriche e la tabella vengono loggate automaticamente nel run attivo.
+    """
+
+    # Tabella di valutazione a 1 riga (scalabile a molte righe)
+    data = {
+        "inputs": [user_query],
+        "predictions": [prediction],
+    }
+    if context is not None:
+        data["context"] = [context]
+    if ground_truth is not None:
+        data["ground_truth"] = [ground_truth]
+
+    df = pd.DataFrame(data)
+
+    # Costruisci lista metriche in base alle colonne disponibili
+    extra_metrics = [
+        mlflow.metrics.genai.answer_relevance(),  # sempre se hai inputs+predictions
+        mlflow.metrics.toxicity(),                # metrica non-LLM (HF pipeline)
+    ]
+    if "context" in df.columns:
+        extra_metrics.append(mlflow.metrics.genai.faithfulness(context_column="context"))
+    if "ground_truth" in df.columns:
+        extra_metrics.extend([
+            mlflow.metrics.genai.answer_similarity(),
+            mlflow.metrics.genai.answer_correctness(),
+        ])
+
+    # model_type:
+    # - "text" va bene per generico testo
+    # - "question-answering" se passi ground_truth in stile QA
+    model_type = "question-answering" if "ground_truth" in df.columns else "text"
+
+    results = mlflow.evaluate(
+        data=df,
+        predictions="predictions",
+        targets="ground_truth" if "ground_truth" in df.columns else None,
+        model_type=model_type,
+        extra_metrics=extra_metrics,
+        evaluators="default",
+    )
+    
+    # MLflow ha già loggato metriche e tabella 'eval_results_table'
+    return results.metrics
 
     
 
@@ -438,7 +438,8 @@ def plot():
 def kickoff():
     """Alternative entry point for the flow (CrewAI convention)."""
     plot()
-    main()
+    #main()
+    evaluation_flow()
 
 
 if __name__ == "__main__":

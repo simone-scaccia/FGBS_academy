@@ -2,7 +2,7 @@
 
 ## True/False Questions
 
-1. **LUIS enables rapid development of conversational AI applications without requiring deep knowledge of AI or machine learning.**  
+1. **Azure Language Understanding (LUIS) requires advanced AI expertise to set up and use effectively.**  
   [] True  
   [] False  
 
@@ -10,30 +10,34 @@
 
 *Note: Select the most appropriate answer. Only one option is correct.*
 
-2. **Which of the following is NOT a best practice when developing a LUIS application?**  
-  A) Plan iteratively by mapping user scenarios early on  
-  B) Automatically extract sensitive data irrespective of relevance  
-  C) Use versioning to release newer iterations  
-  D) Improve the model with real data  
+2. **Which component of LUIS represents the actions a user intends to perform?**  
+  A) Intents  
+  B) Entities  
+  C) Utterances  
+  D) Phrase List Features  
 
 ## Short Open Questions
 
-3. **What are the key components of a LUIS application and their roles in interpreting user input?**  
+3. **Outline the key steps involved in the development lifecycle of LUIS applications.**
 
-  ________________________________________________________  
+  ________________________________________________________
 
-  ________________________________________________________  
+  ________________________________________________________
 
-  ________________________________________________________  
+  ________________________________________________________
 
-  ________________________________________________________  
+  ________________________________________________________
 
-4. **Describe how LUIS can be integrated with other Azure tools and provide one practical example.**  
+  ________________________________________________________
 
-  ________________________________________________________  
+4. **Describe a common use case of LUIS in enterprise environments.**
 
-  ________________________________________________________  
+  ________________________________________________________
 
-  ________________________________________________________  
+  ________________________________________________________
+
+  ________________________________________________________
+
+  ________________________________________________________
 
   ________________________________________________________
