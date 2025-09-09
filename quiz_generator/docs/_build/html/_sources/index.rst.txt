@@ -16,6 +16,9 @@ documentation for details.
    :caption: Contents:
 
    api/index
+   configuration
+   examples
+   installation
 
 
 Indices and tables

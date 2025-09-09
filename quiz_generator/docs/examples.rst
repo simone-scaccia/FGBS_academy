@@ -1,95 +1,58 @@
-Examples
-========
+Quiz Generator Usage Examples
+============================
 
-This section provides practical examples of how to use the QA AI Agent system.
+This document provides usage examples for the `quiz_generator` project in the FGBS_academy repository.
 
-.. toctree::
-   :maxdepth: 2
-
-Basic Usage Examples
---------------------
-
-Simple Question Answering
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Complete Flow Example
+---------------------
+The following Python script runs the complete quiz generation workflow with predefined inputs:
 
 .. code-block:: python
 
-   from qa_ai_agent.main import QA_AI_Agent
-   
-   # Initialize the agent
-   agent = QA_AI_Agent()
-   
-   # Ask a simple question
-   response = agent.ask("What is artificial intelligence?")
-   print(response)
+    from src.quiz_generator.main import QuizGeneratorFlow
+    quiz_flow = QuizGeneratorFlow()
+    quiz_flow.kickoff()
 
-RAG-based Question Answering
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This will:
+- Collect user input (provider, certification, topic, number of questions, question type)
+- Initialize the vector database
+- Generate a quiz template
+- Generate questions using RAG Crew
+- Create the final quiz
+- Finalize the flow
 
-.. code-block:: python
-
-   from qa_ai_agent.crews.rag_crew import RagCrew
-   
-   # Initialize RAG crew
-   rag_crew = RagCrew()
-   
-   # Ask a question that requires document retrieval
-   response = rag_crew.process_question(
-       "What are the main features of our product?",
-       context_docs=["product_manual.pdf", "specifications.txt"]
-   )
-   print(response)
-
-Web Search Integration
-~~~~~~~~~~~~~~~~~~~~~~
+Automated Test Example
+----------------------
+Automated tests are provided in `test_complete_flow.py` and `test_azure_ai900.py`. Example:
 
 .. code-block:: python
 
-   from qa_ai_agent.crews.web_search_crew import WebSearchCrew
-   
-   # Initialize web search crew
-   web_crew = WebSearchCrew()
-   
-   # Search for current information
-   response = web_crew.search_and_answer(
-       "What are the latest developments in AI?",
-       max_results=5
-   )
-   print(response)
+    # test_azure_ai900.py
+    def test_azure_ai900_mixed_7_questions():
+        quiz_flow = QuizGeneratorFlow()
+        quiz_flow.state.provider = 'azure'
+        quiz_flow.state.certification = 'AI_900'
+        quiz_flow.state.topic = 'First available topic'
+        quiz_flow.state.number_of_questions = 7
+        quiz_flow.state.question_type = 'mixed'
+        quiz_flow.initialize_vector_database()
+        quiz_flow.generate_quiz_template()
+        quiz_flow.generate_quiz_with_rag_crew()
+        quiz_flow.create_final_quiz()
+        quiz_flow.take_quiz()
+        quiz_flow.evaluate_quiz()
+        quiz_flow.finalize_flow()
 
-Advanced Examples
------------------
+Output Files
+------------
+After running the flow, the following files are generated in the `outputs/` directory:
+- quiz_template.md
+- questions.json
+- quiz.md
+- quiz.pdf
+- completed_quiz.md
+- quiz_evaluation.md
 
-Custom Tool Integration
-~~~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   from qa_ai_agent.tools.custom_tool import RagTool
-   
-   # Create a custom RAG tool
-   rag_tool = RagTool(
-       name="Document Q&A",
-       description="Answer questions based on document content"
-   )
-   
-   # Use the tool
-   result = rag_tool.run("What is the main topic?", documents=["doc1.txt"])
-   print(result)
-
-Multi-Agent Workflow
-~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: python
-
-   from qa_ai_agent.crews.ethic_checker_crew import EthicCheckerCrew
-   
-   # Initialize ethic checker crew
-   ethic_crew = EthicCheckerCrew()
-   
-   # Check content for ethical concerns
-   ethic_report = ethic_crew.check_content(
-       "Analyze this content for potential bias",
-       content="Your content here..."
-   )
-   print(ethic_report)
+Flow Visualization
+------------------
+A flow plot is generated as `crewai_flow.html` to visualize the steps and connections in the quiz generation process.

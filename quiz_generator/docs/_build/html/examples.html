@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Examples &mdash; Quiz Generator  documentation</title>
+  <title>Quiz Generator Usage Examples &mdash; Quiz Generator  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -18,7 +18,9 @@
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="Quiz Generator Configuration" href="configuration.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,8 +43,17 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api/index.html">index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Quiz Generator Configuration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quiz Generator Usage Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#complete-flow-example">Complete Flow Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#automated-test-example">Automated Test Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#output-files">Output Files</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#flow-visualization">Flow Visualization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 </ul>
 
         </div>
@@ -59,7 +70,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Examples</li>
+      <li class="breadcrumb-item active">Quiz Generator Usage Examples</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/examples.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -69,100 +80,69 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="examples">
-<h1>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h1>
-<p>This section provides practical examples of how to use the QA AI Agent system.</p>
-<div class="toctree-wrapper compound">
+  <section id="quiz-generator-usage-examples">
+<h1>Quiz Generator Usage Examples<a class="headerlink" href="#quiz-generator-usage-examples" title="Link to this heading"></a></h1>
+<p>This document provides usage examples for the <cite>quiz_generator</cite> project in the FGBS_academy repository.</p>
+<section id="complete-flow-example">
+<h2>Complete Flow Example<a class="headerlink" href="#complete-flow-example" title="Link to this heading"></a></h2>
+<p>The following Python script runs the complete quiz generation workflow with predefined inputs:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">src.quiz_generator.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">QuizGeneratorFlow</span>
+<span class="n">quiz_flow</span> <span class="o">=</span> <span class="n">QuizGeneratorFlow</span><span class="p">()</span>
+<span class="n">quiz_flow</span><span class="o">.</span><span class="n">kickoff</span><span class="p">()</span>
+</pre></div>
 </div>
-<section id="basic-usage-examples">
-<h2>Basic Usage Examples<a class="headerlink" href="#basic-usage-examples" title="Link to this heading"></a></h2>
-<section id="simple-question-answering">
-<h3>Simple Question Answering<a class="headerlink" href="#simple-question-answering" title="Link to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qa_ai_agent.main</span><span class="w"> </span><span class="kn">import</span> <span class="n">QA_AI_Agent</span>
-
-<span class="c1"># Initialize the agent</span>
-<span class="n">agent</span> <span class="o">=</span> <span class="n">QA_AI_Agent</span><span class="p">()</span>
-
-<span class="c1"># Ask a simple question</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">agent</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;What is artificial intelligence?&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+<p>This will:
+- Collect user input (provider, certification, topic, number of questions, question type)
+- Initialize the vector database
+- Generate a quiz template
+- Generate questions using RAG Crew
+- Create the final quiz
+- Finalize the flow</p>
+</section>
+<section id="automated-test-example">
+<h2>Automated Test Example<a class="headerlink" href="#automated-test-example" title="Link to this heading"></a></h2>
+<p>Automated tests are provided in <cite>test_complete_flow.py</cite> and <cite>test_azure_ai900.py</cite>. Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># test_azure_ai900.py</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">test_azure_ai900_mixed_7_questions</span><span class="p">():</span>
+    <span class="n">quiz_flow</span> <span class="o">=</span> <span class="n">QuizGeneratorFlow</span><span class="p">()</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="s1">&#39;azure&#39;</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">certification</span> <span class="o">=</span> <span class="s1">&#39;AI_900&#39;</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">topic</span> <span class="o">=</span> <span class="s1">&#39;First available topic&#39;</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">number_of_questions</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">state</span><span class="o">.</span><span class="n">question_type</span> <span class="o">=</span> <span class="s1">&#39;mixed&#39;</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">initialize_vector_database</span><span class="p">()</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">generate_quiz_template</span><span class="p">()</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">generate_quiz_with_rag_crew</span><span class="p">()</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">create_final_quiz</span><span class="p">()</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">take_quiz</span><span class="p">()</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">evaluate_quiz</span><span class="p">()</span>
+    <span class="n">quiz_flow</span><span class="o">.</span><span class="n">finalize_flow</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
-<section id="rag-based-question-answering">
-<h3>RAG-based Question Answering<a class="headerlink" href="#rag-based-question-answering" title="Link to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qa_ai_agent.crews.rag_crew</span><span class="w"> </span><span class="kn">import</span> <span class="n">RagCrew</span>
-
-<span class="c1"># Initialize RAG crew</span>
-<span class="n">rag_crew</span> <span class="o">=</span> <span class="n">RagCrew</span><span class="p">()</span>
-
-<span class="c1"># Ask a question that requires document retrieval</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">rag_crew</span><span class="o">.</span><span class="n">process_question</span><span class="p">(</span>
-    <span class="s2">&quot;What are the main features of our product?&quot;</span><span class="p">,</span>
-    <span class="n">context_docs</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;product_manual.pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;specifications.txt&quot;</span><span class="p">]</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-</pre></div>
-</div>
+<section id="output-files">
+<h2>Output Files<a class="headerlink" href="#output-files" title="Link to this heading"></a></h2>
+<p>After running the flow, the following files are generated in the <cite>outputs/</cite> directory:
+- quiz_template.md
+- questions.json
+- quiz.md
+- quiz.pdf
+- completed_quiz.md
+- quiz_evaluation.md</p>
 </section>
-<section id="web-search-integration">
-<h3>Web Search Integration<a class="headerlink" href="#web-search-integration" title="Link to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qa_ai_agent.crews.web_search_crew</span><span class="w"> </span><span class="kn">import</span> <span class="n">WebSearchCrew</span>
-
-<span class="c1"># Initialize web search crew</span>
-<span class="n">web_crew</span> <span class="o">=</span> <span class="n">WebSearchCrew</span><span class="p">()</span>
-
-<span class="c1"># Search for current information</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">web_crew</span><span class="o">.</span><span class="n">search_and_answer</span><span class="p">(</span>
-    <span class="s2">&quot;What are the latest developments in AI?&quot;</span><span class="p">,</span>
-    <span class="n">max_results</span><span class="o">=</span><span class="mi">5</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-</section>
-<section id="advanced-examples">
-<h2>Advanced Examples<a class="headerlink" href="#advanced-examples" title="Link to this heading"></a></h2>
-<section id="custom-tool-integration">
-<h3>Custom Tool Integration<a class="headerlink" href="#custom-tool-integration" title="Link to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qa_ai_agent.tools.custom_tool</span><span class="w"> </span><span class="kn">import</span> <span class="n">RagTool</span>
-
-<span class="c1"># Create a custom RAG tool</span>
-<span class="n">rag_tool</span> <span class="o">=</span> <span class="n">RagTool</span><span class="p">(</span>
-    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Document Q&amp;A&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Answer questions based on document content&quot;</span>
-<span class="p">)</span>
-
-<span class="c1"># Use the tool</span>
-<span class="n">result</span> <span class="o">=</span> <span class="n">rag_tool</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;What is the main topic?&quot;</span><span class="p">,</span> <span class="n">documents</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;doc1.txt&quot;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
-<section id="multi-agent-workflow">
-<h3>Multi-Agent Workflow<a class="headerlink" href="#multi-agent-workflow" title="Link to this heading"></a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">qa_ai_agent.crews.ethic_checker_crew</span><span class="w"> </span><span class="kn">import</span> <span class="n">EthicCheckerCrew</span>
-
-<span class="c1"># Initialize ethic checker crew</span>
-<span class="n">ethic_crew</span> <span class="o">=</span> <span class="n">EthicCheckerCrew</span><span class="p">()</span>
-
-<span class="c1"># Check content for ethical concerns</span>
-<span class="n">ethic_report</span> <span class="o">=</span> <span class="n">ethic_crew</span><span class="o">.</span><span class="n">check_content</span><span class="p">(</span>
-    <span class="s2">&quot;Analyze this content for potential bias&quot;</span><span class="p">,</span>
-    <span class="n">content</span><span class="o">=</span><span class="s2">&quot;Your content here...&quot;</span>
-<span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">ethic_report</span><span class="p">)</span>
-</pre></div>
-</div>
-</section>
+<section id="flow-visualization">
+<h2>Flow Visualization<a class="headerlink" href="#flow-visualization" title="Link to this heading"></a></h2>
+<p>A flow plot is generated as <cite>crewai_flow.html</cite> to visualize the steps and connections in the quiz generation process.</p>
 </section>
 </section>
 
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="configuration.html" class="btn btn-neutral float-left" title="Quiz Generator Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
 
   <hr/>
 

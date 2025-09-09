@@ -1,44 +1,66 @@
-Configuration
-=============
+Quiz Generator Configuration
+===========================
 
-This section describes how to configure the QA AI Agent system.
+This document describes the configuration for the `quiz_generator` project, which automates quiz creation using CrewAI and RAG (Retrieval-Augmented Generation) techniques.
 
-.. toctree::
-   :maxdepth: 2
+Project Metadata
+----------------
+- **Name:** quiz_generator
+- **Version:** 0.1.0
+- **Description:** quiz_generator using CrewAI
+- **Python Version:** >=3.10, <3.14
+- **Main Dependencies:**
+  - crewai[tools]
+  - langchain, langchain-community, langchain-core, langchain-openai
+  - openai
+  - qdrant-client
+  - markdown2, markdown-pdf, pdfkit, pymupdf
+  - pytest
+  - jsonpatch, jsonpointer
 
-Configuration Options
----------------------
+Entry Points
+------------
+- `kickoff`: Starts the quiz generation flow
+- `run_crew`: Alias for kickoff
+- `plot`: Generates a flow plot (see crewai_flow.html)
 
-The system can be configured through various configuration files and environment variables.
+CrewAI Flow
+-----------
+The flow consists of the following steps:
+1. Collect User Input
+2. Initialize Vector Database
+3. Generate Quiz Template
+4. Generate Quiz With RAG Crew
+5. Create Final Quiz
+6. Finalize Flow
 
-Environment Variables
-~~~~~~~~~~~~~~~~~~~~~
+Configuration Example
+--------------------
+Configuration is typically provided via a JSON file (see `test_config.json`). Example:
 
-- ``OPENAI_API_KEY``: Your OpenAI API key for accessing GPT models
-- ``SERPER_API_KEY``: API key for SerperDev web search functionality
-- ``FAISS_INDEX_PATH``: Path to your FAISS index for RAG functionality
+.. code-block:: json
 
-Configuration Files
-~~~~~~~~~~~~~~~~~~~
+    {
+      "test_config": {
+        "provider": "azure",
+        "certification": "AI_900",
+        "topic": "First available topic",
+        "number_of_questions": 7,
+        "question_type": "mixed"
+      },
+      "expected_outputs": [
+        "outputs/quiz_template.md",
+        "outputs/questions.json",
+        "outputs/quiz.md",
+        "outputs/quiz.pdf",
+        "outputs/completed_quiz.md",
+        "outputs/quiz_evaluation.md"
+      ],
+      "expected_distribution": {
+        "total": 7,
+        "multiple_choice": 3,
+        "true_false": 2,
+        "open_ended": 2
+      }
+    }
 
-The system uses YAML configuration files for agents and tasks:
-
-- ``agents.yaml``: Defines the AI agents and their roles
-- ``tasks.yaml``: Defines the tasks that agents can perform
-
-Example Configuration
-~~~~~~~~~~~~~~~~~~~~~
-
-.. code-block:: yaml
-
-   # agents.yaml example
-   agents:
-     researcher:
-       name: Research Agent
-       role: Conducts research and gathers information
-       goal: Find accurate and relevant information
-     
-     validator:
-       name: Validation Agent
-       role: Validates and verifies information
-       goal: Ensure information accuracy and reliability
