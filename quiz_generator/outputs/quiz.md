@@ -1,12 +1,16 @@
-# **Azure - AI_900**
+# **Azure - AI_102**
 
 ## True/False Questions
 
-1. **Azure AI Anomaly Detector supports both univariate and multivariate anomaly detection strategies.**  
+1. **Azure AI Document Intelligence can analyze both structured and unstructured data from documents.**  
   [] True  
   [] False  
 
-2. **Multivariate anomaly detection in Azure AI can analyze up to 500 signals simultaneously.**  
+2. **Custom models in Azure AI Document Intelligence require extensive coding skills to train and deploy.**  
+  [] True  
+  [] False  
+
+3. **Microsoft AI principles are optional when using Azure AI Document Intelligence for sensitive data.**  
   [] True  
   [] False  
 
@@ -14,27 +18,21 @@
 
 *Note: Select the most appropriate answer. Only one option is correct.*
 
-3. **What is the main benefit of using univariate detection mode in Azure AI Anomaly Detector?**  
-  A) Analyzes multiple correlated metrics together.  
-  B) Focuses on detecting anomalies in a single time-series variable.  
-  C) Relies on Graph Attention Networks.  
-  D) Requires manual configuration of models.  
+4. **Which feature is NOT supported by Azure AI Document Intelligence?**  
+  A) Text extraction  
+  B) Gender prediction  
+  C) Barcode recognition  
+  D) Document layout analysis  
 
-4. **Which feature allows Azure Anomaly Detector to handle real-time data streams efficiently?**  
-  A) Batch Processing  
-  B) Streaming Detection  
-  C) Change Point Detection  
-  D) On-premise Deployment  
-
-5. **When training models in multivariate detection, what is the recommended minimum number of data points per variable?**  
-  A) 1,000  
-  B) 3,000  
-  C) 5,000  
-  D) 10,000  
+5. **What is a common use case for Azure AI Document Intelligence?**  
+  A) Automating accounts payable  
+  B) Predicting stock market trends  
+  C) Measuring website traffic  
+  D) Creating social media ads  
 
 ## Short Open Questions
 
-6. **Explain how sensitivity settings in Azure AI Anomaly Detector can impact the detection results.**  
+6. **Describe the advantages of integrating Azure Logic Apps with Azure AI Document Intelligence for enterprise workflows.**  
 
   ________________________________________________________  
 
@@ -46,7 +44,7 @@
 
   ________________________________________________________  
 
-7. **Describe a real-world application of Azure AI's multivariate detection mode.**  
+7. **What are the best practices to ensure ethical and secure usage of Azure AI Document Intelligence?**  
 
   ________________________________________________________  
 

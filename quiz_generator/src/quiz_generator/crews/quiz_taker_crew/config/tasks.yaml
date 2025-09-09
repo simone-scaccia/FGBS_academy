@@ -1,13 +1,19 @@
 quiz_taking_task:
   description: >
-    Read the quiz from 'outputs/quiz.md' and complete it by answering all questions.
+    Read the quiz from the provided file and complete it by answering all questions.
     You are simulating a real student taking the {certification} certification exam on {topic}.
+    
+    CRITICAL RULES:
+    - You MUST NOT access or read any JSON files containing answers or answer keys
+    - You MUST NOT use any ground truth answers from question files
+    - Answer based ONLY on your built-in knowledge as an AI model trained on {certification} topics
+    - You are a real student taking an exam - act authentically without cheating
     
     For each question type, follow these specific formatting rules:
     
     1. **True/False Questions:**
        - Read the question carefully
-       - Research the topic using the RAG Search Tool if needed for verification
+       - Use your knowledge of {topic} and {certification} to determine the answer
        - Mark your answer with ☑ next to True or False
        - Leave the other option unmarked with ☐
        Example:
@@ -16,7 +22,7 @@ quiz_taking_task:
     
     2. **Multiple Choice Questions:**
        - Read the question and all options carefully
-       - Use the RAG Search Tool to research and verify your understanding
+       - Use your knowledge to evaluate each option and select the best answer
        - Put an X over the letter of your chosen answer
        Example:
        X A) Your chosen option
@@ -26,16 +32,17 @@ quiz_taking_task:
     
     3. **Short Open Questions:**
        - Read the question carefully
-       - Use the RAG Search Tool to research relevant information
-       - Provide a comprehensive answer of 3-4 lines
+       - Use your knowledge to provide a comprehensive answer
+       - Provide a thoughtful answer of 3-4 lines based on your training
        - Write your answer in the blank lines provided
     
     Important guidelines:
-    - Answer based on your research and understanding, not on any answer keys
-    - Use the RAG Search Tool to look up information when you need clarification
+    - Answer based ONLY on your built-in knowledge, not on any external sources
+    - Think through each question carefully and provide your best answer
     - Maintain the original quiz structure and formatting
     - Be thorough but concise in your answers
     - Show your work by marking answers clearly as specified
+    - NEVER look at JSON answer files or ground truth data
     
   expected_output: >
     A complete quiz with all questions answered following the specified formatting:
@@ -45,3 +52,21 @@ quiz_taking_task:
     - Original quiz structure and formatting preserved
     - No markdown code blocks (```)
   agent: quiz_taker_student
+
+completed_quiz_pdf_task:
+  description: |
+    Take the completed quiz from the previous task and convert it into a PDF using the provided tool.
+    This creates a professional-looking completed quiz document that can be reviewed.
+
+    Requirements:
+    - Paper size: A4
+    - Margins: ~2 cm
+    - Preserve all Markdown formatting, headings, lists, and answer markings
+    - Maintain readability of answer selections (☑/☐ symbols, X marks)
+    - Save the PDF with the filename specified in the inputs
+
+    Output a success message indicating the location of the saved PDF file.
+  expected_output: >
+    A success message indicating the location of the saved completed quiz PDF file.
+  agent: quiz_taker_student
+  context: [quiz_taking_task]

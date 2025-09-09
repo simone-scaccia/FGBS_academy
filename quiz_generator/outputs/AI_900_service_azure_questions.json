@@ -1,0 +1,52 @@
+{
+  "questions": [
+    {
+      "type": "open_ended",
+      "question": "What is the purpose of Azure Policy, and how does it support secure configurations across Azure resources?",
+      "options": [],
+      "answer": "Azure Policy is used to monitor and enforce service configurations across Azure resources. It integrates with services like Microsoft Defender for Cloud and Azure Monitor to audit security settings and detect deviations."
+    },
+    {
+      "type": "open_ended",
+      "question": "Explain the role of Azure Monitor in maintaining the performance of Azure resources.",
+      "options": [],
+      "answer": "Azure Monitor collects metrics and logs from Azure resources to provide a performance overview. It notifies users of incidents and enables data analysis through tools like Metrics Explorer and Log Analytics."
+    },
+    {
+      "type": "open_ended",
+      "question": "How does Service Azure ensure encryption for data stored in the cloud?",
+      "options": [],
+      "answer": "Service Azure uses Microsoft-managed encryption keys by default to safeguard data stored in the cloud. Customers can also opt for customer-managed keys via Azure Key Vault for a customized approach to data protection."
+    },
+    {
+      "type": "open_ended",
+      "question": "Describe how Azure AI services use Docker containers to enhance deployment flexibility and compliance.",
+      "options": [],
+      "answer": "Azure AI services enable the deployment of Docker containers, which offer flexibility and compliance. These containers can run on Azure Kubernetes Service, Azure Stack, or other Kubernetes clusters."
+    },
+    {
+      "type": "open_ended",
+      "question": "What capabilities does Azure Monitor provide for identifying errors and improving system resilience?",
+      "options": [],
+      "answer": "Azure Monitor provides built-in dashboards, supports telemetry in applications, identifies frequently used features, detects errors, tracks performance issues, and logs real-time data to maximize resilience."
+    },
+    {
+      "type": "open_ended",
+      "question": "In what ways can Azure Key Vault be configured to enhance data security?",
+      "options": [],
+      "answer": "Azure Key Vault can be configured with purge protection and the soft delete feature enabled, ensuring sensitive information is safeguarded during and after implementation."
+    },
+    {
+      "type": "open_ended",
+      "question": "Discuss the scalability options available for AI services on Service Azure.",
+      "options": [],
+      "answer": "Service Azure AI services can scale using Docker containers, allowing high throughput and low latency. Scaling models can also be optimized on Kubernetes clusters to handle workload peaks effectively."
+    },
+    {
+      "type": "open_ended",
+      "question": "How does Service Azure handle compliance with data governance rules through Azure Backup?",
+      "options": [],
+      "answer": "Service Azure ensures compliance with data governance rules by utilizing Azure Backup, which enables organizations to manage data backups in alignment with specific governance requirements."
+    }
+  ]
+}

@@ -19,17 +19,19 @@ class RagCrew():
     provider: str = None
     certification: str = None
 
-    def __init__(self, provider: str = None, certification: str = None, **kwargs):
+    def __init__(self, provider: str = None, certification: str = None, template_file: str = None, **kwargs):
         """
         Initialize RagCrew with provider/certification for collection-specific search.
         
         Args:
             provider (str, optional): Provider name for RAG collection
             certification (str, optional): Certification name for RAG collection
+            template_file (str, optional): Path to the quiz template file
         """
         super().__init__(**kwargs)
         self.provider = provider
         self.certification = certification
+        self.template_file = template_file or 'outputs/quiz_template.md'
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
@@ -50,7 +52,7 @@ class RagCrew():
         return Agent(
             config=self.agents_config['reporting_analyst'], # type: ignore[index]
             tools=[RagTool(provider=self.provider, certification=self.certification),
-                   FileReadTool(file_path='outputs/quiz_template.md')],
+                   FileReadTool(file_path=self.template_file)],
             verbose=True
         )
 
@@ -66,8 +68,8 @@ class RagCrew():
     @task
     def reporting_task(self) -> Task:
         return Task(
-            config=self.tasks_config['reporting_task'], # type: ignore[index]
-            output_file='outputs/questions.json'
+            config=self.tasks_config['reporting_task'] # type: ignore[index]
+            # Note: output_file will be set dynamically based on inputs
         )
 
     @crew

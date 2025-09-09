@@ -1,0 +1,40 @@
+{
+  "questions": [
+    {
+      "type": "multiple_choice",
+      "question": "Which of the following is a primary advantage of Foundry Foundry Local?",
+      "options": ["Enhanced privacy and reduced latency", "Higher dependency on cloud environments", "Limited hardware support", "Requires constant network connection"],
+      "answer": "Enhanced privacy and reduced latency"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is the ONNX Runtime used for in Foundry Foundry Local?",
+      "options": ["To scale AI models to the cloud environment", "To run ONNX models locally across hardware types", "To support only NVIDIA GPUs", "To provide network optimization for AI"],
+      "answer": "To run ONNX models locally across hardware types"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which hardware types are supported by Foundry Foundry Local?",
+      "options": ["Only AMD CPUs", "Only NVIDIA GPUs", "Diverse hardware including CPUs, GPUs, and NPUs", "Apple silicon exclusively"],
+      "answer": "Diverse hardware including CPUs, GPUs, and NPUs"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What does the Foundry Local CLI primarily help with?",
+      "options": ["Managing model lifecycle operations", "Performing cloud-based inference only", "Limiting the integration of new models", "Optimizing network latency"],
+      "answer": "Managing model lifecycle operations"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which practice enhances AI model performance in Foundry Foundry Local?",
+      "options": ["Using default FP32 model formats", "Using quantized models such as INT8", "Avoiding disk encryption", "Running models exclusively on CPU"],
+      "answer": "Using quantized models such as INT8"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is the recommended solution for slow inference speeds?",
+      "options": ["Using cloud-hosted models", "Leverage GPU-optimized or quantized models", "Avoid using CLI commands", "Stop using Foundry Foundry Local"],
+      "answer": "Leverage GPU-optimized or quantized models"
+    }
+  ]
+}

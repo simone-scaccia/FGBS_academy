@@ -51,7 +51,7 @@ class Settings:
     qdrant_url: str = "http://localhost:6333"  # Qdrant URL
     collection: str = "rag_chunks"             # Collection name (can be dynamic)
     emb_model_name: str = "text-embedding-ada-002"  # Embedding model
-    chunk_size: int = 10000                      # Chunk size
+    chunk_size: int = 8000                      # Chunk size
     chunk_overlap: int = 300                   # Overlap size
     top_n_semantic: int = 30                   # Candidates for semantic search
     top_n_text: int = 100                      # Candidates for text search
@@ -246,7 +246,7 @@ def upsert_chunks(client: QdrantClient, settings: Settings, chunks: List[Documen
     print(f"Embedding {len(chunks)} chunks...")
     
     # Process chunks in smaller batches to avoid rate limits
-    batch_size = 10  # Reduce batch size for rate limiting
+    batch_size = 7  # Reduce batch size for rate limiting
     all_vecs = []
     
     for i in range(0, len(chunks), batch_size):

@@ -1,0 +1,46 @@
+{
+  "questions": [
+    {
+      "type": "true_false",
+      "question": "LUIS is only capable of handling English language applications.",
+      "options": ["True", "False"],
+      "answer": "False"
+    },
+    {
+      "type": "true_false",
+      "question": "LUIS supports integration with Microsoft Bot Framework and Azure Speech services.",
+      "options": ["True", "False"],
+      "answer": "True"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What is the primary purpose of 'Intents' in LUIS?",
+      "options": ["To represent user’s purpose or goal", "To identify specific details from inputs", "To improve security measures", "To enable source control of apps"],
+      "answer": "To represent user’s purpose or goal"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which feature in LUIS helps recognize variations in input quality?",
+      "options": ["Custom Entities", "Phrase List Features", "Batch Testing", "Prebuilt Apps"],
+      "answer": "Phrase List Features"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "What should be avoided in LUIS training data to ensure compliance with privacy laws?",
+      "options": ["Sensitive data", "Intent training examples", "Entity classification samples", "Source control files"],
+      "answer": "Sensitive data"
+    },
+    {
+      "type": "open_ended",
+      "question": "Explain the importance of version control in large-scale LUIS applications.",
+      "options": [],
+      "answer": "Version control helps manage app schema definitions, enables independent versioning for different components, and ensures consistent updates."
+    },
+    {
+      "type": "open_ended",
+      "question": "Describe an example use case where LUIS could be applied in IoT device management.",
+      "options": [],
+      "answer": "LUIS can be used in IoT device management to process voice commands for controlling smart devices, such as adjusting thermostat settings or turning lights on/off."
+    }
+  ]
+}

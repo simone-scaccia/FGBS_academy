@@ -32,8 +32,8 @@ class TemplateGeneratorCrew():
     @task
     def template_generator_task(self) -> Task:
         return Task(
-            config=self.tasks_config['template_generator_task'],
-            output_file='outputs/quiz_template.md'
+            config=self.tasks_config['template_generator_task']
+            # Note: output_file will be set dynamically based on inputs
         )
 
     @crew
