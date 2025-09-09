@@ -4,14 +4,13 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from crewai_tools import FileReadTool
 from typing import List
 
-from quiz_generator.tools.md_to_pdf_tool import MarkdownToPdfExporter
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 @CrewBase
-class QuizMakerCrew():
-    """QuizMakerCrew crew"""
+class QuizEvaluatorCrew():
+    """QuizEvaluatorCrew crew - Evaluates the completed quiz against correct answers"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -23,13 +22,13 @@ class QuizMakerCrew():
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
-    def quiz_maker(self) -> Agent:
+    def quiz_evaluator(self) -> Agent:
         return Agent(
-            config=self.agents_config['quiz_maker'], # type: ignore[index]
-            tools=[FileReadTool(file_path='outputs/quiz_template.md'), # Tool to read the quiz template
-                   FileReadTool(file_path='outputs/questions.json'), # Tool to read the questions JSON
-                   MarkdownToPdfExporter() # Tool to convert markdown to PDF
-                  ],
+            config=self.agents_config['quiz_evaluator'], # type: ignore[index]
+            tools=[
+                FileReadTool(file_path='outputs/completed_quiz.md'), # Tool to read the completed quiz
+                FileReadTool(file_path='outputs/questions.json'), # Tool to read the correct answers
+            ],
             verbose=True
         )
 
@@ -37,21 +36,15 @@ class QuizMakerCrew():
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def quiz_maker_task(self) -> Task:
+    def quiz_evaluation_task(self) -> Task:
         return Task(
-            config=self.tasks_config['quiz_maker_task'], # type: ignore[index]
-            output_file='outputs/quiz.md'
-        )
-    
-    @task
-    def pdf_export_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['pdf_export_task'], # type: ignore[index]
+            config=self.tasks_config['quiz_evaluation_task'], # type: ignore[index]
+            output_file='outputs/quiz_evaluation.md'
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the QuizMakerCrew crew"""
+        """Creates the QuizEvaluatorCrew crew"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

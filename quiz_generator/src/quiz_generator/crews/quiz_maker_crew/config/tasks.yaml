@@ -1,24 +1,27 @@
 quiz_maker_task:
   description: |
-    The JSON input: "{questions}" has the following structure:
+    Read the JSON file 'outputs/questions.json' using FileReadTool that has the following structure:
  
     {
       "questions": [
         {
-          "type": "<multiple | true_false | open>",
+          "type": "multiple_choice|true_false|open|mixed",
           "question": "<question text>",
-          "options": ["<list of options>", "..."],
-          "answer": "<correct answer or 'n/a'>"
+          "options": ["<list of options>", "..."] OR ["True", "False"] OR [],
+          "answer": "<correct answer or empty string>"
         }
       ]
     }
 
-    Placeholders are enclosed in square braces e.g. [TF_Question_1], [MC_Question_1], [MC_Option_A_1], [Open_Question_1]
+    Also read the quiz template file 'outputs/quiz_template.md' using FileReadTool which contains placeholders like:
+    [TF_Question_1], [MC_Question_1], [MC_Option_A_1], [Open_Question_1]
 
-    Populate the base Markdown quiz template following the following rules:
-    - For each T/F question, replace the T/F question placeholder with the actual question text.
-    - For each multiple choice question, replace the MC question placeholder with the actual question text and the A-D placeholders with the actual options.
-    - For each open-ended question, replace the open question placeholder with the actual question text.
+    Populate the base Markdown quiz template following these rules:
+    - For each true_false question, replace the T/F question placeholder with the actual question text.
+    - For each multiple_choice question, replace the MC question placeholder with the actual question text and the A-D placeholders with the actual options.
+    - For each short open question, replace the open question placeholder with the actual question text.
+    - Maintain the original template structure and formatting
+    - Replace placeholders in sequential order (question 1, 2, 3, etc.)
 
     Output only the final Markdown content of the populated quiz pack.
   expected_output: >
@@ -34,8 +37,9 @@ pdf_export_task:
     Requirements:
     - Paper size: A4
     - Margins: ~2 cm
-    - Preserve headings, lists, and formatting
- 
+    - Preserve Markdown headings, lists, formatting, new lines
+    - Number questions starting from 1 and finish at {number_of_questions}, continuously across sections
+
     Output a success message indicating the location of the saved PDF file.
   expected_output: >
     A success message indicating the location of the saved PDF file.

@@ -1,20 +1,35 @@
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
-from crewai_tools import FileReadTool
 from typing import List
-
-from quiz_generator.tools.md_to_pdf_tool import MarkdownToPdfExporter
+from quiz_generator.tools.rag_qdrant_tool import RagTool
+from crewai_tools import FileReadTool
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
 @CrewBase
-class QuizMakerCrew():
-    """QuizMakerCrew crew"""
+class RagCrew():
+    """RagCrew crew"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
+    
+    # Provider and certification for RAG tool configuration
+    provider: str = None
+    certification: str = None
+
+    def __init__(self, provider: str = None, certification: str = None, **kwargs):
+        """
+        Initialize RagCrew with provider/certification for collection-specific search.
+        
+        Args:
+            provider (str, optional): Provider name for RAG collection
+            certification (str, optional): Certification name for RAG collection
+        """
+        super().__init__(**kwargs)
+        self.provider = provider
+        self.certification = certification
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
@@ -23,13 +38,19 @@ class QuizMakerCrew():
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
-    def quiz_maker(self) -> Agent:
+    def researcher(self) -> Agent:
         return Agent(
-            config=self.agents_config['quiz_maker'], # type: ignore[index]
-            tools=[FileReadTool(file_path='outputs/quiz_template.md'), # Tool to read the quiz template
-                   FileReadTool(file_path='outputs/questions.json'), # Tool to read the questions JSON
-                   MarkdownToPdfExporter() # Tool to convert markdown to PDF
-                  ],
+            config=self.agents_config['researcher'], # type: ignore[index]
+            tools=[RagTool(provider=self.provider, certification=self.certification)],
+            verbose=True
+        )
+
+    @agent
+    def reporting_analyst(self) -> Agent:
+        return Agent(
+            config=self.agents_config['reporting_analyst'], # type: ignore[index]
+            tools=[RagTool(provider=self.provider, certification=self.certification),
+                   FileReadTool(file_path='outputs/quiz_template.md')],
             verbose=True
         )
 
@@ -37,21 +58,21 @@ class QuizMakerCrew():
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def quiz_maker_task(self) -> Task:
+    def research_task(self) -> Task:
         return Task(
-            config=self.tasks_config['quiz_maker_task'], # type: ignore[index]
-            output_file='outputs/quiz.md'
+            config=self.tasks_config['research_task'], # type: ignore[index]
         )
-    
+
     @task
-    def pdf_export_task(self) -> Task:
+    def reporting_task(self) -> Task:
         return Task(
-            config=self.tasks_config['pdf_export_task'], # type: ignore[index]
+            config=self.tasks_config['reporting_task'], # type: ignore[index]
+            output_file='outputs/questions.json'
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the QuizMakerCrew crew"""
+        """Creates the RagCrew crew"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

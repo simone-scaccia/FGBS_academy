@@ -1,12 +1,7 @@
-from crewai.tools import BaseTool
-from markdown_pdf import MarkdownPdf, Section
-
 import markdown2
 import pdfkit
-
-
-
-
+from crewai.tools import BaseTool
+from markdown_pdf import MarkdownPdf, Section
 
 class MarkdownToPdfExporter(BaseTool):
 
@@ -22,5 +17,3 @@ class MarkdownToPdfExporter(BaseTool):
         pdf.add_section(Section(markdown_content, toc=False))
         pdf.save(out_path)
         return f"PDF file saved to {out_path}"
-
- 
