@@ -1,3 +1,22 @@
+"""
+Quiz evaluation crew for grading completed quizzes.
+
+This module implements a crew that reads the completed quiz and the canonical
+answers, then produces an evaluation report. Configuration is provided via
+YAML for both agents and tasks.
+
+Classes
+-------
+QuizEvaluatorCrew
+    Crew that generates `outputs/quiz_evaluation.md` from inputs.
+
+Examples
+--------
+>>> from quiz_generator.crews.quiz_evaluator_crew.quiz_evaluator_crew import QuizEvaluatorCrew
+>>> crew = QuizEvaluatorCrew()
+>>> result = crew.crew().kickoff()
+"""
+
 from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
@@ -10,7 +29,15 @@ from typing import List
 
 @CrewBase
 class QuizEvaluatorCrew():
-    """QuizEvaluatorCrew crew - Evaluates the completed quiz against correct answers"""
+    """Crew responsible for evaluating a completed quiz against correct answers.
+
+    This crew wires a single evaluator agent with one task that reads the
+    completed quiz and the canonical answers to generate an evaluation report.
+
+    Attributes:
+        agents (List[BaseAgent]): Agents created from YAML configuration.
+        tasks (List[Task]): Tasks created from YAML configuration.
+    """
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -23,6 +50,14 @@ class QuizEvaluatorCrew():
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
     def quiz_evaluator(self) -> Agent:
+        """Build the quiz evaluator agent.
+
+        The agent is configured via YAML and equipped with tools to read the
+        completed quiz and the ground-truth answers.
+
+        Returns:
+            Agent: Configured agent that evaluates quiz responses.
+        """
         return Agent(
             config=self.agents_config['quiz_evaluator'], # type: ignore[index]
             tools=[
@@ -37,6 +72,11 @@ class QuizEvaluatorCrew():
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
     def quiz_evaluation_task(self) -> Task:
+        """Create the task that evaluates the completed quiz.
+
+        Returns:
+            Task: Task definition that produces an evaluation markdown report.
+        """
         return Task(
             config=self.tasks_config['quiz_evaluation_task'], # type: ignore[index]
             output_file='outputs/quiz_evaluation.md'
@@ -44,7 +84,11 @@ class QuizEvaluatorCrew():
 
     @crew
     def crew(self) -> Crew:
-        """Creates the QuizEvaluatorCrew crew"""
+        """Create the `Crew` instance for quiz evaluation.
+
+        Returns:
+            Crew: Sequential process wiring the evaluator agent to its task.
+        """
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

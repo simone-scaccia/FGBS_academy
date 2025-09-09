@@ -1,6 +1,6 @@
 # **Azure - AI_900**
 
-## True/False Questions
+## True/False Questions  
 
 1. **Azure AI Anomaly Detector supports both univariate and multivariate anomaly detection strategies.**  
   [] True  
@@ -10,9 +10,9 @@
   [] True  
   [] False  
 
-## Multiple Choice Questions
+## Multiple Choice Questions  
 
-*Note: Select the most appropriate answer. Only one option is correct.*
+*Note: Select the most appropriate answer. Only one option is correct.*  
 
 3. **What is the main benefit of using univariate detection mode in Azure AI Anomaly Detector?**  
   A) Analyzes multiple correlated metrics together.  
@@ -37,23 +37,33 @@
 6. **Explain how sensitivity settings in Azure AI Anomaly Detector can impact the detection results.**  
 
   ________________________________________________________  
-
   ________________________________________________________  
 
   ________________________________________________________  
-
   ________________________________________________________  
 
+  ________________________________________________________  
+  ________________________________________________________  
+
+  ________________________________________________________  
+  ________________________________________________________  
+
+  ________________________________________________________  
   ________________________________________________________  
 
 7. **Describe a real-world application of Azure AI's multivariate detection mode.**  
 
   ________________________________________________________  
-
   ________________________________________________________  
 
   ________________________________________________________  
-
   ________________________________________________________  
 
+  ________________________________________________________  
+  ________________________________________________________  
+
+  ________________________________________________________  
+  ________________________________________________________  
+
+  ________________________________________________________
   ________________________________________________________
