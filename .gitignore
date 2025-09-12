@@ -3,7 +3,7 @@ __pycache__/
 lib/
 .DS_Store
 dataset/
-.venv/
+.venvext/
 qdrant_storage/
 .vscode/
 mlruns/
