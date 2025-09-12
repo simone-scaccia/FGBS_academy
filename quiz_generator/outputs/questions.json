@@ -1,0 +1,28 @@
+{
+  "questions": [
+    {
+      "type": "true_false",
+      "question": "Azure Language Understanding (LUIS) requires advanced AI expertise to set up and use effectively.",
+      "options": ["True", "False"],
+      "answer": "False"
+    },
+    {
+      "type": "multiple_choice",
+      "question": "Which component of LUIS represents the actions a user intends to perform?",
+      "options": ["Intents", "Entities", "Utterances", "Phrase List Features"],
+      "answer": "Intents"
+    },
+    {
+      "type": "open_ended",
+      "question": "Outline the key steps involved in the development lifecycle of LUIS applications.",
+      "options": [],
+      "answer": "The key steps include planning by identifying scenarios and defining intents and entities, building iteratively by adding utterances and configuring capabilities, testing and improving applications for accuracy, publishing the application for real-world inputs, and continuously refining using real-life examples."
+    },
+    {
+      "type": "open_ended",
+      "question": "Describe a common use case of LUIS in enterprise environments.",
+      "options": [],
+      "answer": "A common use case is the development of enterprise chatbots in industries like retail, healthcare, and finance, which handle customer queries and assist with interactions effectively."
+    }
+  ]
+}

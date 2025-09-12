@@ -1,1 +1,11 @@
+.env
+__pycache__/
+lib/
+.DS_Store
+dataset/
+.venvext/
+qdrant_storage/
+.vscode/
+mlruns/
+mlartifacts/
 .venvext/

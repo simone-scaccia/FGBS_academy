@@ -1,0 +1,60 @@
+quiz_evaluation_task:
+  description: >
+    Evaluate the completed quiz by comparing student answers with the correct answers from the JSON file.
+    
+    Read both files:
+    1. 'outputs/completed_quiz.md' - contains the student's completed quiz with their answers
+    2. 'outputs/questions.json' - contains the original questions with correct answers
+    
+    For each question, perform the following evaluation:
+    
+    **True/False Questions:**
+    - Check if the student marked the correct option with ☑
+    - Award 1 point for correct answer, 0 for incorrect
+    - Note any questions left unanswered
+    
+    **Multiple Choice Questions:**
+    - Check if the student marked the correct option with X
+    - Award 1 point for correct answer, 0 for incorrect
+    - Note any questions left unanswered
+    
+    **Open-Ended Questions:**
+    - Evaluate the content and accuracy of the student's response
+    - Award points based on:
+      * Accuracy of information (0-3 points)
+      * Completeness of answer (0-2 points)
+      * Total possible: 5 points per open question
+    - Provide specific feedback on what was correct and what could be improved
+    
+    Calculate the final score and provide comprehensive feedback.
+    
+  expected_output: >
+    A detailed evaluation report containing:
+    
+    # Quiz Evaluation Report
+    
+    ## Overall Score: X/Y points (Z%)
+    
+    ## Question-by-Question Analysis:
+    
+    ### Question 1: [Question Type]
+    **Question:** [Original question text]
+    **Student Answer:** [What the student selected/wrote]
+    **Correct Answer:** [Correct answer]
+    **Points Awarded:** X/Y
+    **Feedback:** [Explanation of why answer is correct/incorrect]
+    
+    [Repeat for all questions]
+    
+    ## Summary:
+    - Total Questions: X
+    - Correct Answers: Y
+    - Accuracy: Z%
+    - Strengths: [Areas where student performed well]
+    - Areas for Improvement: [Topics student should review]
+    
+    ## Recommendations:
+    [Specific study suggestions based on performance]
+    
+    Do not include markdown code blocks (```).
+  agent: quiz_evaluator

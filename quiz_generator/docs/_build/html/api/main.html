@@ -1,0 +1,312 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Main Module &mdash; Quiz Generator  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Crews Modules" href="crews.html" />
+    <link rel="prev" title="index" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Quiz Generator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">index</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Main Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.provider"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.provider</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.certification"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.certification</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.topic"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.topic</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.number_of_questions"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.number_of_questions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.question_type"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.question_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.database_initialized"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.database_initialized</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.quiz_generated"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.quiz_generated</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.quiz_completed"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.quiz_completed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.quiz_evaluated"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.quiz_evaluated</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.output_filename"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.output_filename</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.error_message"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.error_message</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorState.model_config"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorState.model_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorFlow"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorFlow</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorFlow.collect_user_input"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorFlow.collect_user_input()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorFlow.initialize_vector_database"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorFlow.initialize_vector_database()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorFlow.generate_quiz_template"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorFlow.generate_quiz_template()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorFlow.generate_quiz_with_rag_crew"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorFlow.generate_quiz_with_rag_crew()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorFlow.create_final_quiz"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorFlow.create_final_quiz()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#quiz_generator.main.QuizGeneratorFlow.finalize_flow"><code class="docutils literal notranslate"><span class="pre">QuizGeneratorFlow.finalize_flow()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#quiz_generator.main.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quiz_generator.main.plot"><code class="docutils literal notranslate"><span class="pre">plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quiz_generator.main.kickoff"><code class="docutils literal notranslate"><span class="pre">kickoff()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="crews.html">Crews Modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools.html">Tools</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Quiz Generator Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Quiz Generator Usage Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Quiz Generator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">index</a></li>
+      <li class="breadcrumb-item active">Main Module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api/main.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-quiz_generator.main">
+<span id="main-module"></span><h1>Main Module<a class="headerlink" href="#module-quiz_generator.main" title="Link to this heading"></a></h1>
+<p>Main module for Quiz Generator application.
+This module implements the main Flow following CrewAI best practices.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">quiz_generator.main.</span></span><span class="sig-name descname"><span class="pre">QuizGeneratorState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#QuizGeneratorState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<p>State model for the Quiz Generator Flow.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>provider</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>certification</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>topic</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>number_of_questions</strong> (<em>int</em>)</p></li>
+<li><p><strong>question_type</strong> (<em>str</em>)</p></li>
+<li><p><strong>database_initialized</strong> (<em>bool</em>)</p></li>
+<li><p><strong>quiz_generated</strong> (<em>bool</em>)</p></li>
+<li><p><strong>quiz_completed</strong> (<em>bool</em>)</p></li>
+<li><p><strong>quiz_evaluated</strong> (<em>bool</em>)</p></li>
+<li><p><strong>output_filename</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>error_message</strong> (<em>str</em><em> | </em><em>None</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.provider">
+<span class="sig-name descname"><span class="pre">provider</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.provider" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.certification">
+<span class="sig-name descname"><span class="pre">certification</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.certification" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.topic">
+<span class="sig-name descname"><span class="pre">topic</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.topic" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.number_of_questions">
+<span class="sig-name descname"><span class="pre">number_of_questions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.number_of_questions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.question_type">
+<span class="sig-name descname"><span class="pre">question_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.question_type" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.database_initialized">
+<span class="sig-name descname"><span class="pre">database_initialized</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.database_initialized" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.quiz_generated">
+<span class="sig-name descname"><span class="pre">quiz_generated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.quiz_generated" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.quiz_completed">
+<span class="sig-name descname"><span class="pre">quiz_completed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.quiz_completed" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.quiz_evaluated">
+<span class="sig-name descname"><span class="pre">quiz_evaluated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.quiz_evaluated" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.output_filename">
+<span class="sig-name descname"><span class="pre">output_filename</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.output_filename" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.error_message">
+<span class="sig-name descname"><span class="pre">error_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code><span class="pre">[</span><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code><span class="pre">]</span></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.error_message" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorState.model_config">
+<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar[ConfigDict]</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#quiz_generator.main.QuizGeneratorState.model_config" title="Link to this definition"></a></dt>
+<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorFlow">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">quiz_generator.main.</span></span><span class="sig-name descname"><span class="pre">QuizGeneratorFlow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">persistence</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#QuizGeneratorFlow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.QuizGeneratorFlow" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">_FlowGeneric</span></code></p>
+<p>Main Flow for Quiz Generator following CrewAI best practices.</p>
+<p>This flow orchestrates the complete quiz generation process:
+1. User input collection
+2. Database initialization
+3. Quiz generation using RAG crew
+4. Results saving</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>persistence</strong> (<em>FlowPersistence</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>tracing</strong> (<em>bool</em><em> | </em><em>None</em>)</p></li>
+<li><p><strong>kwargs</strong> (<em>Any</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorFlow.collect_user_input">
+<span class="sig-name descname"><span class="pre">collect_user_input</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#QuizGeneratorFlow.collect_user_input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.QuizGeneratorFlow.collect_user_input" title="Link to this definition"></a></dt>
+<dd><p>Step 1: Collect user input for provider, certification, and topic selection.
+Step 2: Collect user choice about the number of questions and their type to generate for the practice quiz.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorFlow.initialize_vector_database">
+<span class="sig-name descname"><span class="pre">initialize_vector_database</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#QuizGeneratorFlow.initialize_vector_database"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.QuizGeneratorFlow.initialize_vector_database" title="Link to this definition"></a></dt>
+<dd><p>Step 3: Initialize the Qdrant vector database with documents from the selected certification.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorFlow.generate_quiz_template">
+<span class="sig-name descname"><span class="pre">generate_quiz_template</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#QuizGeneratorFlow.generate_quiz_template"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.QuizGeneratorFlow.generate_quiz_template" title="Link to this definition"></a></dt>
+<dd><p>Step 2.5: Generate quiz template using the Template Generator crew.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorFlow.generate_quiz_with_rag_crew">
+<span class="sig-name descname"><span class="pre">generate_quiz_with_rag_crew</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#QuizGeneratorFlow.generate_quiz_with_rag_crew"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.QuizGeneratorFlow.generate_quiz_with_rag_crew" title="Link to this definition"></a></dt>
+<dd><p>Step 4: Generate quiz questions using the RAG crew with the initialized database.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorFlow.create_final_quiz">
+<span class="sig-name descname"><span class="pre">create_final_quiz</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#QuizGeneratorFlow.create_final_quiz"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.QuizGeneratorFlow.create_final_quiz" title="Link to this definition"></a></dt>
+<dd><p>Step 5: Create final quiz using Quiz Maker crew to combine template and questions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="quiz_generator.main.QuizGeneratorFlow.finalize_flow">
+<span class="sig-name descname"><span class="pre">finalize_flow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#QuizGeneratorFlow.finalize_flow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.QuizGeneratorFlow.finalize_flow" title="Link to this definition"></a></dt>
+<dd><p>Step 4: Finalize the flow and provide summary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="quiz_generator.main.main">
+<span class="sig-prename descclassname"><span class="pre">quiz_generator.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.main" title="Link to this definition"></a></dt>
+<dd><p>Main function to start the Quiz Generator Flow.</p>
+<p>This function follows CrewAI best practices by implementing the main logic
+as a Flow with proper state management and step-by-step execution.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="quiz_generator.main.plot">
+<span class="sig-prename descclassname"><span class="pre">quiz_generator.main.</span></span><span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.plot" title="Link to this definition"></a></dt>
+<dd><p>Plot the Quiz Generator Flow for visualization.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="quiz_generator.main.kickoff">
+<span class="sig-prename descclassname"><span class="pre">quiz_generator.main.</span></span><span class="sig-name descname"><span class="pre">kickoff</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/quiz_generator/main.html#kickoff"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#quiz_generator.main.kickoff" title="Link to this definition"></a></dt>
+<dd><p>Alternative entry point for the flow (CrewAI convention).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="index" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="crews.html" class="btn btn-neutral float-right" title="Crews Modules" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, FGBS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

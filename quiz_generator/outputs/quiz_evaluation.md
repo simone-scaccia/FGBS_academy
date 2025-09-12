@@ -1,0 +1,1 @@
+I encountered an encoding issue while attempting to read the file `outputs/completed_quiz.md`. I need assistance or alternative tools to decode and access the file content in order to perform the evaluation.
