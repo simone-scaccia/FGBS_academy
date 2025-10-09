@@ -1,0 +1,47 @@
+# Git files
+.git/
+.gitignore
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.env
+.venv/
+env/
+venv/
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentation and build artifacts not needed in container
+README.md
+FLOW_DOCUMENTATION.md
+Progetto.txt
+BUILD_SECRETS.md
+HEALTHCHECK.md
+DOCKER_README.md
+docs/
+.pytest_cache/
+tests/
+outputs/
+uv.lock
+
+# Secrets (handled via BuildKit)
+.secrets/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

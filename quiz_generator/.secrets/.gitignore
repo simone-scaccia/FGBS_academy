@@ -1,0 +1,5 @@
+# Ignore secrets directory
+.secrets/
+*.key
+*.secret
+*.txt

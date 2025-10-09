@@ -48,7 +48,7 @@ load_dotenv()
 @dataclass
 class Settings:
     """Config settings for RAG pipeline"""
-    qdrant_url: str = "http://localhost:6333"  # Qdrant URL
+    qdrant_url: str = f"http://{os.getenv('QDRANT_HOST', 'localhost')}:{os.getenv('QDRANT_PORT', '6333')}"  # Qdrant URL
     collection: str = "rag_chunks"             # Collection name (can be dynamic)
     emb_model_name: str = "text-embedding-ada-002"  # Embedding model
     chunk_size: int = 8000                      # Chunk size
